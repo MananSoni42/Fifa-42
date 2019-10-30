@@ -21,6 +21,20 @@ Your team members are white circles while the opponent team members are blue cir
 * Pause the game by pressing the ```esc``` key
 * Once in the pause menu, formations can be changed using the ```space``` key followed by the left/right arrow keys
 
+## Screens
+1. Main menu  
+<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu1.png" height=150px> | <img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu2.png" height=150px> | <img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu3.png" height=150px>
+
+2. Instructions (interactive)
+<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/instructions.png" height=250px>
+
+3. Game 
+<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/game.png" height=250px>
+
+4. Pause menu
+<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/pause_menu.png" height=250px>
+
+
 ## Developers
 * [Manan Soni](https://github.com/MananSoni42)
 * Ashutosh Jani
