@@ -25,3 +25,6 @@ Your team members are white circles while the opponent team members are blue cir
 * [Manan Soni](https://github.com/MananSoni42)
 * Ashutosh Jani
 
+## License
+This project is licensed under the [MIT](https://opensource.org/licenses/MIT) License
+
