@@ -5,14 +5,21 @@ def dist(p1,p2):
     #print(p1,p2)
     return np.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
 
+## Settings
 PLAYER_SPEED = 3
 BALL_SPEED = 3
 W = 1024
 H = 568
 BALL_RADIUS = 10
-PLAYER_RADIUS = 15
-BACKGROUND_IMG = "assets/field.png"
+PLAYER_RADIUS = 30
 
+## images
+BACKGROUND_IMG = "assets/field.png"
+FOOTBALL_IMG = "assets/football.png"
+RUN_LEFT = { i:f'assets/running/l{i}.png' for i in range(11)}
+RUN_RIGHT = { i:f'assets/running/r{i}.png' for i in range(11)}
+
+## Types
 act = {
     'NOTHING': 0,
     'MOVE_U': (0,-1),
