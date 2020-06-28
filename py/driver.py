@@ -1,15 +1,15 @@
-import pygame
 from agents import HumanAgent
 from game import Game
 from utils import *
-win = pygame.display.set_mode((WIDTH,HEIGHT))
+
+win = pygame.display.set_mode((W,H))
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
-player1 = HumanAgent(id=1, type=type["ATK"], pos=(WIDTH//3,HEIGHT//2))
+player1 = HumanAgent(id=1, type=type["ATK"], pos=(W//4, H//2))
 game = Game(player1)
 
-pygame.key.set_repeat(10,10)
+pygame.key.set_repeat(1,1)
 while not game.end:
     clock.tick(27)
 
