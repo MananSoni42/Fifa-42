@@ -1,27 +1,34 @@
 from utils import *
+from abc import ABC, abstractmethod
 
-class HumanAgent(object):
-    """Agents controlled by humans"""
+class Agent(ABC):
+    """ Abstract class that controls agents in the football game """
     def __init__(self, id, type, pos, color=(255,0,0)):
-        self.id = id
-        self.type = type
-        self.pos = pos
-        self.color = color
-        self.walk_dir = 'L' # options are R,L
-        self.walk_count = 0
+        self.id = id # Unique ID starts from 0 (also denotes it's position in team array)
+        self.type = type # To be used later
+        self.pos = P(pos) # Starting position
+        self.color = color # Colour (R,G,B) triple
+        self.walk_dir = 'L' # options are R (right), L (left)
+        self.walk_count = 0 # For running animation
 
     def draw(self, win):
         # Player boundary
         #pygame.draw.rect(win, (255,255,255), (self.pos[0]- PLAYER_RADIUS, self.pos[1] - PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
-        win.blit(RUN[self.walk_dir][(self.walk_count%33)//3], (self.pos[0]-PLAYER_RADIUS, self.pos[1]-PLAYER_RADIUS))
+        win.blit(RUN[self.walk_dir][(self.walk_count%33)//3], (self.pos - PLAYER_CENTER).val)
 
     def update(self, a):
+        """ Update player's state (in-game) based on action """
         if a in ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']:
-            x,y = self.pos
-            x += PLAYER_SPEED*act[a][0]
-            y += PLAYER_SPEED*act[a][1]
-            self.pos = (min(max(PLAYER_RADIUS,x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,y), H - PLAYER_RADIUS)) # account for overflow
+            self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(act[a])
+            self.pos = P(min(max(PLAYER_RADIUS,self.pos.x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,self.pos.y), H - PLAYER_RADIUS)) # account for overflow
 
+    @abstractmethod
+    def move(self, state, reward):
+        """ Implement this method for a valid agent """
+        pass
+
+class HumanAgent(Agent):
+    """Agents controlled by humans"""
     def move(self, state, reward):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -63,3 +70,11 @@ class HumanAgent(object):
                     return 'MOVE_D'
                 else:
                     return 'NOTHING'
+
+class SimpleAIAgent(Agent):
+    def move(self, state, reward):
+        pass
+
+class RLAgent(Agent):
+    def move(self,state,reward):
+        pass
