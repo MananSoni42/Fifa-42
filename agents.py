@@ -24,12 +24,12 @@ class Agent(ABC):
             pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
         win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
 
-    def check_collision(self, action, players):
+    def check_collision(self, players):
         for i,player in enumerate(players):
             if i != self.id:
                 if self.pos.dist(player.pos) <= 2*PLAYER_RADIUS:
-                    self.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
-                    break
+                    return True
+        return False
 
     def update(self, action, players, dir):
         """ Update player's state (in-game) based on action """
@@ -57,8 +57,9 @@ class Agent(ABC):
                     self.walk_count = WALK_DELAY
 
             self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
+            if self.check_collision(players):
+                self.pos -= P(2,2)*P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
             self.pos = P(min(max(PLAYER_RADIUS,self.pos.x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,self.pos.y), H - PLAYER_RADIUS)) # account for overflow
-            self.check_collision(action, players)
         """
         elif action in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']:
             self.walk_count = 0

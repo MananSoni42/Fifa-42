@@ -80,14 +80,26 @@ class HumanTeam(Team):
             player.walk_count = 0
             player.walk_dir = self.dir
             return 'NOTHING'
-        elif player.pos.x - FORM[self.formation][id].x > min_dist:
-            return 'MOVE_L'
-        elif player.pos.x - FORM[self.formation][id].x < -min_dist:
-            return 'MOVE_R'
-        elif abs(player.pos.x - FORM[self.formation][id].x) <= min_dist and player.pos.y - FORM[self.formation][id].y > min_dist:
-            return 'MOVE_U'
-        elif player.pos.x == FORM[self.formation][id].x and player.pos.y - FORM[self.formation][id].y < -min_dist:
-            return 'MOVE_D'
+        elif abs(player.pos.x - FORM[self.formation][id].x) <= min_dist:
+            if (player.pos.y - FORM[self.formation][id].y) > min_dist:
+                return 'MOVE_U'
+            else:
+                return 'MOVE_D'
+        elif abs(player.pos.y - FORM[self.formation][id].y) <= min_dist:
+            if (player.pos.x - FORM[self.formation][id].x) > min_dist:
+                return 'MOVE_L'
+            else:
+                return 'MOVE_R'
+        elif (player.pos.x - FORM[self.formation][id].x) > min_dist:
+            if (player.pos.y - FORM[self.formation][id].y) > min_dist:
+                return np.random.choice(['MOVE_L', 'MOVE_U'])
+            else:
+                return np.random.choice(['MOVE_L', 'MOVE_D'])
+        elif (player.pos.x - FORM[self.formation][id].x) < -min_dist:
+            if (player.pos.y - FORM[self.formation][id].y) > min_dist:
+                return np.random.choice(['MOVE_R', 'MOVE_U'])
+            else:
+                return np.random.choice(['MOVE_R', 'MOVE_D'])
 
     def move(self):
         """

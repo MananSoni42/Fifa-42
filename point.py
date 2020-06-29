@@ -47,4 +47,5 @@ class P:
         return self
 
     def dist(self, p):
-        return np.sqrt((self.x-p.x)**2 + (self.y-p.y)**2)
+        """ L1 distance (not euclidean) """
+        return abs(self.x-p.x) + abs(self.y-p.y)
