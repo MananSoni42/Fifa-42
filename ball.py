@@ -9,6 +9,11 @@ class Ball:
         self.color = (50,50,50)
         self.player_id = -1
 
+    def draw(self, win, debug=False):
+        if debug:
+            pygame.draw.rect(win, (100,100,100), (self.pos.x-BALL_RADIUS, self.pos.y-BALL_RADIUS,BALL_RADIUS*2,BALL_RADIUS*2))
+        win.blit(FOOTBALL_IMG, (self.pos - BALL_CENTER).val)
+
     def reset(self):
         """ Reset the ball - used after a goal is scored """
         self.pos = P(W//2, H//2)
@@ -29,9 +34,9 @@ class Ball:
         if not self.free:
             self.dir = player.walk_dir
             if self.dir == 'L':
-                self.pos = player.pos + P(-2, 1.5)*BALL_CENTER
+                self.pos = player.pos + P(-1,1)*BALL_OFFSET*BALL_CENTER
             elif self.dir == 'R':
-                self.pos = player.pos + P(2, 1.5)*BALL_CENTER
+                self.pos = player.pos + BALL_OFFSET*BALL_CENTER
 
         else:
             for i,player in enumerate(team.players):
@@ -57,20 +62,16 @@ class Ball:
         elif a in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']: # Player shoots
             self.vel = P(ACT[a])
             self.free = True
-            
+
             # Ball relearse mechanics (when player shoots)
+            const = PLAYER_RADIUS + BALL_RADIUS + 1
             if self.dir == 'R' and ACT[a][0] in [0,1]:
-                self.pos.x += PLAYER_RADIUS - BALL_RADIUS + 1
+                self.pos.x += const - BALL_RADIUS*BALL_OFFSET.x
             elif self.dir == 'R' and ACT[a][0] == -1:
-                self.pos.x -= (PLAYER_RADIUS + 3*BALL_RADIUS + 1)
+                self.pos.x -= const + BALL_RADIUS*BALL_OFFSET.x
             elif self.dir == 'L' and ACT[a][0] == 1:
-                self.pos.x += PLAYER_RADIUS + 3*BALL_RADIUS + 1
+                self.pos.x += const + BALL_RADIUS*BALL_OFFSET.x
             elif self.dir == 'L' and ACT[a][0] in [0,-1]:
-                self.pos.x -= (PLAYER_RADIUS - BALL_RADIUS + 1)
+                self.pos.x -= const - BALL_RADIUS*BALL_OFFSET.x
 
         self.check_capture(team)
-
-    def draw(self, win):
-        # Ball boundary
-        #pygame.draw.rect(win, (100,100,100), (self.pos[0]- BALL_RADIUS, self.pos[1] - BALL_RADIUS,BALL_RADIUS*2,BALL_RADIUS*2))
-        win.blit(FOOTBALL_IMG, (self.pos - BALL_CENTER).val)

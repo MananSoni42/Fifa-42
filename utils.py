@@ -3,7 +3,7 @@ import numpy as np
 from point import P
 
 """
-Utilities: Contains global settings, constants, functions and classes
+Utilities: Contains global settings and constants
 """
 
 ############## Settings ##############
@@ -14,21 +14,40 @@ W = 1024
 H = 568
 BALL_RADIUS = 10
 BALL_CENTER = P(BALL_RADIUS, BALL_RADIUS)
+BALL_OFFSET = P(3, 1.5)
 PLAYER_RADIUS = 30
 PLAYER_CENTER = P(PLAYER_RADIUS, PLAYER_RADIUS)
 GOAL_POS = [0.3,0.7] # goalpost positions in percentage
 LINE_WIDTH = 3
 ASSET_DIR = './assets/' # Path to where the images are stored
+ANIM_NUM = 7 # Number of images used for running animation
+WALK_DELAY = 3 # Change walking sprite after X presses
 ######################################
 
 
+
+############## Functions ##############
+def recolor(surface, color=(255,128,0)):
+    """Fill all pixels of the surface with color, preserve transparency."""
+    w, h = surface.get_size()
+    r, g, b = color
+    for x in range(w):
+        for y in range(h):
+            val = surface.get_at((x, y))
+            surface.set_at((x, y), pygame.Color(r, g, b, val[3]))
 
 ############## Images ##############
 BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "field.png"), (W, H))
 FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
 RUN = {
-    'L': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(11) },
-    'R': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(11) },
+    1: {
+        'L': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'R': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+    },
+    2: {
+        'L': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'R': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+    },
 }
 ######################################
 

@@ -6,11 +6,14 @@ class Team(ABC):
     """
     Abstract class for a team of agents
     """
-    def __init__(self, formation, dir='R'):
+    def __init__(self, id, formation, color, dir='R'):
+        self.id = id
         self.dir = dir
+        self.color = color
         self.formation = formation
         self.maintain_formation = True
         self.set_players()
+        self.set_color()
 
     def __str__(self):
         s = "Team:"
@@ -18,18 +21,23 @@ class Team(ABC):
             s += player.__str__()
         return s
 
-    def set_formation(formation):
+    def set_color(self):
+        for k in RUN[self.id]['L'].keys():
+            recolor(RUN[self.id]['L'][k], color=self.color)
+            recolor(RUN[self.id]['R'][k], color=self.color)
+
+    def set_formation(self,formation):
         self.formation = formation
 
     def formation_toggle(self):
         self.maintain_formation = not self.maintain_formation
 
-    def draw(self,win):
+    def draw(self,win, debug=False):
         for i,player in enumerate(self.players):
             if i == self.nearest:
-                player.draw(win,selected=True)
+                player.draw(win, self.id, selected=True, debug=debug)
             else:
-                player.draw(win)
+                player.draw(win, self.id, debug=debug)
 
     def set_nearest(self, ball):
         dists = [player.pos.dist(ball.pos) for player in self.players]
@@ -94,5 +102,6 @@ class HumanTeam(Team):
             elif self.maintain_formation:
                 actions.append(self.formation_dir(i))
             else:
+                player.walk_count = 0
                 actions.append('NOTHING')
         return actions

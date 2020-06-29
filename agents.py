@@ -1,53 +1,64 @@
 from utils import *
 from abc import ABC, abstractmethod
+from copy import copy
 
 class Agent(ABC):
     """
     Abstract class that controls agents in the football game
     Implement the move method to instantiate
     """
-    def __init__(self, id, pos, dir='L', color=(255,0,0)):
+    def __init__(self, id, pos, dir='L'):
         self.id = id # Unique ID starts from 0 (also denotes it's position in team array)
         self.pos = P(pos) # Starting position
-        self.color = color # Colour (R,G,B) triple
         self.walk_dir = dir # options are R (right), L (left)
         self.walk_count = 0 # For running animation
 
     def __str__(self):
         return f'\nAgent {self.id} - {self.pos}'
 
-    def draw(self, win, selected=False, debug=False):
+    def draw(self, win, team_id, selected=False, debug=False):
+        #scaled_size = P(0.75*self.pos.y/H + 0.25, 0.75*self.pos.y/H + 0.25)*P(2*PLAYER_RADIUS,2*PLAYER_RADIUS)
         if debug:
-            pygame.draw.rect(win, (255,255,255), (self.pos[0]- PLAYER_RADIUS, self.pos[1] - PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
+            pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
         if selected:
             pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
-        win.blit(RUN[self.walk_dir][(self.walk_count%33)//3], (self.pos - PLAYER_CENTER).val)
+        win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
+
+    def check_collision(self, action, players):
+        for i,player in enumerate(players):
+            if i != self.id:
+                if self.pos.dist(player.pos) <= 2*PLAYER_RADIUS:
+                    self.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
+                    break
 
     def update(self, action, players, dir):
         """ Update player's state (in-game) based on action """
         if action in ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']:
             if action == 'MOVE_L':
                 if self.walk_dir == 'R':
-                    self.walk_count = 0
+                    self.walk_count = 1
                     self.walk_dir = 'L'
                 else:
                     self.walk_count += 1
+                    if self.walk_count >= WALK_DELAY*ANIM_NUM:
+                        self.walk_count = WALK_DELAY
+
             elif action == 'MOVE_R':
                 if self.walk_dir == 'L':
-                    self.walk_count = 0
+                    self.walk_count = 1
                     self.walk_dir = 'R'
                 else:
                     self.walk_count += 1
+                    if self.walk_count >= WALK_DELAY*ANIM_NUM:
+                        self.walk_count = WALK_DELAY
             else:
                 self.walk_count += 1
+                if self.walk_count >= WALK_DELAY*ANIM_NUM:
+                    self.walk_count = WALK_DELAY
 
             self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
             self.pos = P(min(max(PLAYER_RADIUS,self.pos.x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,self.pos.y), H - PLAYER_RADIUS)) # account for overflow
-            for i,player in enumerate(players):
-                if i != self.id:
-                    if self.pos.dist(player.pos) <= 2*PLAYER_RADIUS:
-                        self.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
-                        break
+            self.check_collision(action, players)
         """
         elif action in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']:
             self.walk_count = 0

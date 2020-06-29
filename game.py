@@ -21,11 +21,11 @@ class Game:
         pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
         pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
 
-    def draw(self, win):
+    def draw(self, win, debug=False):
         """ Draw everything """
         self.draw_field(win)
-        self.team.draw(win)
-        self.ball.draw(win)
+        self.team.draw(win, debug=debug)
+        self.ball.draw(win, debug=debug)
 
     def next(self, a):
         """
