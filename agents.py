@@ -16,9 +16,9 @@ class Agent(ABC):
     def __str__(self):
         return f'\nAgent {self.id} - {self.pos}'
 
-    def draw(self, win, selected=False):
-        # Player boundary
-        #pygame.draw.rect(win, (255,255,255), (self.pos[0]- PLAYER_RADIUS, self.pos[1] - PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
+    def draw(self, win, selected=False, debug=False):
+        if debug:
+            pygame.draw.rect(win, (255,255,255), (self.pos[0]- PLAYER_RADIUS, self.pos[1] - PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
         if selected:
             pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
         win.blit(RUN[self.walk_dir][(self.walk_count%33)//3], (self.pos - PLAYER_CENTER).val)
@@ -31,7 +31,7 @@ class Agent(ABC):
                     self.walk_count = 0
                     self.walk_dir = 'L'
                 else:
-                    self.walk_count += 1 
+                    self.walk_count += 1
             elif action == 'MOVE_R':
                 if self.walk_dir == 'L':
                     self.walk_count = 0
@@ -60,7 +60,7 @@ class Agent(ABC):
         pass
 
 class HumanAgent(Agent):
-    """Agents controlled by humans"""
+    """ Agents controlled by humans """
     def move(self, state, reward):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -92,11 +92,3 @@ class HumanAgent(Agent):
                     return 'MOVE_D'
                 else:
                     return 'NOTHING'
-
-class BasicAIAgent(Agent):
-    def move(self, state, reward):
-        pass
-
-class AIAgent(Agent):
-    def move(self,state,reward):
-        pass

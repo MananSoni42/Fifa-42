@@ -41,9 +41,17 @@ class Team(ABC):
 
     @abstractmethod
     def set_players(self):
+        """
+        Add players (of relevant class) to the team
+        Requirements:
+            - Players are added to a list: self.players
+            - Their ids match their respective index in the array
+        """
         pass
+
     @abstractmethod
     def move(self):
+        """ Move the entire team (may use the player's move method) """
         pass
 
 class HumanTeam(Team):
@@ -56,6 +64,7 @@ class HumanTeam(Team):
         self.nearest = NUM_TEAM//2
 
     def formation_dir(self, id):
+        """ Send player with given id to his designated place in the formation """
         player = self.players[id]
         min_dist = 2
 
@@ -76,7 +85,7 @@ class HumanTeam(Team):
         """
         Move a human team
             * Player nearest to the ball moves through keyboard
-            * All other players return to their original positions if maintain_formation is set
+            * All other players return to their original positions (if maintain_formation is set)
         """
         actions = []
         for i,player in enumerate(self.players):
