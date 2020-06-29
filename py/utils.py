@@ -12,14 +12,19 @@ W = 1024
 H = 568
 BALL_RADIUS = 10
 PLAYER_RADIUS = 30
+GOAL_POS = [0.3,0.7] # goalpost positions in percentage
+LINE_WIDTH = 3
 
 ## images
-BACKGROUND_IMG = "assets/field.png"
-FOOTBALL_IMG = "assets/football.png"
-RUN_LEFT = { i:f'assets/running/l{i}.png' for i in range(11)}
-RUN_RIGHT = { i:f'assets/running/r{i}.png' for i in range(11)}
+BACKGROUND_IMG = pygame.transform.scale(pygame.image.load("assets/field.png"), (W, H))
+FOOTBALL_IMG = pygame.transform.scale(pygame.image.load("assets/football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
+RUN = {
+    'L': { i: pygame.transform.scale(pygame.image.load(f'assets/running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(11) },
+    'R': { i: pygame.transform.scale(pygame.image.load(f'assets/running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(11) },
+}
 
 ## Special types
+
 act = { 'NOTHING': 0,
         'MOVE_U': (0,-1), 'MOVE_D': (0,1), 'MOVE_L': (-1,0), 'MOVE_R': (1,0),
         'SHOOT_Q': (-1,-1), 'SHOOT_W': (0,-1), 'SHOOT_E': (1,-1), 'SHOOT_A': (-1,0),
