@@ -15,8 +15,9 @@ class HumanAgent(object):
             'R': {k:pygame.transform.scale(pygame.image.load(v), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for k,v in RUN_RIGHT.items()},
         }
     def draw(self, win):
-        #pygame.draw.circle(win, self.color, self.pos, PLAYER_RADIUS)
-        win.blit(self.run[self.walk_dir][self.walk_count%11], (self.pos[0]-PLAYER_RADIUS, self.pos[1]-PLAYER_RADIUS))
+        # Player boundary
+        #pygame.draw.rect(win, (255,255,255), (self.pos[0]- PLAYER_RADIUS, self.pos[1] - PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
+        win.blit(self.run[self.walk_dir][(self.walk_count%33)//3], (self.pos[0]-PLAYER_RADIUS, self.pos[1]-PLAYER_RADIUS))
 
     def move(self, state, reward):
         for event in pygame.event.get():

@@ -8,9 +8,10 @@ class Game:
         self.ball = Ball(pos=(W//2, H//2))
         self.end = False
         self.bg = pygame.transform.scale(pygame.image.load(BACKGROUND_IMG), (W, H))
+        self.bg.set_alpha(128)
     def draw(self, win):
         #win.blit(self.bg, (0, 0)) # grass
-        win.fill((0,255,0)) # constant green
+        win.fill((14, 156, 23)) # constant green
         pygame.draw.rect(win, (255, 255, 255), (0, 0, W, 3)) # border
         pygame.draw.rect(win, (255, 255, 255), (0, H-3, W, 3)) # border
         pygame.draw.rect(win, (255, 255, 255), (0, 0, 3, H)) # border
@@ -44,16 +45,23 @@ class Game:
         if not self.ball.free and a in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']: # Player shoots
             self.ball.vel = act[a]
             self.ball.free = True
-            min_dist = dist((0,0), act[a])
-            min_dist = (PLAYER_RADIUS+BALL_RADIUS)/min_dist
-            min_dist = int(min_dist) + 1
-            x,y = act[a]
-            x*= min_dist
-            y*= min_dist
-            self.ball.pos = (self.ball.pos[0]+x,self.ball.pos[1]+y)
+
+            if self.player.walk_dir == 'R' and act[a][0] in [0,1]:
+                xincr = PLAYER_RADIUS - BALL_RADIUS + 1
+            elif self.player.walk_dir == 'R' and act[a][0] == -1:
+                xincr = -(PLAYER_RADIUS + 3*BALL_RADIUS + 1)
+            elif self.player.walk_dir == 'L' and act[a][0] == 1:
+                xincr = PLAYER_RADIUS + 3*BALL_RADIUS + 1
+            elif self.player.walk_dir == 'L' and act[a][0] in [0,-1]:
+                xincr = -(PLAYER_RADIUS - BALL_RADIUS + 1)
+
+            self.ball.pos = (self.ball.pos[0]+xincr, self.ball.pos[1])
 
         if not self.ball.free:
-            self.ball.pos = self.player.pos
+            if self.player.walk_dir == 'L':
+                self.ball.pos = (self.player.pos[0] - 2*BALL_RADIUS, self.player.pos[1] + 3*BALL_RADIUS//2)
+            elif self.player.walk_dir == 'R':
+                self.ball.pos = (self.player.pos[0] + 2*BALL_RADIUS, self.player.pos[1] + 3*BALL_RADIUS//2)
 
         elif dist(self.ball.pos, self.player.pos) < PLAYER_RADIUS + BALL_RADIUS:
             self.ball.vel = (0,0)

@@ -6,7 +6,7 @@ win = pygame.display.set_mode((W,H))
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
-player1 = HumanAgent(id=1, type=type["ATK"], pos=(W//4, H//2))
+player1 = HumanAgent(id=1, type="ATK", pos=(W//4, H//2))
 game = Game(player1)
 
 pygame.key.set_repeat(1,1)
