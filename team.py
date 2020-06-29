@@ -28,4 +28,4 @@ class Team:
 
     def update(self, action):
         for i,player in enumerate(self.players):
-            player.update(action[i], self.dir)
+            player.update(action[i], self.players, self.dir)
