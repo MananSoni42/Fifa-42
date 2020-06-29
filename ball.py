@@ -55,17 +55,17 @@ class Ball:
                 self.vel.y *= (-1) # Flip Y velocity
 
         elif a in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']: # Player shoots
-            self.vel = P(act[a])
+            self.vel = P(ACT[a])
             self.free = True
             
             # Ball relearse mechanics (when player shoots)
-            if self.dir == 'R' and act[a][0] in [0,1]:
+            if self.dir == 'R' and ACT[a][0] in [0,1]:
                 self.pos.x += PLAYER_RADIUS - BALL_RADIUS + 1
-            elif self.dir == 'R' and act[a][0] == -1:
+            elif self.dir == 'R' and ACT[a][0] == -1:
                 self.pos.x -= (PLAYER_RADIUS + 3*BALL_RADIUS + 1)
-            elif self.dir == 'L' and act[a][0] == 1:
+            elif self.dir == 'L' and ACT[a][0] == 1:
                 self.pos.x += PLAYER_RADIUS + 3*BALL_RADIUS + 1
-            elif self.dir == 'L' and act[a][0] in [0,-1]:
+            elif self.dir == 'L' and ACT[a][0] in [0,-1]:
                 self.pos.x -= (PLAYER_RADIUS - BALL_RADIUS + 1)
 
         self.check_capture(team)

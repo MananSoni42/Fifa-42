@@ -2,7 +2,10 @@ from utils import *
 from abc import ABC, abstractmethod
 
 class Agent(ABC):
-    """ Abstract class that controls agents in the football game """
+    """
+    Abstract class that controls agents in the football game
+    Implement the move method to instantiate
+    """
     def __init__(self, id, pos, dir='L', color=(255,0,0)):
         self.id = id # Unique ID starts from 0 (also denotes it's position in team array)
         self.pos = P(pos) # Starting position
@@ -23,18 +26,33 @@ class Agent(ABC):
     def update(self, action, players, dir):
         """ Update player's state (in-game) based on action """
         if action in ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']:
-            self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(act[action])
+            if action == 'MOVE_L':
+                if self.walk_dir == 'R':
+                    self.walk_count = 0
+                    self.walk_dir = 'L'
+                else:
+                    self.walk_count += 1 
+            elif action == 'MOVE_R':
+                if self.walk_dir == 'L':
+                    self.walk_count = 0
+                    self.walk_dir = 'R'
+                else:
+                    self.walk_count += 1
+            else:
+                self.walk_count += 1
+
+            self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
             self.pos = P(min(max(PLAYER_RADIUS,self.pos.x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,self.pos.y), H - PLAYER_RADIUS)) # account for overflow
             for i,player in enumerate(players):
                 if i != self.id:
                     if self.pos.dist(player.pos) <= 2*PLAYER_RADIUS:
-                        self.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(act[action])
+                        self.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
                         break
-
-
+        """
         elif action in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']:
             self.walk_count = 0
             self.walk_dir = dir
+        """
 
     @abstractmethod
     def move(self, state, reward):
@@ -65,18 +83,8 @@ class HumanAgent(Agent):
                 elif event.key == pygame.K_c:
                     return 'SHOOT_C'
                 elif event.key == pygame.K_LEFT:
-                    if self.walk_dir == 'R':
-                        self.walk_count = 0
-                        self.walk_dir = 'L'
-                    else:
-                        self.walk_count+=1
                     return 'MOVE_L'
                 elif event.key == pygame.K_RIGHT:
-                    if self.walk_dir == 'L':
-                        self.walk_count = 0
-                        self.walk_dir = 'R'
-                    else:
-                        self.walk_count+=1
                     return 'MOVE_R'
                 elif event.key == pygame.K_UP:
                     return 'MOVE_U'
@@ -85,10 +93,10 @@ class HumanAgent(Agent):
                 else:
                     return 'NOTHING'
 
-class SimpleAIAgent(Agent):
+class BasicAIAgent(Agent):
     def move(self, state, reward):
         pass
 
-class RLAgent(Agent):
+class AIAgent(Agent):
     def move(self,state,reward):
         pass
