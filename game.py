@@ -3,8 +3,8 @@ from ball import Ball
 
 class Game:
     """ Class that controls the entire game """
-    def __init__(self, player):
-        self.player = player
+    def __init__(self, team):
+        self.team = team
         self.ball = Ball(pos=(W//2, H//2))
         self.end = False # True when the game ends (never probably)
 
@@ -24,12 +24,16 @@ class Game:
     def draw(self, win):
         """ Draw everything """
         self.draw_field(win)
-        self.player.draw(win)
+        self.team.draw(win)
         self.ball.draw(win)
 
     def next(self, a):
-        """ Next loop that is the heart of the game - takes an action from the player and returns the new state and reward """
-        self.player.update(a) # Update player's state
-        self.ball.update(self.player, a) # Update ball's state
+        """
+        Next loop that is the heart of the game
+         - a (list): Actions of each player in the team
+        """
+        self.team.update(a) # Update team's state
+        self.ball.update(self.team, a) # Update ball's state
         self.ball.goal_check() # Check for goals
+        self.team.set_nearest(self.ball)
         return 0,0

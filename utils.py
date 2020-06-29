@@ -9,9 +9,13 @@ class P:
     """ 2-D point """
 
     def __init__(self, x,y=None):
-        if y is None and isinstance(x,tuple):
-            self.x = x[0]
-            self.y = x[1]
+        if y is None:
+            if isinstance(x,tuple):
+                self.x = x[0]
+                self.y = x[1]
+            elif isinstance(x,P):
+                self.x = x.x
+                self.y = x.y
         else:
             self.x = x
             self.y = y
@@ -40,7 +44,7 @@ class P:
         return self
 
     def __mul__(self, p):
-        return P(self.x * p.x, self.y * p.y)
+        return P(int(self.x * p.x), int(self.y * p.y))
 
     def __imul__(self, p):
         self.x *= p.x
@@ -54,6 +58,7 @@ class P:
 
 
 ############## Settings ##############
+NUM_TEAM = 7
 PLAYER_SPEED = 3
 BALL_SPEED = 5
 W = 1024
@@ -85,6 +90,14 @@ act = { 'NOTHING': 0,
         'MOVE_U': (0,-1), 'MOVE_D': (0,1), 'MOVE_L': (-1,0), 'MOVE_R': (1,0),
         'SHOOT_Q': (-1,-1), 'SHOOT_W': (0,-1), 'SHOOT_E': (1,-1), 'SHOOT_A': (-1,0),
         'SHOOT_D': (1,0), 'SHOOT_Z': (-1,1), 'SHOOT_X': (0,1), 'SHOOT_C': (1,1) }
+
+form = {
+    'default': [P(10,H//2),
+                P(W//4,H//4), P(W//4, H//2), P(W//4, 3*H//4),
+                P(W//2,H//3), P(W//2, 2*H//3),
+                P(3*W//4,H//2)],
+
+}
 
 #pl_type = { 'GK': 0, 'DEF': 1, 'MID': 2, 'ATK': 3 }
 ######################################

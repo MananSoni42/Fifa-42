@@ -3,24 +3,31 @@ from abc import ABC, abstractmethod
 
 class Agent(ABC):
     """ Abstract class that controls agents in the football game """
-    def __init__(self, id, type, pos, color=(255,0,0)):
+    def __init__(self, id, pos, dir='L', color=(255,0,0)):
         self.id = id # Unique ID starts from 0 (also denotes it's position in team array)
-        self.type = type # To be used later
         self.pos = P(pos) # Starting position
         self.color = color # Colour (R,G,B) triple
-        self.walk_dir = 'L' # options are R (right), L (left)
+        self.walk_dir = dir # options are R (right), L (left)
         self.walk_count = 0 # For running animation
 
-    def draw(self, win):
+    def __str__(self):
+        return f'\nAgent {self.id} - {self.pos}'
+
+    def draw(self, win, selected=False):
         # Player boundary
         #pygame.draw.rect(win, (255,255,255), (self.pos[0]- PLAYER_RADIUS, self.pos[1] - PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
+        if selected:
+            pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
         win.blit(RUN[self.walk_dir][(self.walk_count%33)//3], (self.pos - PLAYER_CENTER).val)
 
-    def update(self, a):
+    def update(self, action, dir):
         """ Update player's state (in-game) based on action """
-        if a in ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']:
-            self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(act[a])
+        if action in ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']:
+            self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(act[action])
             self.pos = P(min(max(PLAYER_RADIUS,self.pos.x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,self.pos.y), H - PLAYER_RADIUS)) # account for overflow
+        elif action in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']:
+            self.walk_count = 0
+            self.walk_dir = dir
 
     @abstractmethod
     def move(self, state, reward):
