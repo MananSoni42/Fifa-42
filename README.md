@@ -7,7 +7,7 @@ I also intend to convert this into a full blown online game along with a realist
 - [ ] Create a python port (using PyGame)
   - [x] Set up game environment and Human Agents
   - [ ] Set up the original AI team
-  - [ ] Calculate stats (possession, shot/pass accuracy)
+  - [x] Calculate stats (possession, shot/pass accuracy)
   - [ ] Implement Pause menu
 - [ ] Convert to a static online game
   - [ ] Port to JavaScript

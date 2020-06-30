@@ -7,8 +7,9 @@ class Agent(ABC):
     Abstract class that controls agents in the football game
     Implement the move method to instantiate
     """
-    def __init__(self, id, pos, dir='L'):
+    def __init__(self, id, team_id, pos, dir='L'):
         self.id = id # Unique ID starts from 0 (also denotes it's position in team array)
+        self.team_id = team_id # ID of player's team
         self.pos = P(pos) # Starting position
         self.walk_dir = dir # options are R (right), L (left)
         self.walk_count = 0 # For running animation
@@ -16,20 +17,10 @@ class Agent(ABC):
     def __str__(self):
         return f'\nAgent {self.id} - {self.pos}'
 
-    def draw(self, win, team_id, selected=False, debug=False):
+    def draw(self, win, team_id, debug=False):
         if debug:
             pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
-        if selected:
-            pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
         win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
-
-    def same_team_collision(self, players):
-        """ Check if current player collides with any other players (same team) """
-        for i,player in enumerate(players):
-            if i != self.id:
-                if self.pos.dist(player.pos) <= 2*PLAYER_RADIUS:
-                    return True
-        return False
 
     def update(self, action, players, dir):
         """ Update player's state (in-game) based on action """
@@ -57,8 +48,6 @@ class Agent(ABC):
                     self.walk_count = WALK_DELAY
 
             self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
-            if self.same_team_collision(players):
-                self.pos -= P(5,5)*P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
             self.pos = P(min(max(PLAYER_RADIUS,self.pos.x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,self.pos.y), H - PLAYER_RADIUS)) # account for overflow
 
     @abstractmethod
@@ -68,6 +57,13 @@ class Agent(ABC):
 
 class HumanAgent(Agent):
     """ Agents controlled by humans """
+    def draw(self, win, team_id, selected=False, debug=False):
+        if debug:
+            pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
+        if selected:
+            pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
+        win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
+
     def move(self, state, reward):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -99,3 +95,14 @@ class HumanAgent(Agent):
                     return 'MOVE_D'
                 else:
                     return 'NOTHING'
+
+class RandomAgent(Agent):
+    """ Agents that move randomly """
+    def move(self, state, reward):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        if np.random.rand() < 0.6:
+            return np.random.choice(['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R'])
+        else:
+            return np.random.choice(['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C'])

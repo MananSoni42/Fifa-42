@@ -1,6 +1,6 @@
 from utils import *
 from abc import ABC, abstractmethod
-from agents import HumanAgent
+from agents import HumanAgent, RandomAgent
 
 class Team(ABC):
     """
@@ -16,7 +16,7 @@ class Team(ABC):
         self.set_color()
 
     def __str__(self):
-        s = "Team:"
+        s = f'Team {self.id}:'
         for player in self.players:
             s += player.__str__()
         return s
@@ -33,15 +33,8 @@ class Team(ABC):
         self.maintain_formation = not self.maintain_formation
 
     def draw(self,win, debug=False):
-        for i,player in enumerate(self.players):
-            if i == self.nearest:
-                player.draw(win, self.id, selected=True, debug=debug)
-            else:
-                player.draw(win, self.id, debug=debug)
-
-    def set_nearest(self, ball):
-        dists = [player.pos.dist(ball.pos) + 0.01*np.random.rand() for player in self.players]
-        self.nearest = np.argmin(dists)
+        for player in self.players:
+            player.draw(win, team_id=self.id, debug=debug)
 
     def update(self, action):
         for i,player in enumerate(self.players):
@@ -64,10 +57,22 @@ class Team(ABC):
 
 class HumanTeam(Team):
     """A team of human players"""
+    def draw(self,win, debug=False):
+        for i,player in enumerate(self.players):
+            if i == self.nearest:
+                player.draw(win, team_id=self.id, selected=True, debug=debug)
+            else:
+                player.draw(win, team_id=self.id, debug=debug)
+
+
+    def set_nearest(self, ball):
+        dists = [player.pos.dist(ball.pos) + 0.01*np.random.rand() for player in self.players]
+        self.nearest = np.argmin(dists)
+
     def set_players(self):
         self.players = []
         for i in range(NUM_TEAM):
-            self.players.append(HumanAgent(id=i, pos=FORM[self.formation][i], dir=self.dir))
+            self.players.append(HumanAgent(id=i, team_id=self.id, pos=FORM[self.formation][i], dir=self.dir))
 
         self.nearest = NUM_TEAM//2
 
@@ -120,4 +125,20 @@ class HumanTeam(Team):
             else:
                 player.walk_count = 0
                 actions.append('NOTHING')
+        return actions
+
+class RandomTeam(Team):
+    """A team of random players"""
+    def set_players(self):
+        self.players = []
+        for i in range(NUM_TEAM):
+            self.players.append(RandomAgent(id=i, team_id=self.id, pos=FORM[self.formation][i], dir=self.dir))
+
+        self.nearest = NUM_TEAM//2
+
+    def move(self):
+        """ Move each player randomly """
+        actions = []
+        for i,player in enumerate(self.players):
+            actions.append(player.move(0,0))
         return actions

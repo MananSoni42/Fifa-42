@@ -1,4 +1,4 @@
-from team import HumanTeam
+from team import HumanTeam, RandomTeam
 from game import Game
 from utils import *
 
@@ -10,15 +10,18 @@ win = pygame.display.set_mode((W,H))
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
-team = HumanTeam(id = 1, formation='default-right', color=(0,0,0), dir='L') # Create a team facing left (L), use the default-left formation (defined in utils.py)
-game = Game(team)
+# ids need to be 1 and 2 only
+team1 = HumanTeam(id = 1, formation='default-left', color=(0,0,0), dir='R') # Create a team facing Right
+team2 = RandomTeam(id = 2, formation='default-right', color=(255,128,0), dir='L')
+game = Game(team1,team2)
 
-pygame.key.set_repeat(1,1) # Generate multiple keydowns if a key is pressed
+pygame.key.set_repeat(1,1) # Generate multiple keydown events if a key is pressed continuously
 
 while not game.end:
-    clock.tick(27) # FPS
-    game.draw(win)
+    clock.tick(FPS) # FPS
+    game.draw(win, debug=False)
     pygame.display.update() # refresh screen
 
-    a = team.move()
-    s,r = game.next(a)
+    a1 = team1.move()
+    a2 = team2.move()
+    s,r = game.next(a1,a2)
