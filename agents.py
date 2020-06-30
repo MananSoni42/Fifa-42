@@ -17,14 +17,14 @@ class Agent(ABC):
         return f'\nAgent {self.id} - {self.pos}'
 
     def draw(self, win, team_id, selected=False, debug=False):
-        #scaled_size = P(0.75*self.pos.y/H + 0.25, 0.75*self.pos.y/H + 0.25)*P(2*PLAYER_RADIUS,2*PLAYER_RADIUS)
         if debug:
             pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
         if selected:
             pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
         win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
 
-    def check_collision(self, players):
+    def same_team_collision(self, players):
+        """ Check if current player collides with any other players (same team) """
         for i,player in enumerate(players):
             if i != self.id:
                 if self.pos.dist(player.pos) <= 2*PLAYER_RADIUS:
@@ -57,14 +57,9 @@ class Agent(ABC):
                     self.walk_count = WALK_DELAY
 
             self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
-            if self.check_collision(players):
-                self.pos -= P(2,2)*P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
+            if self.same_team_collision(players):
+                self.pos -= P(5,5)*P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
             self.pos = P(min(max(PLAYER_RADIUS,self.pos.x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,self.pos.y), H - PLAYER_RADIUS)) # account for overflow
-        """
-        elif action in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']:
-            self.walk_count = 0
-            self.walk_dir = dir
-        """
 
     @abstractmethod
     def move(self, state, reward):

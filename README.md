@@ -1,19 +1,21 @@
 # Fifa-42 - Reborn!
-A modern port of a beloved game me and a couple of friends wrote.  
+A modern port of a beloved game written by me along with a couple of friends.  
+The aim is to bring the original game (written in ANSI C) online.
 I also intend to convert this into a full blown online game along with a realistic AI.
 
 ## Milestones
-- [ ] Create a basic python port (using PyGame for now)
+- [ ] Create a python port (using PyGame)
   - [x] Set up game environment and Human Agents
-  - [ ] Set up basic (original) AI Agent
-  - [ ] Create new formations
+  - [ ] Set up the original AI team
   - [ ] Calculate stats (possession, shot/pass accuracy)
   - [ ] Implement Pause menu
 - [ ] Convert to a static online game
-- [ ] Train AI using Reinforcement Learning (super hard)
+  - [ ] Port to JavaScript
+  - [ ] Set up local multiplayer (static - requires only frontend)
+  - [ ] Enable online multiplayer (requires a backend)
+- [ ] Train a realistic AI team using Reinforcement Learning (super hard)
 
 ## Setup
-
 ### Structure
 ```terminal
 .
@@ -22,16 +24,19 @@ I also intend to convert this into a full blown online game along with a realist
 ├── ball.py # Football that can be passed around
 ├── game.py # Class that conotrols the entire game
 ├── driver.py # Driver to test the game
-└── utils.py # Contains global settings, constants, functions and classes
+├── point.py # class that handles 2-D co-ordinate manipulation
+└── utils.py # Contains global settings and constants
 ```
 
 ### Installing locally
-The game requires Python3+  
-Install dependancies using:  
+* The game requires Python3+  
+
+* Install dependancies using:  
 ```terminal
 pip3 install -r requirements.txt
 ```
-Run the game using:  
+
+* Run the game using:  
 ```terminal
 python3 driver.py
 ```

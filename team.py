@@ -40,7 +40,7 @@ class Team(ABC):
                 player.draw(win, self.id, debug=debug)
 
     def set_nearest(self, ball):
-        dists = [player.pos.dist(ball.pos) for player in self.players]
+        dists = [player.pos.dist(ball.pos) + 0.01*np.random.rand() for player in self.players]
         self.nearest = np.argmin(dists)
 
     def update(self, action):
@@ -76,7 +76,11 @@ class HumanTeam(Team):
         player = self.players[id]
         min_dist = 2
 
-        if abs(player.pos.x - FORM[self.formation][id].x) <= min_dist and abs(player.pos.y - FORM[self.formation][id].y) <= min_dist:
+        """
+        If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
+        Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
+        """
+        if player.pos.dist(FORM[self.formation][id]) < 2*min_dist:
             player.walk_count = 0
             player.walk_dir = self.dir
             return 'NOTHING'

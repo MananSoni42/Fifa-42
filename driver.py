@@ -10,7 +10,7 @@ win = pygame.display.set_mode((W,H))
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
-team = HumanTeam(id = 1, formation='default-left', color=(255,128,0), dir='L') # Create a team facing left (L), use the default-left formation (defined in utils.py)
+team = HumanTeam(id = 1, formation='default-right', color=(0,0,0), dir='L') # Create a team facing left (L), use the default-left formation (defined in utils.py)
 game = Game(team)
 
 pygame.key.set_repeat(1,1) # Generate multiple keydowns if a key is pressed
