@@ -1,7 +1,7 @@
 from team import HumanTeam, RandomTeam
 from game import Game
 from settings import *
-#from const import *
+# from const import * # Enable for possession stats and goals
 
 """
 Driver program to test the game

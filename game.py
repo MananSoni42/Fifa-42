@@ -89,6 +89,6 @@ class Game:
         self.team_ai.update(a_ai) # Update team's state
         self.collision(self.team_human, a_h, self.team_ai, a_ai, self.ball)
         self.ball.update(self.team_human, self.team_ai, a_h, a_ai) # Update ball's state
-        self.ball.goal_check() # Check if a goal is scoread
+        self.ball.goal_check(self.team_human.dir, self.team_ai.dir) # Check if a goal is scoread
         self.team_human.set_nearest(self.ball) # select nearest human player
         return 0,0

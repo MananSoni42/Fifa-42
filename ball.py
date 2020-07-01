@@ -30,23 +30,35 @@ class Ball:
         self.stats['player'] = -1
         self.stats['team'] = -1
 
-    def goal_check(self):
+    def goal_check(self, dir1, dir2):
         """ Check if a goal is scored """
         goal = False
         reset = False
+        goals_scored = {1: 0, 2: 0}
+        
         if not (BALL_RADIUS < self.pos.x < W - BALL_RADIUS):
             reset = True
             if self.pos.x <= BALL_RADIUS:
-                pos = P(BALL_RADIUS + 1, H//2)
+                pos = P(3*BALL_RADIUS, H//2)
+                if dir1 == 'R':
+                    goals_scored[2] += 1
+                else:
+                    goals_scored[1] += 1
             else:
-                pos = P(W - BALL_RADIUS - 1, H//2)
+                pos = P(W - 3*BALL_RADIUS, H//2)
+                if dir1 == 'R':
+                    goals_scored[1] += 1
+                else:
+                    goals_scored[2] += 1
             if GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
                 goal = True
+                GOALS[1] += goals_scored[1]
+                GOALS[2] += goals_scored[2]
                 pos = P(W//2, H//2)
+
         if reset:
             self.update_stats(goal=goal)
             self.reset(pos)
-
         return goal
 
     def update_stats(self, player=None, goal=None):
