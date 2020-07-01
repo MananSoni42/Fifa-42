@@ -1,4 +1,5 @@
-from utils import *
+from settings import *
+from const import ACT, POSSESSION, PASS_ACC, SHOT_ACC
 
 class Ball:
     """Implements the football used in the game"""
@@ -35,11 +36,17 @@ class Ball:
         reset = False
         if not (BALL_RADIUS < self.pos.x < W - BALL_RADIUS):
             reset = True
+            if self.pos.x <= BALL_RADIUS:
+                pos = P(BALL_RADIUS + 1, H//2)
+            else:
+                pos = P(W - BALL_RADIUS - 1, H//2)
             if GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
                 goal = True
+                pos = P(W//2, H//2)
         if reset:
             self.update_stats(goal=goal)
-            self.reset(P(W//2,H//2))
+            self.reset(pos)
+
         return goal
 
     def update_stats(self, player=None, goal=None):
@@ -63,7 +70,6 @@ class Ball:
                     POSSESSION[self.stats['team']] += 1
                     PASS_ACC[self.stats['team']]['succ'] += 1
             else: # Different team pass
-                print('DIFF')
                 if self.stats['last_team'] != -1:
                     if self.stats['player'] == 0: # GK of different team receives the ball
                         SHOT_ACC[self.stats['last_team']]['fail'] += 1
@@ -75,9 +81,6 @@ class Ball:
                 SHOT_ACC[self.stats['team']]['succ'] += 1
             else:
                 SHOT_ACC[self.stats['team']]['fail'] += 1
-
-        print(self.stats)
-        print(f'POSS: {get_possession(POSSESSION)} | PASS: {get_pass_acc(PASS_ACC)} | SHOT: {get_shot_acc(SHOT_ACC)}')
 
     def ball_player_collision(self, team):
         for player in team.players:

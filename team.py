@@ -1,4 +1,5 @@
-from utils import *
+from settings import *
+from const import FORM, recolor
 from abc import ABC, abstractmethod
 from agents import HumanAgent, RandomAgent
 
@@ -85,7 +86,7 @@ class HumanTeam(Team):
         If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
         Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
         """
-        if player.pos.dist(FORM[self.formation][id]) < 2*min_dist:
+        if abs(player.pos.x - FORM[self.formation][id].x) <= min_dist and abs(player.pos.y - FORM[self.formation][id].y) <= min_dist:
             player.walk_count = 0
             player.walk_dir = self.dir
             return 'NOTHING'

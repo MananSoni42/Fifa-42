@@ -25,7 +25,8 @@ I also intend to convert this into a full blown online game along with a realist
 ├── game.py # Class that conotrols the entire game
 ├── driver.py # Driver to test the game
 ├── point.py # class that handles 2-D co-ordinate manipulation
-└── utils.py # Contains global settings and constants
+├── const.py # Important game constants
+└── settings.py # Global settings and paths
 ```
 
 ### Installing locally

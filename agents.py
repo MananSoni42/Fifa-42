@@ -1,6 +1,6 @@
-from utils import *
+from settings import *
+from const import ACT
 from abc import ABC, abstractmethod
-from copy import copy
 
 class Agent(ABC):
     """

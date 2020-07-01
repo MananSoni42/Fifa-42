@@ -1,4 +1,5 @@
-from utils import *
+from settings import *
+from const import ACT
 from ball import Ball
 
 class Game:
@@ -9,41 +10,27 @@ class Game:
         self.ball = Ball(pos=(W//2, H//2))
         self.end = False # True when the game ends (never probably)
 
-    def same_team_collision(self, team, free):
+    def same_team_collision(self, team, actions, free):
         """ Check if current player collides with any other players (same team) """
-        if free:
-            min_dist = 2*PLAYER_RADIUS
-        else:
-            min_dist = 2*PLAYER_RADIUS + BALL_RADIUS
+        min_dist  = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
+        if not free:
+            min_dist.x += BALL_RADIUS
 
         for player1 in team.players:
             for player2 in team.players:
-                if player1.id != player2.id and player1.pos.dist(player2.pos) <= min_dist:
-                    xincr = 1 + PLAYER_RADIUS - abs(player1.pos.x-player2.pos.x)//2
-                    xdir = (1,-1)
-                    yincr = 1 + PLAYER_RADIUS - abs(player1.pos.y-player2.pos.y)//2
-                    ydir = (1,-1)
-
-                    if player1.pos.x < player2.pos.x:
-                        xdir = (-1,1)
-                    if player1.pos.y < player2.pos.y:
-                        ydir = (-1,1)
-
-                    player1.pos.x += xdir[0]*xincr
-                    player2.pos.x += xdir[1]*xincr
-                    player1.pos.y += ydir[0]*yincr
-                    player2.pos.y += ydir[1]*yincr
+                if player1.id != player2.id and abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
+                    player1.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player1.id]])
+                    player2.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player2.id]])
 
     def diff_team_collision(self, team1, team2, free):
-        """ Check if current player collides with any other players (same team) """
-        if free:
-            min_dist = 2*PLAYER_RADIUS
-        else:
-            min_dist = 2*PLAYER_RADIUS + BALL_RADIUS
+        """ Check if current player collides with any other players (different teams) """
+        min_dist  = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
+        if not free:
+            min_dist.x += BALL_RADIUS
 
         for player1 in team1.players:
             for player2 in team2.players:
-                if player1.pos.dist(player2.pos) <= min_dist:
+                if abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
                     if not free:
                         self.ball.reset(self.ball.pos)
                     xincr = 1 + 2*PLAYER_RADIUS - abs(player1.pos.x-player2.pos.x)//2
@@ -63,8 +50,8 @@ class Game:
 
     def collision(self, team1, act1, team2, act2, ball):
         # Special case when ball is not free
-        self.same_team_collision(team1, self.ball.free)
-        self.same_team_collision(team2, self.ball.free)
+        self.same_team_collision(team1, act1, self.ball.free)
+        self.same_team_collision(team2, act2, self.ball.free)
         self.diff_team_collision(team1, team2, self.ball.free)
 
     def draw_field(self,win):

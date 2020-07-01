@@ -1,6 +1,7 @@
 from team import HumanTeam, RandomTeam
 from game import Game
-from utils import *
+from settings import *
+#from const import *
 
 """
 Driver program to test the game
@@ -20,6 +21,7 @@ pygame.key.set_repeat(1,1) # Generate multiple keydown events if a key is presse
 while not game.end:
     clock.tick(FPS) # FPS
     game.draw(win, debug=False)
+    #print(f'POSS: {get_possession(POSSESSION)} | PASS: {get_pass_acc(PASS_ACC)} | SHOT: {get_shot_acc(SHOT_ACC)}') # Stats
     pygame.display.update() # refresh screen
 
     a1 = team1.move()

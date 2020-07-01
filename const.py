@@ -1,34 +1,10 @@
-import pygame
-import numpy as np
+from pygame import Color
 from point import P
+from settings import *
 
 """
-Utilities: Contains global settings and constants
+Important constants used in the game
 """
-
-############## Settings ##############
-NUM_TEAM = 7 # Number of players in a team
-W = 1024 # Width
-H = 568 # Height
-FPS = 27
-
-PLAYER_SPEED = 3
-PLAYER_RADIUS = 30
-PLAYER_CENTER = P(PLAYER_RADIUS, PLAYER_RADIUS)
-
-BALL_SPEED = 5
-BALL_RADIUS = 10
-BALL_CENTER = P(BALL_RADIUS, BALL_RADIUS)
-BALL_OFFSET = P(3, 1.5)
-
-GOAL_POS = [0.3,0.7] # goalpost positions in percentage
-LINE_WIDTH = 2
-ASSET_DIR = './assets/' # Path to where the images are stored
-ANIM_NUM = 7 # Number of images used for running animation
-WALK_DELAY = 3 # Change walking sprite after X presses
-######################################
-
-
 
 ############## Functions ##############
 def recolor(surface, color=(255,128,0)):
@@ -38,7 +14,7 @@ def recolor(surface, color=(255,128,0)):
     for x in range(w):
         for y in range(h):
             val = surface.get_at((x, y))
-            surface.set_at((x, y), pygame.Color(r, g, b, val[3]))
+            surface.set_at((x, y), Color(r, g, b, val[3]))
 
 def get_possession(pos, printpos=False):
     if pos[1]+pos[2] == 0:
@@ -81,22 +57,6 @@ def get_shot_acc(shot, printshot=False):
 
 
 
-############## Images ##############
-BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "field.png"), (W, H))
-FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
-RUN = {
-    1: {
-        'L': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
-        'R': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
-    },
-    2: {
-        'L': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
-        'R': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
-    },
-}
-######################################
-
-
 
 ############## Custom types ##############
 
@@ -107,12 +67,17 @@ ACT = { 'NOTHING': (0,0), None: (0,0),
         'SHOOT_D': (1,0), 'SHOOT_Z': (-0.707,0.707), 'SHOOT_X': (0,1), 'SHOOT_C': (0.707,0.707) }
 # 0.717 = 1/sqrt(2)
 
-# Possible team formations
+"""
+Team formations
+    - Must start with the keeper
+    - Recommended to specify completley in terms of W and H (and PLAYER_RADIUS if reqd)
+"""
 FORM = {
-    'default-left': [P(50,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
-    'default-right': [P(W-50,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
+    'default-left': [P(PLAYER_RADIUS + W//100,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
+    'default-right': [P(99*W//100 - PLAYER_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
 }
 
+# Global Stats
 POSSESSION = { 1: 0, 2: 0 }
 
 PASS_ACC = {
