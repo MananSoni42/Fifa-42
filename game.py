@@ -1,5 +1,5 @@
 from settings import *
-from const import ACT
+from const import ACT, GOALS
 from ball import Ball
 
 class Game:
@@ -54,7 +54,27 @@ class Game:
         self.same_team_collision(team2, act2, self.ball.free)
         self.diff_team_collision(team1, team2, self.ball.free)
 
-    def draw_field(self,win):
+    def text_draw(self, win, text, rect):
+        center_x = rect[0] + rect[2]//2
+        center_y = rect[1] + rect[3]//2
+        width = text.get_width()
+        height = text.get_height()
+        win.blit(text, (center_x - width//2, center_y - height//2))
+
+    def goal_draw(self,win):
+        """ Show game score """
+        goal1_rect = (W//2 - GOAL_DISP_SIZE - 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
+        goal2_rect = (W//2 + 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
+        goal_font = pygame.font.Font(FONT_PATH, FONT_SIZE)
+
+        pygame.draw.rect(win, (255, 255, 255), goal1_rect)
+        pygame.draw.rect(win, (255, 255, 255), goal2_rect)
+        text = goal_font.render(str(GOALS[1]), True, (0,0,0))
+        self.text_draw(win, text, goal1_rect)
+        text = goal_font.render(str(GOALS[2]), True, (0,0,0))
+        self.text_draw(win, text, goal2_rect)
+
+    def field_draw(self,win):
         """ Draw the football pitch """
         #win.blit(BACKGROUND_IMG, (0, 0)) # grass
         win.fill((14, 156, 23)) # constant green
@@ -75,10 +95,11 @@ class Game:
 
     def draw(self, win, debug=False):
         """ Draw everything """
-        self.draw_field(win)
+        self.field_draw(win)
         self.team_human.draw(win, debug=debug)
         self.team_ai.draw(win, debug=debug)
         self.ball.draw(win, debug=debug)
+        self.goal_draw(win)
 
     def next(self, a_h,a_ai):
         """

@@ -6,7 +6,7 @@ from settings import *
 """
 Driver program to test the game
 """
-
+pygame.init()
 win = pygame.display.set_mode((W,H))
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")

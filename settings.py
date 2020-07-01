@@ -11,6 +11,8 @@ NUM_TEAM = 7 # Number of players in a team
 W = 1024 # Width
 H = 568 # Height
 FPS = 27
+ASSET_DIR = './assets/' # Path to assets
+FONT_PATH = ASSET_DIR + 'Roboto-Black.ttf'
 
 PLAYER_SPEED = 3
 PLAYER_RADIUS = 20
@@ -21,6 +23,8 @@ BALL_RADIUS = 7
 BALL_CENTER = P(BALL_RADIUS, BALL_RADIUS)
 BALL_OFFSET = P(3, 1.5)
 
+GOAL_DISP_SIZE = 60
+FONT_SIZE = 45
 GOAL_POS = [0.3,0.7] # goalpost positions in percentage of H
 LINE_WIDTH = 2
 ANIM_NUM = 7 # Number of images used for running animation
@@ -30,8 +34,6 @@ WALK_DELAY = 3 # Change walking sprite after this many presses
 
 
 ############## Images ##############
-ASSET_DIR = './assets/' # Path to where the images are stored
-
 BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "field.png"), (W, H))
 FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
 RUN = {

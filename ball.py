@@ -1,5 +1,5 @@
 from settings import *
-from const import ACT, POSSESSION, PASS_ACC, SHOT_ACC
+from const import ACT, POSSESSION, PASS_ACC, SHOT_ACC, GOALS
 
 class Ball:
     """Implements the football used in the game"""
@@ -35,7 +35,7 @@ class Ball:
         goal = False
         reset = False
         goals_scored = {1: 0, 2: 0}
-        
+
         if not (BALL_RADIUS < self.pos.x < W - BALL_RADIUS):
             reset = True
             if self.pos.x <= BALL_RADIUS:
