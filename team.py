@@ -7,9 +7,8 @@ class Team(ABC):
     """
     Abstract class for a team of agents
     """
-    def __init__(self, id, formation, color, dir='R'):
+    def __init__(self, id, formation, color):
         self.id = id
-        self.dir = dir
         self.color = color
         self.formation = formation
         self.maintain_formation = True
@@ -39,7 +38,7 @@ class Team(ABC):
 
     def update(self, action):
         for i,player in enumerate(self.players):
-            player.update(action[i], self.players, self.dir)
+            player.update(action[i], self.players)
 
     @abstractmethod
     def set_players(self):
@@ -73,7 +72,7 @@ class HumanTeam(Team):
     def set_players(self):
         self.players = []
         for i in range(NUM_TEAM):
-            self.players.append(HumanAgent(id=i, team_id=self.id, pos=FORM[self.formation][i], dir=self.dir))
+            self.players.append(HumanAgent(id=i, team_id=self.id, pos=FORM[self.formation][i]))
 
         self.nearest = NUM_TEAM//2
 
@@ -88,7 +87,6 @@ class HumanTeam(Team):
         """
         if abs(player.pos.x - FORM[self.formation][id].x) <= min_dist and abs(player.pos.y - FORM[self.formation][id].y) <= min_dist:
             player.walk_count = 0
-            player.walk_dir = self.dir
             return 'NOTHING'
         elif abs(player.pos.x - FORM[self.formation][id].x) <= min_dist:
             if (player.pos.y - FORM[self.formation][id].y) > min_dist:
@@ -133,7 +131,7 @@ class RandomTeam(Team):
     def set_players(self):
         self.players = []
         for i in range(NUM_TEAM):
-            self.players.append(RandomAgent(id=i, team_id=self.id, pos=FORM[self.formation][i], dir=self.dir))
+            self.players.append(RandomAgent(id=i, team_id=self.id, pos=FORM[self.formation][i]))
 
         self.nearest = NUM_TEAM//2
 

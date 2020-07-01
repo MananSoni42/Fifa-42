@@ -11,9 +11,14 @@ win = pygame.display.set_mode((W,H))
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
-# ids need to be 1 and 2 only
-team1 = HumanTeam(id = 1, formation='default-left', color=(0,0,0), dir='R') # Create a team facing Right
-team2 = RandomTeam(id = 2, formation='default-right', color=(255,128,0), dir='L')
+"""
+Define teams
+    - One needs to be AI, other can be human or AI
+    - ids need to be 1 and 2 only
+    - Team 1 faces right by default
+"""
+team1 = HumanTeam(id = 1, formation='default-left', color=(0,32,255))
+team2 = RandomTeam(id = 2, formation='default-right', color=(255,128,0))
 game = Game(team1,team2)
 
 pygame.key.set_repeat(1,1) # Generate multiple keydown events if a key is pressed continuously

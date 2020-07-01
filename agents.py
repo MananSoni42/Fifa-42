@@ -22,7 +22,7 @@ class Agent(ABC):
             pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
         win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
 
-    def update(self, action, players, dir):
+    def update(self, action, players):
         """ Update player's state (in-game) based on action """
         if action in ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']:
             if action == 'MOVE_L':

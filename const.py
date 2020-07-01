@@ -73,8 +73,8 @@ Team formations
     - Recommended to specify completley in terms of W and H (and PLAYER_RADIUS if reqd)
 """
 FORM = {
-    'default-left': [P(PLAYER_RADIUS + BALL_RADIUS,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
-    'default-right': [P(W - PLAYER_RADIUS - BALL_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
+    'default-left': [P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
+    'default-right': [P(W - 2*PLAYER_RADIUS - BALL_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
 }
 
 # Number of goals
