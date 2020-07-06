@@ -36,11 +36,12 @@ while not game.end:
 
 
     if game.pause:
+        game.draw(win, debug=False)
         game.pause_draw(win)
     else:
         game.draw(win, debug=False)
-
-    game.next()
+        game.next()
+        
     pygame.display.update() # refresh screen
 
 pygame.quit()

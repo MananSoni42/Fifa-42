@@ -107,66 +107,75 @@ class Game:
 
     def pause_draw(self,win):
         """ Draw the pause menu """
-
+        W_,H_ = int(0.8*W), int(0.8*H)
+        W0,H0 = int(0.1*W), int(0.1*H)
         # background and border
-        win.fill((42, 42, 42)) # Gray
-        pygame.draw.rect(win, (255, 255, 255), (0, 0, W - LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH) # border
+        #win.fill((42, 42, 42)) # Gray
+        pygame.draw.rect(win, (42, 42, 42), (W0, H0, W_ - LINE_WIDTH, H_ - LINE_WIDTH)) # border
         pad = LINE_WIDTH*2
+        min_len = 10
 
-        # Exit button
-        pygame.draw.rect(win, (255, 255, 255), (W//50, H//50, W//10, H//10)) # button
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE).render("X", True, (255,0,0))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render("(Backspace)", True, (0,0,0))
-        self.text_draw(win, text1, (pad, (3*H)//100, W//10, (5*H)//100))
-        self.text_draw(win, text2, (pad, (8*H)//100, W//10, (5*H)//100))
+        # Exit
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE).render("x", True, (255,0,0))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render("(Backspace)", True, (255,0,0))
+        self.text_draw(win, text1, (W0 + pad, H0 + (3*H_)//100, W_//10, (5*H_)//100))
+        self.text_draw(win, text2, (W0 + pad, H0 + (8*H_)//100, W_//10, (5*H_)//100))
 
         # Possession
         text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("POSSESSION", True, (255,255,255))
-        self.text_draw(win, text_pos, (0, (15*H)//100, W, (10*H)//100))
+        self.text_draw(win, text_pos, (W0, H0 + (15*H_)//100, W_, (10*H_)//100))
 
         pos = get_possession(POSSESSION)
         text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pos[0],2))+"%", True, (255,255,255))
         text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pos[1],2))+"%", True, (255,255,255))
 
-        pygame.draw.rect(win, self.team1.color, (pad, (25*H)//100, int(pos[0]*W) - 2*pad, (5*H)//100))
-        self.text_draw(win, text1, (pad, (25*H)//100, int(pos[0]*W) - 2*pad, (5*H)//100))
-        pygame.draw.rect(win, self.team2.color, (int(pos[0]*W)-pad, (25*H)//100, max(0,int(pos[1]*W) - pad), (5*H)//100))
-        self.text_draw(win, text2, (int(pos[0]*W)-pad, (25*H)//100, max(0,int(pos[1]*W) - pad), (5*H)//100))
-        pygame.draw.rect(win, (0,0,0), (pad, (25*H)//100, W - 3*pad, (5*H)//100), LINE_WIDTH)
+        if int(pos[0]*W_) - 2*pad > min_len:
+            pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_) - 3*pad, (5*H_)//100))
+            self.text_draw(win, text1, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_) - 3*pad, (5*H_)//100))
+
+        if int(pos[1]*W_) - pad > min_len:
+            pygame.draw.rect(win, self.team2.color, (W0 + int(pos[0]*W_)-pad, H0 + (25*H_)//100, int(pos[1]*W_ - pad), (5*H_)//100))
+            self.text_draw(win, text2, (W0 + int(pos[0]*W_)-pad, H0 + (25*H_)//100, int(pos[1]*W_ - pad), (5*H_)//100))
+
+        pygame.draw.rect(win, (0,0,0), (W0 + pad, H0 + (25*H_)//100, W_ - 3*pad, (5*H_)//100), LINE_WIDTH)
 
         # Pass accuracy
         text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("Pass Accuracy", True, (255,255,255))
-        self.text_draw(win, text_pos, (0, (35*H)//100, W, (10*H)//100))
+        self.text_draw(win, text_pos, (W0, H0 + (35*H_)//100, W_, (10*H_)//100))
 
         pa = get_pass_acc(PASS_ACC)
         text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pa[0],2))+"%", True, (255,255,255))
         text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pa[1],2))+"%", True, (255,255,255))
 
-        pygame.draw.rect(win, self.team1.color, (pad, (45*H)//100, int(pa[0]*W//2) - 2*pad, (5*H)//100))
-        self.text_draw(win, text1, (pad, (45*H)//100, int(pa[0]*W//2) - 2*pad, (5*H)//100))
+        if int(pa[0]*W_//2) > min_len:
+            pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (45*H_)//100, int(pa[0]*W_//2) - pad, (5*H_)//100))
+            self.text_draw(win, text1, (W0 + pad, H0 + (45*H_)//100, int(pa[0]*W_//2) - pad, (5*H_)//100))
 
-        pygame.draw.rect(win, self.team2.color, (W - pad - int(pa[1]*W//2), (45*H)//100, int(pa[1]*W//2) - pad, (5*H)//100))
-        self.text_draw(win, text2, (W - pad - int(pa[1]*W//2), (45*H)//100, int(pa[1]*W//2) - pad, (5*H)//100))
+        if int(pa[1]*W_//2) - pad > min_len:
+            pygame.draw.rect(win, self.team2.color, (W0 + W_ - pad - int(pa[1]*W_//2), H0 + (45*H_)//100, int(pa[1]*W_//2) - pad, (5*H_)//100))
+            self.text_draw(win, text2, (W0 + W_ - pad - int(pa[1]*W_//2), H0 + (45*H_)//100, int(pa[1]*W_//2) - pad, (5*H_)//100))
 
-        pygame.draw.rect(win, (0,0,0), (W//2 - LINE_WIDTH//2, (45*H)//100, LINE_WIDTH, (5*H)//100))
-        pygame.draw.rect(win, (0,0,0), (pad, (45*H)//100, W - 3*pad, (5*H)//100), LINE_WIDTH)
+        pygame.draw.rect(win, (0,0,0), (W0 + W_//2 - LINE_WIDTH//2, H0 + (45*H_)//100, LINE_WIDTH, (5*H_)//100))
+        pygame.draw.rect(win, (0,0,0), (W0 + pad, H0 + (45*H_)//100, W_ - 3*pad, (5*H_)//100), LINE_WIDTH)
 
         # Shot accuracy
         text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("Shot Accuracy", True, (255,255,255))
-        self.text_draw(win, text_pos, (0, (55*H)//100, W, (10*H)//100))
+        self.text_draw(win, text_pos, (W0, H0 + (55*H_)//100, W_, (10*H_)//100))
 
         sa = get_shot_acc(SHOT_ACC)
         text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*sa[0],2))+"%", True, (255,255,255))
         text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*sa[1],2))+"%", True, (255,255,255))
 
-        pygame.draw.rect(win, self.team1.color, (pad, (65*H)//100, int(sa[0]*W//2) - 2*pad, (5*H)//100))
-        self.text_draw(win, text1, (pad, (65*H)//100, int(sa[0]*W//2) - 2*pad, (5*H)//100))
+        if int(sa[0]*W_//2) > min_len:
+            pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (65*H_)//100, int(sa[0]*W_//2) - pad, (5*H_)//100))
+            self.text_draw(win, text1, (W0 + pad, H0 + (65*H_)//100, int(sa[0]*W_//2) - pad, (5*H_)//100))
 
-        pygame.draw.rect(win, self.team2.color, (W - pad - int(sa[1]*W//2), (65*H)//100, int(sa[1]*W//2) - pad, (5*H)//100))
-        self.text_draw(win, text2, (W - pad - int(sa[1]*W//2), (65*H)//100, int(sa[1]*W//2) - pad, (5*H)//100))
+        if int(sa[1]*W_//2) - 2*pad > min_len:
+            pygame.draw.rect(win, self.team2.color, (W0 + W_ - int(sa[1]*W_//2), H0 + (65*H_)//100, int(sa[1]*W_//2) - 2*pad, (5*H_)//100))
+            self.text_draw(win, text2, (W0 + W_ - int(sa[1]*W_//2), H0 + (65*H_)//100, int(sa[1]*W_//2) - 2*pad, (5*H_)//100))
 
-        pygame.draw.rect(win, (0,0,0), (W//2 - LINE_WIDTH//2, (65*H)//100, LINE_WIDTH, (5*H)//100))
-        pygame.draw.rect(win, (0,0,0), (pad, (65*H)//100, W - 3*pad, (5*H)//100), LINE_WIDTH)
+        pygame.draw.rect(win, (0,0,0), (W0 + W_//2 - LINE_WIDTH//2, H0 + (65*H_)//100, LINE_WIDTH, (5*H_)//100))
+        pygame.draw.rect(win, (0,0,0), (W0 + pad, H0 + (65*H_)//100, W_ - 3*pad, (5*H_)//100), LINE_WIDTH)
 
     def get_state(self):
         """
