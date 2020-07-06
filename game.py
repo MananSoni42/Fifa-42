@@ -15,6 +15,8 @@ class Game:
         self.ball = Ball(pos=(W//2, H//2))
         self.end = False # True when the game ends (never probably)
         self.pause = False
+        self.state = 0
+        self.rewards = 0
 
     def same_team_collision(self, team, actions, free):
         """ Check if current player collides with any other players (same team) """
@@ -96,7 +98,7 @@ class Game:
         pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
 
     def draw(self, win, debug=False):
-        """ Draw everything """
+        """ Draw the game """
         self.field_draw(win)
         self.goal_draw(win)
         self.team1.draw(win, debug=debug)
@@ -106,11 +108,8 @@ class Game:
     def pause_draw(self,win):
         """ Draw the pause menu """
 
-        """ # Stats
-        print(f'POSS: {get_possession(POSSESSION)} | PASS: {get_pass_acc(PASS_ACC)} | SHOT: {get_shot_acc(SHOT_ACC)}') # Stats
-        """
         # background and border
-        win.fill((42, 42, 42)) # Gray background
+        win.fill((42, 42, 42)) # Gray
         pygame.draw.rect(win, (255, 255, 255), (0, 0, W - LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH) # border
         pad = LINE_WIDTH*2
 
@@ -169,12 +168,22 @@ class Game:
         pygame.draw.rect(win, (0,0,0), (W//2 - LINE_WIDTH//2, (65*H)//100, LINE_WIDTH, (5*H)//100))
         pygame.draw.rect(win, (0,0,0), (pad, (65*H)//100, W - 3*pad, (5*H)//100), LINE_WIDTH)
 
+    def get_state(self):
+        """
+        The state object: a summary of the entire game as seen by the agent
+        """
+        pos1 = [P(1/W,1/H)*player.pos for player in self.team1.players]
+        pos2 = [P(1/W,1/H)*player.pos for player in self.team2.players]
+        return {
+            'team1': pos1,
+            'team2': pos2,
+            'ball': P(1/W,1/H)*self.ball.pos
+        }
+
     def next(self):
-        s = 0
-        r = 0
-        a1 = self.team1.move(s, r)
-        a2 = self.team2.move(s, r)
-        s, r = self.move_next(a1,a2)
+        a1 = self.team1.move(self.state, self.rewards)
+        a2 = self.team2.move(self.state, self.rewards)
+        self.state, self.rewards = self.move_next(a1,a2)
 
     def move_next(self, a1, a2):
         """
@@ -188,4 +197,4 @@ class Game:
 
         self.ball.update(self.team1, self.team2, a1, a2) # Update ball's state
         self.ball.goal_check() # Check if a goal is scoread
-        return 0,0
+        return self.get_state(), 0

@@ -13,13 +13,10 @@ pygame.display.set_caption("FIFA-42")
 
 """
 Define teams
-    - One needs to be AI, other can be human or AI
-    - ids need to be 1 and 2 only
     - Team 1 faces right by default
 """
-
-team1 = RandomTeam(formation='default', color=(0,32,255))
-team2 = HumanTeam(color=(255,128,0))
+team1 = HumanTeam(formation='default', color=(0,32,255))
+team2 = RandomTeam(color=(255,128,0))
 
 game = Game(team1,team2)
 

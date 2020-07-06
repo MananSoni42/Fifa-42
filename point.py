@@ -17,9 +17,13 @@ class P:
 
     @property
     def val(self):
+        """ Return the value of the point as a tuple rounded to the nearest integer point """
         return (int(round(self.x,0)), int(round(self.y,0)))
 
     def __str__(self):
+        return f'P({self.x}, {self.y})'
+
+    def __repr__(self):
         return f'P({self.x}, {self.y})'
 
     def __add__(self, p):
@@ -39,7 +43,7 @@ class P:
         return self
 
     def __mul__(self, p):
-        return P(int(self.x * p.x), int(self.y * p.y))
+        return P(self.x * p.x, self.y * p.y)
 
     def __imul__(self, p):
         self.x *= p.x
