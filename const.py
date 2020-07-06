@@ -20,7 +20,7 @@ def get_possession(pos):
     if pos[1]+pos[2] == 0:
         team1_pos = 0.5
     else:
-        team1_pos = int(round(pos[1]/(pos[1]+pos[2]),0))
+        team1_pos = round(pos[1]/(pos[1]+pos[2]),2)
     return team1_pos, 1-team1_pos
 
 def get_pass_acc(ballpass):
