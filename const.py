@@ -70,11 +70,15 @@ ACT = { 'NOTHING': (0,0), None: (0,0),
 """
 Team formations
     - Must start with the keeper
+    - Must contain positions for both left and right sides
     - Recommended to specify completley in terms of W and H (and PLAYER_RADIUS if reqd)
 """
 FORM = {
-    'default-left': [P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
-    'default-right': [P(W - 2*PLAYER_RADIUS - BALL_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
+    'default': {
+            'L': [P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
+            'R': [P(W - 2*PLAYER_RADIUS - BALL_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
+        }
+
 }
 
 # Number of goals

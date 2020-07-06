@@ -4,9 +4,13 @@ from ball import Ball
 
 class Game:
     """ Class that controls the entire game """
-    def __init__(self, team_human, team_ai):
-        self.team_human = team_human
-        self.team_ai = team_ai
+    def __init__(self, team1, team2):
+        self.team1 = team1
+        self.team1.init(id=1, dir='L') # direction is hardcoded, don't change
+
+        self.team2 = team2
+        self.team2.init(id=2, dir='R')
+
         self.ball = Ball(pos=(W//2, H//2))
         self.end = False # True when the game ends (never probably)
 
@@ -49,7 +53,6 @@ class Game:
                     player2.pos.y += ydir[1]*yincr
 
     def collision(self, team1, act1, team2, act2, ball):
-        # Special case when ball is not free
         self.same_team_collision(team1, act1, self.ball.free)
         self.same_team_collision(team2, act2, self.ball.free)
         self.diff_team_collision(team1, team2, self.ball.free)
@@ -97,19 +100,21 @@ class Game:
         """ Draw everything """
         self.field_draw(win)
         self.goal_draw(win)
-        self.team_human.draw(win, debug=debug)
-        self.team_ai.draw(win, debug=debug)
+        self.team1.draw(win, debug=debug)
+        self.team2.draw(win, debug=debug)
         self.ball.draw(win, debug=debug)
 
-    def next(self, a_h,a_ai):
+
+    def next(self, a1, a2):
         """
         Next loop that is the heart of the game
-         - a (list): Actions of each player in the team
+         - a1,a2 (list): Actions of each player in respective teams
         """
-        self.team_human.update(a_h) # Update team's state
-        self.team_ai.update(a_ai) # Update team's state
-        self.collision(self.team_human, a_h, self.team_ai, a_ai, self.ball)
-        self.ball.update(self.team_human, self.team_ai, a_h, a_ai) # Update ball's state
+        self.team1.update(a1, self.ball) # Update team's state
+        self.team2.update(a2, self.ball)
+
+        self.collision(self.team1, a1, self.team2, a2, self.ball) # Check for collision between players
+
+        self.ball.update(self.team1, self.team2, a1, a2) # Update ball's state
         self.ball.goal_check() # Check if a goal is scoread
-        self.team_human.set_nearest(self.ball) # select nearest human player
         return 0,0

@@ -13,6 +13,7 @@ class Agent(ABC):
         self.pos = P(pos) # Starting position
         self.walk_dir = dir # options are R (right), L (left)
         self.walk_count = 0 # For running animation
+        self.rnd = 0.01*np.random.rand()
 
     def __str__(self):
         return f'\nAgent {self.id} - {self.pos}'
@@ -68,33 +69,33 @@ class HumanAgent(Agent):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    return 'SHOOT_Q'
-                elif event.key == pygame.K_w:
-                    return 'SHOOT_W'
-                elif event.key == pygame.K_e:
-                    return 'SHOOT_E'
-                elif event.key == pygame.K_a:
-                    return 'SHOOT_A'
-                elif event.key == pygame.K_d:
-                    return 'SHOOT_D'
-                elif event.key == pygame.K_z:
-                    return 'SHOOT_Z'
-                elif event.key == pygame.K_x:
-                    return 'SHOOT_X'
-                elif event.key == pygame.K_c:
-                    return 'SHOOT_C'
-                elif event.key == pygame.K_LEFT:
-                    return 'MOVE_L'
-                elif event.key == pygame.K_RIGHT:
-                    return 'MOVE_R'
-                elif event.key == pygame.K_UP:
-                    return 'MOVE_U'
-                elif event.key == pygame.K_DOWN:
-                    return 'MOVE_D'
-                else:
-                    return 'NOTHING'
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            return 'SHOOT_A'
+        elif keys[pygame.K_d]:
+            return 'SHOOT_D'
+        elif keys[pygame.K_w]:
+            return 'SHOOT_W'
+        elif keys[pygame.K_x]:
+            return 'SHOOT_X'
+        elif keys[pygame.K_q]:
+            return 'SHOOT_Q'
+        elif keys[pygame.K_c]:
+            return 'SHOOT_C'
+        elif keys[pygame.K_e]:
+            return 'SHOOT_E'
+        elif keys[pygame.K_z]:
+            return 'SHOOT_Z'
+        elif keys[pygame.K_LEFT]:
+            return 'MOVE_L'
+        elif keys[pygame.K_RIGHT]:
+            return 'MOVE_R'
+        elif keys[pygame.K_UP]:
+            return 'MOVE_U'
+        elif keys[pygame.K_DOWN]:
+            return 'MOVE_D'
+        else:
+            return 'NOTHING'
 
 class RandomAgent(Agent):
     """ Agents that move randomly """

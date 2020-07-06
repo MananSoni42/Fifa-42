@@ -17,7 +17,7 @@ class P:
 
     @property
     def val(self):
-        return (self.x, self.y)
+        return (int(round(self.x,0)), int(round(self.y,0)))
 
     def __str__(self):
         return f'P({self.x}, {self.y})'
@@ -47,5 +47,4 @@ class P:
         return self
 
     def dist(self, p):
-        """ L1 distance (not euclidean) """
-        return abs(self.x-p.x) + abs(self.y-p.y)
+        return np.sqrt((self.x-p.x)**2 + (self.y-p.y)**2)
