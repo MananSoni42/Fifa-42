@@ -16,41 +16,37 @@ def recolor(surface, color=(255,128,0)):
             val = surface.get_at((x, y))
             surface.set_at((x, y), Color(r, g, b, val[3]))
 
-def get_possession(pos, printpos=False):
+def get_possession(pos):
     if pos[1]+pos[2] == 0:
-        team1_pos = 50
+        team1_pos = 0.5
     else:
-        team1_pos = int(round(100*pos[1]/(pos[1]+pos[2]),0))
-    if printpos:
-        print(f'Possession: Team 1: {team1_pos} % Team 2: {100-team1_pos} %')
-    return team1_pos, 100-team1_pos
+        team1_pos = int(round(pos[1]/(pos[1]+pos[2]),0))
+    return team1_pos, 1-team1_pos
 
-def get_pass_acc(ballpass, printpass=False):
+def get_pass_acc(ballpass):
     if ballpass[1]['succ'] + ballpass[1]['fail'] == 0:
         team1_pass = 0
     else:
-        team1_pass = round(100*ballpass[1]['succ']/(ballpass[1]['succ']+ballpass[1]['fail']),2)
+        team1_pass = round(ballpass[1]['succ']/(ballpass[1]['succ']+ballpass[1]['fail']),2)
 
     if ballpass[2]['succ'] + ballpass[2]['fail'] == 0:
         team2_pass = 0
     else:
-        team2_pass = round(100*ballpass[2]['succ']/(ballpass[2]['succ']+ballpass[2]['fail']),2)
-    if printpass:
-        print(f'Passing accuracy: Team 1: {team1_pass} % Team 2: {team2_pass} %')
+        team2_pass = round(ballpass[2]['succ']/(ballpass[2]['succ']+ballpass[2]['fail']),2)
+
     return team1_pass, team2_pass
 
-def get_shot_acc(shot, printshot=False):
+def get_shot_acc(shot):
     if shot[1]['succ'] + shot[1]['fail'] == 0:
         team1_shot = 0
     else:
-        team1_shot = round(100*shot[1]['succ']/(shot[1]['succ']+shot[1]['fail']),2)
+        team1_shot = round(shot[1]['succ']/(shot[1]['succ']+shot[1]['fail']),2)
 
     if shot[2]['succ'] + shot[2]['fail'] == 0:
         team2_shot = 0
     else:
-        team2_shot = round(100*shot[2]['succ']/(shot[2]['succ']+shot[2]['fail']),2)
-    if printshot:
-        print(f'Passing accuracy: Team 1: {team1_shot} % Team 2: {team2_shot} %')
+        team2_shot = round(shot[2]['succ']/(shot[2]['succ']+shot[2]['fail']),2)
+
     return team1_shot, team2_shot
 ######################################
 

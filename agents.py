@@ -66,10 +66,8 @@ class HumanAgent(Agent):
         win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
 
     def move(self, state, reward):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
         keys = pygame.key.get_pressed()
+        
         if keys[pygame.K_a]:
             return 'SHOOT_A'
         elif keys[pygame.K_d]:

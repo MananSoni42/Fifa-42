@@ -8,11 +8,10 @@ Settings and paths
 
 ############## Settings ##############
 NUM_TEAM = 7 # Number of players in a team
+FONT_SIZE = 45
 W = 1024 # Width
 H = 568 # Height
 FPS = 27
-ASSET_DIR = './assets/' # Path to assets
-FONT_PATH = ASSET_DIR + 'Roboto-Black.ttf'
 
 PLAYER_SPEED = 3
 PLAYER_RADIUS = 20
@@ -23,8 +22,9 @@ BALL_RADIUS = 7
 BALL_CENTER = P(BALL_RADIUS, BALL_RADIUS)
 BALL_OFFSET = P(2, 1.5)
 
+ASSET_DIR = './assets/' # Path to assets
+FONT_PATH = ASSET_DIR + 'Roboto-Black.ttf'
 GOAL_DISP_SIZE = 60
-FONT_SIZE = 45
 GOAL_POS = [0.3,0.7] # goalpost positions in percentage of H
 LINE_WIDTH = 2
 ANIM_NUM = 7 # Number of images used for running animation

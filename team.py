@@ -58,7 +58,7 @@ class Team(ABC):
         pass
 
     @abstractmethod
-    def move(self):
+    def move(self, state, reward):
         """ Move the entire team (may use the player's move method) """
         pass
 
@@ -131,7 +131,7 @@ class HumanTeam(Team):
         else:
             return 'NOTHING'
 
-    def move(self, keys=None):
+    def move(self, state, reward):
         """
         Move a human team
             * Player nearest to the ball moves through keyboard
@@ -140,7 +140,7 @@ class HumanTeam(Team):
         actions = []
         for i,player in enumerate(self.players):
             if i == self.selected:
-                actions.append(player.move(0,0))
+                actions.append(player.move(state, reward))
             elif self.maintain_formation:
                 actions.append(self.formation_dir(i))
             else:
@@ -157,9 +157,9 @@ class RandomTeam(Team):
 
         self.selected = NUM_TEAM//2
 
-    def move(self):
+    def move(self, state, reward):
         """ Move each player randomly """
         actions = []
         for i,player in enumerate(self.players):
-            actions.append(player.move(0,0))
+            actions.append(player.move(state, reward))
         return actions

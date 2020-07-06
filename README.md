@@ -4,17 +4,18 @@ The aim is to bring the original game (written in ANSI C) online.
 I also intend to convert this into a full blown online game along with a realistic AI.
 
 ## Milestones
-- [ ] Create a python port (using PyGame)
+- [x] Create a python port (using PyGame)
   - [x] Set up game environment and Human Agents
   - [x] Calculate stats (possession, shot/pass accuracy)
-  - [ ] Implement Pause menu
+  - [x] Implement Pause menu
 - [ ] Convert to a static online game
   - [ ] Port to JavaScript
   - [ ] Set up local multiplayer (static - requires only frontend)
   - [ ] Enable online multiplayer (requires a backend)
-- [ ] Set up the original AI team
-- [ ] Come up with an improved (hard-coded) AI team 
-- [ ] Train a realistic AI team using Reinforcement Learning (super hard)
+- [ ] Set up true single player
+  - [ ] Set up the original AI team
+  - [ ] Come up with an improved (hard-coded) AI team
+  - [ ] Train a realistic AI team using Reinforcement Learning (super hard)
 
 ## Setup
 ### Structure

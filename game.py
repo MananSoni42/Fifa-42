@@ -1,6 +1,7 @@
 from settings import *
 from const import ACT, GOALS
 from ball import Ball
+from const import *
 
 class Game:
     """ Class that controls the entire game """
@@ -13,6 +14,7 @@ class Game:
 
         self.ball = Ball(pos=(W//2, H//2))
         self.end = False # True when the game ends (never probably)
+        self.pause = False
 
     def same_team_collision(self, team, actions, free):
         """ Check if current player collides with any other players (same team) """
@@ -82,10 +84,7 @@ class Game:
         #win.blit(BACKGROUND_IMG, (0, 0)) # grass
         win.fill((14, 156, 23)) # constant green
 
-        pygame.draw.rect(win, (255, 255, 255), (0, 0, W, LINE_WIDTH//2)) # border
-        pygame.draw.rect(win, (255, 255, 255), (0, H-LINE_WIDTH//2, W, LINE_WIDTH//2)) # border
-        pygame.draw.rect(win, (255, 255, 255), (0, 0, LINE_WIDTH//2, H)) # border
-        pygame.draw.rect(win, (255, 255, 255), (W-LINE_WIDTH//2, 0, LINE_WIDTH//2, H)) # border
+        pygame.draw.rect(win, (255, 255, 255), (0, 0, W - LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH) # border
 
         pygame.draw.rect(win, (255, 255, 255), (W//2 - LINE_WIDTH//2, 0, LINE_WIDTH, H)) # mid line
         pygame.draw.circle(win, (255, 255, 255), (W//2, H//2), H//5, LINE_WIDTH) # mid circle
@@ -104,8 +103,80 @@ class Game:
         self.team2.draw(win, debug=debug)
         self.ball.draw(win, debug=debug)
 
+    def pause_draw(self,win):
+        """ Draw the pause menu """
 
-    def next(self, a1, a2):
+        """ # Stats
+        print(f'POSS: {get_possession(POSSESSION)} | PASS: {get_pass_acc(PASS_ACC)} | SHOT: {get_shot_acc(SHOT_ACC)}') # Stats
+        """
+        # background and border
+        win.fill((42, 42, 42)) # Gray background
+        pygame.draw.rect(win, (255, 255, 255), (0, 0, W - LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH) # border
+        pad = LINE_WIDTH*2
+
+        # Exit button
+        pygame.draw.rect(win, (255, 255, 255), (W//50, H//50, W//10, H//10)) # button
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE).render("X", True, (255,0,0))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render("(Backspace)", True, (0,0,0))
+        self.text_draw(win, text1, (pad, (3*H)//100, W//10, (5*H)//100))
+        self.text_draw(win, text2, (pad, (8*H)//100, W//10, (5*H)//100))
+
+        # Possession
+        text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("POSSESSION", True, (255,255,255))
+        self.text_draw(win, text_pos, (0, (15*H)//100, W, (10*H)//100))
+
+        pos = get_possession(POSSESSION)
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*pos[0])+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*pos[1])+"%", True, (255,255,255))
+
+        pygame.draw.rect(win, self.team1.color, (pad, (25*H)//100, int(pos[0]*W) - 2*pad, (5*H)//100))
+        self.text_draw(win, text1, (pad, (25*H)//100, int(pos[0]*W) - 2*pad, (5*H)//100))
+        pygame.draw.rect(win, self.team2.color, (int(pos[0]*W)-pad, (25*H)//100, max(0,int(pos[1]*W) - pad), (5*H)//100))
+        self.text_draw(win, text2, (int(pos[0]*W)-pad, (25*H)//100, max(0,int(pos[1]*W) - pad), (5*H)//100))
+        pygame.draw.rect(win, (0,0,0), (pad, (25*H)//100, W - 3*pad, (5*H)//100), LINE_WIDTH)
+
+        # Pass accuracy
+        text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("Pass Accuracy", True, (255,255,255))
+        self.text_draw(win, text_pos, (0, (35*H)//100, W, (10*H)//100))
+
+        pa = get_pass_acc(PASS_ACC)
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*pa[0])+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*pa[1])+"%", True, (255,255,255))
+
+        pygame.draw.rect(win, self.team1.color, (pad, (45*H)//100, int(pa[0]*W//2) - 2*pad, (5*H)//100))
+        self.text_draw(win, text1, (pad, (45*H)//100, int(pa[0]*W//2) - 2*pad, (5*H)//100))
+
+        pygame.draw.rect(win, self.team2.color, (W - pad - int(pa[1]*W//2), (45*H)//100, int(pa[1]*W//2) - pad, (5*H)//100))
+        self.text_draw(win, text2, (W - pad - int(pa[1]*W//2), (45*H)//100, int(pa[1]*W//2) - pad, (5*H)//100))
+
+        pygame.draw.rect(win, (0,0,0), (W//2 - LINE_WIDTH//2, (45*H)//100, LINE_WIDTH, (5*H)//100))
+        pygame.draw.rect(win, (0,0,0), (pad, (45*H)//100, W - 3*pad, (5*H)//100), LINE_WIDTH)
+
+        # Shot accuracy
+        text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("Shot Accuracy", True, (255,255,255))
+        self.text_draw(win, text_pos, (0, (55*H)//100, W, (10*H)//100))
+
+        sa = get_shot_acc(SHOT_ACC)
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*sa[0])+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*sa[1])+"%", True, (255,255,255))
+
+        pygame.draw.rect(win, self.team1.color, (pad, (65*H)//100, int(sa[0]*W//2) - 2*pad, (5*H)//100))
+        self.text_draw(win, text1, (pad, (65*H)//100, int(sa[0]*W//2) - 2*pad, (5*H)//100))
+
+        pygame.draw.rect(win, self.team2.color, (W - pad - int(sa[1]*W//2), (65*H)//100, int(sa[1]*W//2) - pad, (5*H)//100))
+        self.text_draw(win, text2, (W - pad - int(sa[1]*W//2), (65*H)//100, int(sa[1]*W//2) - pad, (5*H)//100))
+
+        pygame.draw.rect(win, (0,0,0), (W//2 - LINE_WIDTH//2, (65*H)//100, LINE_WIDTH, (5*H)//100))
+        pygame.draw.rect(win, (0,0,0), (pad, (65*H)//100, W - 3*pad, (5*H)//100), LINE_WIDTH)
+
+    def next(self):
+        s = 0
+        r = 0
+        a1 = self.team1.move(s, r)
+        a2 = self.team2.move(s, r)
+        s, r = self.move_next(a1,a2)
+
+    def move_next(self, a1, a2):
         """
         Next loop that is the heart of the game
          - a1,a2 (list): Actions of each player in respective teams

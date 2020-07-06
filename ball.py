@@ -18,8 +18,8 @@ class Ball:
     def draw(self, win, debug=False):
         if debug:
             pygame.draw.rect(win, (100,100,100), (self.pos.x-BALL_RADIUS, self.pos.y-BALL_RADIUS,BALL_RADIUS*2,BALL_RADIUS*2))
-        if not self.free:
-            pygame.draw.circle(win, (255,0,0), self.pos.val, BALL_RADIUS+LINE_WIDTH, LINE_WIDTH)
+            if not self.free:
+                pygame.draw.circle(win, (255,0,0), self.pos.val, BALL_RADIUS+LINE_WIDTH, LINE_WIDTH)
         win.blit(FOOTBALL_IMG, (self.pos - BALL_CENTER).val)
 
     def reset(self, pos):
