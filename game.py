@@ -125,8 +125,8 @@ class Game:
         self.text_draw(win, text_pos, (0, (15*H)//100, W, (10*H)//100))
 
         pos = get_possession(POSSESSION)
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*pos[0])+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*pos[1])+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pos[0],2))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pos[1],2))+"%", True, (255,255,255))
 
         pygame.draw.rect(win, self.team1.color, (pad, (25*H)//100, int(pos[0]*W) - 2*pad, (5*H)//100))
         self.text_draw(win, text1, (pad, (25*H)//100, int(pos[0]*W) - 2*pad, (5*H)//100))
@@ -139,8 +139,8 @@ class Game:
         self.text_draw(win, text_pos, (0, (35*H)//100, W, (10*H)//100))
 
         pa = get_pass_acc(PASS_ACC)
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*pa[0])+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*pa[1])+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pa[0],2))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pa[1],2))+"%", True, (255,255,255))
 
         pygame.draw.rect(win, self.team1.color, (pad, (45*H)//100, int(pa[0]*W//2) - 2*pad, (5*H)//100))
         self.text_draw(win, text1, (pad, (45*H)//100, int(pa[0]*W//2) - 2*pad, (5*H)//100))
@@ -156,8 +156,8 @@ class Game:
         self.text_draw(win, text_pos, (0, (55*H)//100, W, (10*H)//100))
 
         sa = get_shot_acc(SHOT_ACC)
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*sa[0])+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(100*sa[1])+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*sa[0],2))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*sa[1],2))+"%", True, (255,255,255))
 
         pygame.draw.rect(win, self.team1.color, (pad, (65*H)//100, int(sa[0]*W//2) - 2*pad, (5*H)//100))
         self.text_draw(win, text1, (pad, (65*H)//100, int(sa[0]*W//2) - 2*pad, (5*H)//100))

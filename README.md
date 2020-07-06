@@ -1,7 +1,16 @@
+
 # Fifa-42 - Reborn!
 A modern port of a beloved game written by me along with a couple of friends.  
-The aim is to bring the original game (written in ANSI C) online.
-I also intend to convert this into a full blown online game along with a realistic AI.
+The aim is to make the original game (written in ANSI C) more accessible.
+The ideal outcome would be a python game with an AI that can learn from the opposing player's moves along with an online game that supports single-player as well multi-player
+
+## Controls
+Key                  | Action                     |
+-------------------- | -------------------------- |
+Arrow keys           | Move the (selected) player |
+Q,W,E,A,Z,X,C        | Shoot the ball             |
+ESC                  | Bring up Pause menu        |
+BACKSPACE            | Collapse Pause menu        |
 
 ## Milestones
 - [x] Create a python port (using PyGame)
