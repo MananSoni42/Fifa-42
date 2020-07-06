@@ -1,44 +1,57 @@
-# Fifa-42
-This is the first game that was created by me along with a couple of my friends. It is written in ANSI C++ and works only on a console.
-It is a 9v9 Football game where you compete against the computer. 
 
-## Installation 
-* Download Turbo C++ from [here](https://developerinsider.co/download-turbo-c-for-windows-7-8-8-1-and-windows-10-32-64-bit-full-screen/).
-* Open Turbo C++ and navigate to fifa_42.CPP
-* Compile the file and enjoy the game!
+# Fifa-42 - Reborn!
+A modern port of a beloved game written by me along with a couple of friends.  
+The aim is to make the original game (written in ANSI C) more accessible.
+The ideal outcome would be a python game with an AI that can learn from the opposing player's moves along with an online game that supports single-player as well multi-player
 
-## The game
-Once the program is compiled, the user is presented with a menu, you can use the left/right keys to toggle the menu.
+## Controls
+Key                  | Action                     |
+-------------------- | -------------------------- |
+Arrow keys           | Move the (selected) player |
+Q,W,E,A,Z,X,C        | Shoot the ball             |
+ESC                  | Bring up Pause menu        |
+BACKSPACE            | Collapse Pause menu        |
 
-### Basic layout
-Once you click on the play button, a football field appears.
-Your team members are white circles while the opponent team members are blue circles. You are the yellow circle. 
+## Milestones
+- [x] Create a python port (using PyGame)
+  - [x] Set up game environment and Human Agents
+  - [x] Calculate stats (possession, shot/pass accuracy)
+  - [x] Implement Pause menu
+- [ ] Convert to a static online game
+  - [ ] Port to JavaScript
+  - [ ] Set up local multiplayer (static - requires only frontend)
+  - [ ] Enable online multiplayer (requires a backend)
+- [ ] Set up true single player
+  - [ ] Set up the original AI team
+  - [ ] Come up with an improved (hard-coded) AI team
+  - [ ] Train a realistic AI team using Reinforcement Learning (super hard)
 
-### Controls
-* Use arrow keys to move your player
-* Use the ```QWE, ASD, ZXC``` keys for passing the ball in an appropriate direction
-* In game, use the ```space``` key to toggle Position holding (whether your players return to their original positions)
-* Pause the game by pressing the ```esc``` key
-* Once in the pause menu, formations can be changed using the ```space``` key followed by the left/right arrow keys
+## Setup
+### Structure
+```terminal
+.
+├── agents.py # Agents that can play the game
+├── teams.py # Teams consisting of a set of agents
+├── ball.py # Football that can be passed around
+├── game.py # Class that conotrols the entire game
+├── driver.py # Driver to test the game
+├── point.py # class that handles 2-D co-ordinate manipulation
+├── const.py # Important game constants
+└── settings.py # Global settings and paths
+```
 
-## Screens
-1. Main menu  
-<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu1.png" height=150px> | <img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu2.png" height=150px> | <img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu3.png" height=150px>
+### Installing locally
+* The game requires Python3+  
 
-2. Instructions (interactive)
-<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/instructions.png" height=250px>
+* Install dependancies using:  
+```terminal
+pip3 install -r requirements.txt
+```
 
-3. Game 
-<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/game.png" height=250px>
-
-4. Pause menu
-<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/pause_menu.png" height=250px>
-
-
-## Developers
-* [Manan Soni](https://github.com/MananSoni42)
-* [Ashutosh Jani](https://github.com/AshutoshJani)
+* Run the game using:  
+```terminal
+python3 driver.py
+```
 
 ## License
 This project is licensed under the [MIT](https://opensource.org/licenses/MIT) License
-
