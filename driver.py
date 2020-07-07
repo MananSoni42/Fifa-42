@@ -21,7 +21,6 @@ team2 = RandomTeam(color=(255,128,0))
 game = Game(team1,team2)
 
 while not game.end:
-
     clock.tick(FPS) # FPS
 
     for event in pygame.event.get():
@@ -36,12 +35,12 @@ while not game.end:
 
 
     if game.pause:
-        game.draw(win, debug=False)
+        game.draw(win)
         game.pause_draw(win)
     else:
         game.draw(win, debug=False)
         game.next()
-        
+
     pygame.display.update() # refresh screen
 
 pygame.quit()

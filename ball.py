@@ -36,28 +36,27 @@ class Ball:
         """ Check if a goal is scored """
         goal = False
         reset = False
-        goals_scored = {1: 0, 2: 0}
-
+        side = 0 # Which team's goalpost the ball entered
         if not (BALL_RADIUS < self.pos.x < W - BALL_RADIUS):
             reset = True
             if self.pos.x <= BALL_RADIUS:
                 pos = P(PLAYER_RADIUS + BALL_RADIUS, H//2)
-                goals_scored[2] += 1
+                side = 1
             else:
                 pos = P(W - PLAYER_RADIUS - BALL_RADIUS, H//2)
-                goals_scored[1] += 1
+                side = 2
+
             if GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
                 goal = True
-                GOALS[1] += goals_scored[1]
-                GOALS[2] += goals_scored[2]
+                GOALS[3-side] += 1 # maps 1 -> 2, 2 -> 1 bcoz the goal goes to the other side!
                 pos = P(W//2, H//2)
 
         if reset:
-            self.update_stats(goal=goal)
+            self.update_stats(goal=goal, side=side)
             self.reset(pos)
         return goal
 
-    def update_stats(self, player=None, goal=None):
+    def update_stats(self, player=None, goal=None, side=None):
         """
         Sync ball statistics with the global variables
         Activates when a player receives the ball or during a goal attempt
@@ -66,6 +65,7 @@ class Ball:
                     +1 to fail if diff team pass is recorded
             - Shot: +1 to succ if a goal is scored
                     +1 to fail if goal is not scored (out of bounds) / keeper stops the ball
+                    Does not apply if player shoots towards his own goal
         """
         if player is not None: # Player receives the ball
             self.stats['last_player'] = self.stats['player']
@@ -84,7 +84,7 @@ class Ball:
                     else:
                         PASS_ACC[self.stats['last_team']]['fail'] += 1
 
-        elif goal is not None: # Called when a goal is scored
+        elif goal is not None and side != self.stats['team']: # Called when a goal is scored, don't change if player shoots towards his own goalpost
             if goal:
                 SHOT_ACC[self.stats['team']]['succ'] += 1
             else:
