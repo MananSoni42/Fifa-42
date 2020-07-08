@@ -32,14 +32,15 @@ The ideal outcome would be a python game with an AI that can learn from the oppo
 ### Structure
 ```terminal
 .
-├── agents.py # Agents that can play the game
-├── teams.py # Teams consisting of a set of agents
-├── ball.py # Football that can be passed around
-├── game.py # Class that conotrols the entire game
 ├── driver.py # Driver to test the game
-├── point.py # class that handles 2-D co-ordinate manipulation
+├── game.py # Class that controls the entire game
+├── ball.py # Football that can be passed around
+├── teams.py # Teams consisting of a set of agents
+├── agents.py # Agents that can play the game
+├── settings.py # Global settings and paths
 ├── const.py # Important game constants
-└── settings.py # Global settings and paths
+├── stats.py # In-game statistics (possession, goals scored, pass/shot accuracy)
+└── point.py # class that handles 2-D co-ordinate manipulation
 ```
 
 ### Installing locally

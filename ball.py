@@ -1,5 +1,5 @@
 from settings import *
-from const import ACT, POSSESSION, PASS_ACC, SHOT_ACC, GOALS
+from const import ACT
 
 class Ball:
     """Implements the football used in the game"""
@@ -8,7 +8,7 @@ class Ball:
         self.vel = P(0,0)
         self.free = True
         self.color = (50,50,50)
-        self.stats = {
+        self.ball_stats = {
             'last_player': -1,
             'last_team': -1,
             'player': -1,
@@ -27,12 +27,12 @@ class Ball:
         self.pos = P(pos)
         self.vel = P(0,0)
         self.free = True
-        self.stats['last_player'] = -1
-        self.stats['last_team'] = -1
-        self.stats['player'] = -1
-        self.stats['team'] = -1
+        self.ball_stats['last_player'] = -1
+        self.ball_stats['last_team'] = -1
+        self.ball_stats['player'] = -1
+        self.ball_stats['team'] = -1
 
-    def goal_check(self):
+    def goal_check(self, stats):
         """ Check if a goal is scored """
         goal = False
         reset = False
@@ -48,15 +48,15 @@ class Ball:
 
             if GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
                 goal = True
-                GOALS[3-side] += 1 # maps 1 -> 2, 2 -> 1 bcoz the goal goes to the other side!
+                stats.goals[3-side] += 1 # maps 1 -> 2, 2 -> 1 bcoz the goal goes to the other side!
                 pos = P(W//2, H//2)
 
         if reset:
-            self.update_stats(goal=goal, side=side)
+            self.update_stats(stats, goal=goal, side=side)
             self.reset(pos)
         return goal
 
-    def update_stats(self, player=None, goal=None, side=None):
+    def update_stats(self, stats, player=None, goal=None, side=None):
         """
         Sync ball statistics with the global variables
         Activates when a player receives the ball or during a goal attempt
@@ -68,45 +68,45 @@ class Ball:
                     Does not apply if player shoots towards his own goal
         """
         if player is not None: # Player receives the ball
-            self.stats['last_player'] = self.stats['player']
-            self.stats['last_team'] = self.stats['team']
-            self.stats['player'] = player.id
-            self.stats['team'] = player.team_id
+            self.ball_stats['last_player'] = self.ball_stats['player']
+            self.ball_stats['last_team'] = self.ball_stats['team']
+            self.ball_stats['player'] = player.id
+            self.ball_stats['team'] = player.team_id
 
-            if self.stats['last_team'] == self.stats['team']: # Same team pass
-                if self.stats['last_player'] != self.stats['player'] :
-                    POSSESSION[self.stats['team']] += 1
-                    PASS_ACC[self.stats['team']]['succ'] += 1
+            if self.ball_stats['last_team'] == self.ball_stats['team']: # Same team pass
+                if self.ball_stats['last_player'] != self.ball_stats['player'] :
+                    stats.pos[self.ball_stats['team']] += 1
+                    stats.pass_acc[self.ball_stats['team']]['succ'] += 1
             else: # Different team pass
-                if self.stats['last_team'] != -1:
-                    if self.stats['player'] == 0: # GK of different team receives the ball
-                        SHOT_ACC[self.stats['last_team']]['fail'] += 1
+                if self.ball_stats['last_team'] != -1:
+                    if self.ball_stats['player'] == 0: # GK of different team receives the ball
+                        stats.shot_acc[self.ball_stats['last_team']]['fail'] += 1
                     else:
-                        PASS_ACC[self.stats['last_team']]['fail'] += 1
+                        stats.pass_acc[self.ball_stats['last_team']]['fail'] += 1
 
-        elif goal is not None and side != self.stats['team']: # Called when a goal is scored, don't change if player shoots towards his own goalpost
+        elif goal is not None and side != self.ball_stats['team']: # Called when a goal is scored, don't change if player shoots towards his own goalpost
             if goal:
-                SHOT_ACC[self.stats['team']]['succ'] += 1
+                stats.shot_acc[self.ball_stats['team']]['succ'] += 1
             else:
-                SHOT_ACC[self.stats['team']]['fail'] += 1
+                stats.shot_acc[self.ball_stats['team']]['fail'] += 1
 
-    def ball_player_collision(self, team):
+    def ball_player_collision(self, team, stats):
         for player in team.players:
             if self.pos.dist(player.pos) < PLAYER_RADIUS + BALL_RADIUS:
                 self.vel = P(0,0)
                 self.free = False
                 self.dir = player.walk_dir
-                self.update_stats(player)
+                self.update_stats(stats, player=player)
 
-    def check_capture(self, team1, team2):
+    def check_capture(self, team1, team2, stats):
         """
         If ball is captured, move according to player
         else check if captured
         """
-        if self.stats['team'] == 1:
-            player = team1.players[self.stats['player']]
-        elif self.stats['team'] == 2:
-            player = team2.players[self.stats['player']]
+        if self.ball_stats['team'] == 1:
+            player = team1.players[self.ball_stats['player']]
+        elif self.ball_stats['team'] == 2:
+            player = team2.players[self.ball_stats['player']]
 
         if not self.free:
             self.dir = player.walk_dir
@@ -116,15 +116,15 @@ class Ball:
                 self.pos = player.pos + BALL_OFFSET*BALL_CENTER
 
         else:
-            self.ball_player_collision(team1)
-            self.ball_player_collision(team2)
+            self.ball_player_collision(team1, stats)
+            self.ball_player_collision(team2, stats)
 
-    def update(self, team1, team2, action1, action2):
+    def update(self, team1, team2, action1, action2, stats):
         """ Update the ball's state (in-game) according to specified action """
-        if self.stats['team'] == 1:
-            a = action1[self.stats['player']]
-        elif self.stats['team'] == 2:
-            a = action2[self.stats['player']]
+        if self.ball_stats['team'] == 1:
+            a = action1[self.ball_stats['player']]
+        elif self.ball_stats['team'] == 2:
+            a = action2[self.ball_stats['player']]
 
         if self.free:
             self.pos += P(BALL_SPEED,BALL_SPEED)*self.vel
@@ -149,4 +149,5 @@ class Ball:
             elif self.dir == 'L' and ACT[a][0] <= 0:
                 self.pos.x -= const - BALL_RADIUS*BALL_OFFSET.x
 
-        self.check_capture(team1, team2)
+        self.check_capture(team1, team2, stats)
+        self.goal_check(stats)

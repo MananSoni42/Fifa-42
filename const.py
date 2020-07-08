@@ -15,39 +15,6 @@ def recolor(surface, color=(255,128,0)):
         for y in range(h):
             val = surface.get_at((x, y))
             surface.set_at((x, y), Color(r, g, b, val[3]))
-
-def get_possession(pos):
-    if pos[1]+pos[2] == 0:
-        team1_pos = 0.5
-    else:
-        team1_pos = round(pos[1]/(pos[1]+pos[2]),2)
-    return team1_pos, 1-team1_pos
-
-def get_pass_acc(ballpass):
-    if ballpass[1]['succ'] + ballpass[1]['fail'] == 0:
-        team1_pass = 0
-    else:
-        team1_pass = round(ballpass[1]['succ']/(ballpass[1]['succ']+ballpass[1]['fail']),2)
-
-    if ballpass[2]['succ'] + ballpass[2]['fail'] == 0:
-        team2_pass = 0
-    else:
-        team2_pass = round(ballpass[2]['succ']/(ballpass[2]['succ']+ballpass[2]['fail']),2)
-
-    return team1_pass, team2_pass
-
-def get_shot_acc(shot):
-    if shot[1]['succ'] + shot[1]['fail'] == 0:
-        team1_shot = 0
-    else:
-        team1_shot = round(shot[1]['succ']/(shot[1]['succ']+shot[1]['fail']),2)
-
-    if shot[2]['succ'] + shot[2]['fail'] == 0:
-        team2_shot = 0
-    else:
-        team2_shot = round(shot[2]['succ']/(shot[2]['succ']+shot[2]['fail']),2)
-
-    return team1_shot, team2_shot
 ######################################
 
 
@@ -76,32 +43,3 @@ FORM = {
         }
 
 }
-
-# Number of goals
-GOALS = { 1: 0, 2: 0 }
-
-# Global Stats
-POSSESSION = { 1: 0, 2: 0 }
-
-PASS_ACC = {
-    1: {
-        'succ': 0,
-        'fail': 0
-    },
-    2: {
-        'succ': 0,
-        'fail': 0
-    },
-}
-
-SHOT_ACC = {
-    1: {
-        'succ': 0,
-        'fail': 0
-    },
-    2: {
-        'succ': 0,
-        'fail': 0
-    },
-}
-######################################
