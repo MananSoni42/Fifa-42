@@ -24,6 +24,7 @@ BALL_OFFSET = P(2, 1.5)
 
 ASSET_DIR = './assets/' # Path to assets
 FONT_PATH = ASSET_DIR + 'Roboto-Black.ttf'
+
 GOAL_DISP_SIZE = 60
 GOAL_POS = [0.3,0.7] # goalpost positions in percentage of H
 LINE_WIDTH = 2
@@ -34,6 +35,7 @@ WALK_DELAY = 3 # Change walking sprite after this many presses
 
 
 ############## Images ##############
+MENU_BG = ASSET_DIR + 'menu_bg.jpg'
 BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "field.png"), (W, H))
 FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
 RUN = {

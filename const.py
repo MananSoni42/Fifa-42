@@ -5,22 +5,6 @@ from settings import *
 """
 Important constants used in the game
 """
-
-############## Functions ##############
-def recolor(surface, color=(255,128,0)):
-    """Fill all pixels of the surface with color, preserve transparency."""
-    w, h = surface.get_size()
-    r, g, b = color
-    for x in range(w):
-        for y in range(h):
-            val = surface.get_at((x, y))
-            surface.set_at((x, y), Color(r, g, b, val[3]))
-######################################
-
-
-
-
-
 ############## Custom types ##############
 
 # actions that can be performed by a plyer at any given time
@@ -40,6 +24,57 @@ FORM = {
     'default': {
             'L': [P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
             'R': [P(W - 2*PLAYER_RADIUS - BALL_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
-        }
+        },
 
+    'default-1': {
+            'R': [P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
+            'L': [P(W - 2*PLAYER_RADIUS - BALL_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
+        },
 }
+
+
+############## Functions ##############
+def recolor(surface, color=(255,128,0)):
+    """Fill all pixels of the surface with color, preserve transparency."""
+    w, h = surface.get_size()
+    r, g, b = color
+    for x in range(w):
+        for y in range(h):
+            val = surface.get_at((x, y))
+            surface.set_at((x, y), Color(r, g, b, val[3]))
+
+def draw_form(win, curr_form):
+    win.fill((14, 156, 23)) # constant green
+    pygame.draw.rect(win, (255, 255, 255), (0, 0, W - LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH) # border
+    pygame.draw.rect(win, (255, 255, 255), (W//2 - LINE_WIDTH//2, 0, LINE_WIDTH, H)) # mid line
+    pygame.draw.circle(win, (255, 255, 255), (W//2, H//2), H//5, LINE_WIDTH) # mid circle
+    pygame.draw.rect(win, (255, 255, 255), (4*W//5-LINE_WIDTH//2, 0.1*H, W//5, 0.8*H), LINE_WIDTH) # right D
+    pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, 0.1*H, W//5, 0.8*H), LINE_WIDTH) # left D
+    pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
+    pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
+    for pos in FORM[curr_form]['L']:
+        win.blit(RUN[1]['L'][0], (pos - PLAYER_CENTER).val)
+
+def choose_formation(win):
+    chosen = False
+    poss_form = list(FORM.keys())
+    num_formations = len(poss_form)
+    ind = 0
+    print(poss_form, num_formations)
+    while not chosen:
+        keys = pygame.key.get_pressed() # Pause
+        if keys[pygame.K_ESCAPE]:
+            print(1)
+            break
+        elif keys[pygame.K_SPACE]:
+            print(2)
+            chosen = True
+        elif keys[pygame.K_LEFT]:
+            print(3)
+            ind = (ind - 1)%num_formations
+        elif keys[pygame.K_RIGHT]:
+            print(4)
+            ind = (ind + 1)%num_formations
+        draw_form(win, poss_form[ind])
+        pygame.display.update() # refresh screen
+######################################
