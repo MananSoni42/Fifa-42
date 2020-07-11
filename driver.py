@@ -39,18 +39,25 @@ def play_game():
     pygame.quit()
 
 ### The menu
-from menu import main_menu,instr_menu,about_menu,sett_menu,s1,s2
+from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1
 
 def color_change(widget, col, team): # Change color of widget and corresponding team
     if col:
         widget.set_background_color(col)
         team.color = col
 
+def set_form(widget, col, team): # Change team 1's formation and widget's background
+    if col:
+        #widget.set_background_color(col)
+        team.color = col
+
 s1.change = lambda col: color_change(s1, col, team1) # set team 1's color
 s2.change = lambda col: color_change(s2, col, team2) # Set team 2's color
+f1.change = lambda form: set_form(form_menu, form, team1) # set team 1's color
 
 main_menu.add_button('Play', play_game)
 main_menu.add_button('Instructions', instr_menu)
+main_menu.add_button('Choose formation', form_menu)
 main_menu.add_button('Settings', sett_menu)
 main_menu.add_button('About', about_menu)
 main_menu.add_button('Quit', pygame_menu.events.EXIT) # Add exit button
