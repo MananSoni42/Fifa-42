@@ -12,10 +12,6 @@ win = pygame.display.set_mode((W,H)) # Reference to window needed for drawing an
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
-def set_difficulty(value, difficulty):
-    print(value,difficulty)
-    pass
-
 # Define teams (Team 1 faces right by default)
 team1 = HumanTeam(formation='default', color=(0,32,255))
 team2 = RandomTeam(color=(255,128,0))
@@ -39,21 +35,25 @@ def play_game():
     pygame.quit()
 
 ### The menu
-from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1
+from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, form_id
 
 def color_change(widget, col, team): # Change color of widget and corresponding team
     if col:
         widget.set_background_color(col)
         team.color = col
 
-def set_form(widget, col, team): # Change team 1's formation and widget's background
-    if col:
-        #widget.set_background_color(col)
-        team.color = col
+def set_form(win, menu, form, team): # Change team 1's formation and widget's background
+    global form_id
+    team.formattion = form[0]
+    form_id = form[1]
+    pass
+
+def draw_bg():
+    win.blit(pygame.transform.scale(pygame.image.load(GET_FORM_BG(form_id)), (W,H)), (0,0))
 
 s1.change = lambda col: color_change(s1, col, team1) # set team 1's color
 s2.change = lambda col: color_change(s2, col, team2) # Set team 2's color
-f1.change = lambda form: set_form(form_menu, form, team1) # set team 1's color
+f1.change = lambda form: set_form(win, form_menu, form, team1) # set team 1's color
 
 main_menu.add_button('Play', play_game)
 main_menu.add_button('Instructions', instr_menu)
@@ -64,4 +64,4 @@ main_menu.add_button('Quit', pygame_menu.events.EXIT) # Add exit button
 
 ###########################################
 
-main_menu.mainloop(win) # Show the menu
+main_menu.mainloop(win, bgfun=draw_bg) # Show the menu

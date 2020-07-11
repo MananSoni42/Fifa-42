@@ -22,19 +22,21 @@ Team formations
 """
 FORM = {
     'default': {
-            'L': [P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
-            'R': [P(W - 2*PLAYER_RADIUS - BALL_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
-        },
-
-    'default-1': {
-            'R': [P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), P(W//4,H//5), P(W//4, H//2), P(W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(3*W//4,H//2)],
-            'L': [P(W - 2*PLAYER_RADIUS - BALL_RADIUS,H//2), P(3*W//4,H//5), P(3*W//4, H//2), P(3*W//4, 4*H//5), P(W//2,H//3), P(W//2, 2*H//3), P(W//4,H//2)],
+            'name': 'Default (4-4-2)', # name
+            'img-num': 0, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4,H//2 - H//10), P(W//4, H//2 + H//10), P(5*W//16, H//7), P(5*W//16, 6*H//7), # DEF
+                    P(W//2,H//2 - H//10), P(W//2, H//2 + H//10), P(9*W//16, H//7), P(9*W//16, 6*H//7), # MID
+                    P(3*W//4,H//2 - H//10), P(3*W//4, H//2 + H//10), # ATK
+            ],
         },
 }
 
+for k,v in FORM.items(): # Fill in right side counterparts of all formations
+    FORM[k]['R'] = [P(W,H) - point for point in FORM[k]['L']]
 
 ############## Functions ##############
-def recolor(surface, color=(255,128,0)):
+def recolor(surface, color=(255,108,0)):
     """Fill all pixels of the surface with color, preserve transparency."""
     w, h = surface.get_size()
     r, g, b = color

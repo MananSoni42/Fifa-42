@@ -7,10 +7,10 @@ Settings and paths
 """
 
 ############## Settings ##############
-NUM_TEAM = 7 # Number of players in a team
+NUM_TEAM = 11 # Number of players in a team
 FONT_SIZE = 45
-W = 1024 # Width
-H = 568 # Height
+W = 1366 # Width
+H = 9*768//10 # Height
 FPS = 27
 
 PLAYER_SPEED = 3
@@ -36,6 +36,7 @@ WALK_DELAY = 3 # Change walking sprite after this many presses
 
 ############## Images ##############
 MENU_BG = ASSET_DIR + 'menu_bg.jpg'
+GET_FORM_BG = lambda i: ASSET_DIR + f'formations/{i}.png'
 BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "field.png"), (W, H))
 FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
 RUN = {
