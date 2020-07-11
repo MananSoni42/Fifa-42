@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 from point import P
+from screeninfo import get_monitors
 
 """
 Settings and paths
@@ -9,8 +10,8 @@ Settings and paths
 ############## Settings ##############
 NUM_TEAM = 7 # Number of players in a team
 FONT_SIZE = 45
-W = 1024 # Width
-H = 568 # Height
+W = get_monitors()[0].width # Width
+H = 9*get_monitors()[0].height//10 # Height
 FPS = 27
 
 PLAYER_SPEED = 3
