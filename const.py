@@ -27,7 +27,80 @@ FORM = {
             'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
                     P(W//4,H//2 - H//10), P(W//4, H//2 + H//10), P(5*W//16, H//7), P(5*W//16, 6*H//7), # DEF
                     P(W//2,H//2 - H//10), P(W//2, H//2 + H//10), P(9*W//16, H//7), P(9*W//16, 6*H//7), # MID
-                    P(3*W//4,H//2 - H//10), P(3*W//4, H//2 + H//10), # ATK
+                    P(13*W//16,H//2 - H//5), P(13*W//16, H//2 + H//5), # ATK
+            ],
+        },
+
+    'balanced-1': {
+            'name': 'Balanced (4-4-2 diamond)', # name
+            'img-num': 1, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4,H//2 - H//10), P(W//4, H//2 + H//10), P(5*W//16, H//7), P(5*W//16, 6*H//7), # DEF
+                    P(W//2 + W//50,H//4), P(W//2 + W//50, 3*H//4), P(W//2 - 4*W//50, H//2), P(W//2 + 6*W//50, H//2), # MID
+                    P(13*W//16,H//2 - H//5), P(13*W//16, H//2 + H//5), # ATK
+            ],
+        },
+    'balanced-2': {
+            'name': 'Balanced (4-3-3)', # name
+            'img-num': 2, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4,H//2 - H//10), P(W//4, H//2 + H//10), P(5*W//16, H//7), P(5*W//16, 6*H//7), # DEF
+                    P(W//2 + W//50,H//4), P(W//2 + W//50, 3*H//4), P(W//2 - 2*W//50, H//2), # MID
+                    P(24*W//32, H//7), P(24*W//32, 6*H//7), P(26*W//32, H//2) # ATK
+            ],
+        },
+    'attacking-1': { # TODO
+            'name': 'Attacking (3-4-3)', # name
+            'img-num': 3, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4,H//2 - H//4), P(W//4 - W//50, H//2), P(W//4, H//2 + H//4),  # DEF
+                    P(W//2,H//2 - H//10), P(W//2, H//2 + H//10), P(9*W//16, H//5), P(9*W//16, 4*H//5), # MID
+                    P(24*W//32, H//7), P(24*W//32, 6*H//7), P(26*W//32, H//2) # ATK
+            ],
+        },
+    'attacking-2': {
+            'name': 'Attacking (3-3-4)', # name
+            'img-num': 4, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4,H//2 - H//4), P(W//4, H//2), P(W//4, H//2 + H//4),  # DEF
+                    P(W//2 + W//50,H//4), P(W//2 + W//50, 3*H//4), P(W//2 - 2*W//50, H//2), # MID
+                    P(13*W//16,H//2 - H//10), P(13*W//16, H//2 + H//10), P(24*W//32, H//7), P(24*W//32, 6*H//7), # ATK
+            ],
+        },
+    'attacking-3': {
+            'name': 'Attacking (4-2-4)', # name
+            'img-num': 5, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4,H//2 - H//10), P(W//4, H//2 + H//10), P(11*W//32, H//7), P(11*W//32, 6*H//7), # DEF
+                    P(W//2,H//2 - H//5), P(W//2, H//2 + H//5), # MID
+                    P(28*W//32, H//2 - H//10), P(28*W//32, H//2 + H//10), P(26*W//32, H//7), P(26*W//32, 6*H//7), # ATK
+            ],
+        },
+    'defensive-1': {
+            'name': 'Defensive (5-3-2)', # name
+            'img-num': 6, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4 - W//50, H//2), P(W//4, 9*H//28), P(W//4, 19*H//28), P(W//4 + W//12, H//7), P(W//4 + W//12, 6*H//7), # DEF
+                    P(W//2 + W//50,H//4), P(W//2 + W//50, 3*H//4), P(W//2, H//2), # MID
+                    P(13*W//16,H//2 - H//5), P(13*W//16, H//2 + H//5), # ATK
+            ],
+        },
+    'defensive-2': {
+            'name': 'Defensive (5-4-1)', # name
+            'img-num': 7, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4 - W//50, H//2), P(W//4, 9*H//28), P(W//4, 19*H//28), P(W//4 + W//12, H//7), P(W//4 + W//12, 6*H//7), # DEF
+                    P(W//2, H//2 - H//10), P(W//2, H//2 + H//10), P(19*W//32, H//5), P(19*W//32, 4*H//5), # MID
+                    P(27*W//32, H//2) # ATK
+            ],
+        },
+    'defensive-3': {
+            'name': 'Defensive (4-5-1)', # name
+            'img-num': 8, # number corresponding to image in assets/formations directory
+            'L': [  P(2*PLAYER_RADIUS + BALL_RADIUS,H//2), # GK
+                    P(W//4,H//2 - H//10), P(W//4, H//2 + H//10), P(5*W//16, H//7), P(5*W//16, 6*H//7), # DEF
+                    P(W//2 - W//12, H//2 - H//50), P(W//2 + W//50, 9*H//28), P(W//2 + W//50, 19*H//28), P(W//2 + W//6, H//7), P(W//2 + W//6, 6*H//7), # MID
+                    P(27*W//32, H//2) # ATK
             ],
         },
 }

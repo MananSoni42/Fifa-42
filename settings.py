@@ -22,9 +22,6 @@ BALL_RADIUS = 7
 BALL_CENTER = P(BALL_RADIUS, BALL_RADIUS)
 BALL_OFFSET = P(2, 1.5)
 
-ASSET_DIR = './assets/' # Path to assets
-FONT_PATH = ASSET_DIR + 'Roboto-Black.ttf'
-
 GOAL_DISP_SIZE = 60
 GOAL_POS = [0.3,0.7] # goalpost positions in percentage of H
 LINE_WIDTH = 2
@@ -34,12 +31,20 @@ WALK_DELAY = 3 # Change walking sprite after this many presses
 
 
 
-############## Images ##############
+############## Assets (images, fonts) ##############
+ASSET_DIR = './assets/' # Path to assets
+
+FONT_PATH = ASSET_DIR + 'Roboto-Black.ttf'
+
 MENU_BG = ASSET_DIR + 'menu_bg.jpg'
-GET_FORM_BG = lambda i: ASSET_DIR + f'formations/{i}.png'
+
+GET_FORM_BG = lambda team_id, formation_id: ASSET_DIR + f'formations/{team_id}-{formation_id}.jpg'
+
 BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "field.png"), (W, H))
+
 FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
-RUN = {
+
+RUN = { # Sprites that animate the running player
     1: {
         'L': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
         'R': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },

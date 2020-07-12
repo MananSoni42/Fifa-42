@@ -31,8 +31,8 @@ class Game:
         elif keys[pygame.K_BACKSPACE]:
             self.pause = False
         if keys[pygame.K_SPACE]:
-            team1.maintain_formation = not team1.maintain_formation
-            team2.maintain_formation = not team2.maintain_formation
+            self.team1.maintain_formation = not self.team1.maintain_formation
+            self.team2.maintain_formation = not self.team2.maintain_formation
 
     def same_team_collision(self, team, actions, free):
         """ Check if current player collides with any other players (same team) """

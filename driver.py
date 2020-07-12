@@ -35,25 +35,32 @@ def play_game():
     pygame.quit()
 
 ### The menu
-from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, form_id
+from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, f2, form_id, team_id
 
 def color_change(widget, col, team): # Change color of widget and corresponding team
     if col:
         widget.set_background_color(col)
         team.color = col
 
-def set_form(win, menu, form, team): # Change team 1's formation and widget's background
-    global form_id
-    team.formattion = form[0]
+def set_form(form): # Change team 1's formation and widget's background
+    global form_id, team_id
     form_id = form[1]
-    pass
+    if team_id == 1:
+        team1.formation = form[0]
+    else:
+        team2.formation = form[0]
+
+def set_team(id):
+    global team_id
+    team_id = id
 
 def draw_bg():
-    win.blit(pygame.transform.scale(pygame.image.load(GET_FORM_BG(form_id)), (W,H)), (0,0))
+    win.blit(pygame.transform.scale(pygame.image.load(GET_FORM_BG(team_id,form_id)), (W,H)), (0,0))
 
 s1.change = lambda col: color_change(s1, col, team1) # set team 1's color
 s2.change = lambda col: color_change(s2, col, team2) # Set team 2's color
-f1.change = lambda form: set_form(win, form_menu, form, team1) # set team 1's color
+f1.change = set_team # set team 1's color
+f2.change = set_form # set team 1's color
 
 main_menu.add_button('Play', play_game)
 main_menu.add_button('Instructions', instr_menu)
