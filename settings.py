@@ -38,6 +38,8 @@ FONT_PATH = ASSET_DIR + 'Roboto-Black.ttf'
 
 MENU_BG = ASSET_DIR + 'menu_bg.jpg'
 
+CONTROLS_IMG = ASSET_DIR + 'controls.png'
+
 GET_FORM_BG = lambda team_id, formation_id: ASSET_DIR + f'formations/{team_id}-{formation_id}.jpg'
 
 BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "field.png"), (W, H))
