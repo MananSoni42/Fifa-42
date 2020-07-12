@@ -91,6 +91,8 @@ instr_menu.add_label('This is an 11 v 11 Football game where you play against an
 instr_menu.add_vertical_margin(40)
 instr_menu.add_label('You control a single player (marked by a red dot)', max_char=MAX_CHAR)
 instr_menu.add_vertical_margin(40)
+instr_menu.add_label('Running into opponents causes both of you to be thrown back and lose possession of the ball', max_char=MAX_CHAR)
+instr_menu.add_vertical_margin(40)
 instr_menu.add_label('Your play as Team 1 and the computer is Team 2', max_char=MAX_CHAR)
 instr_menu.add_vertical_margin(40)
 instr_menu.add_label('Go back into the choose formations menu to select formations for your team as well as the computer\'s team', max_char=MAX_CHAR)
@@ -142,7 +144,7 @@ s1 = sett_menu.add_selector('Team 1 color:', colors, font_color=(255,255,255))
 
 s2 = sett_menu.add_selector('Team 2 color:', colors, font_color=(255,255,255))
 
-sett_menu.add_selector('Sound', [('ON', 1), ['OFF', 0]])
+# sett_menu.add_selector('Sound', [('ON', 1), ['OFF', 0]])
 
 sett_menu.add_vertical_margin(40)
 sett_menu.add_button('Back', pygame_menu.events.BACK)

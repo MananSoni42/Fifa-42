@@ -9,7 +9,9 @@ The ideal outcome would be a python game with an AI that can learn from the oppo
   - [x] Set up game environment and Human Agents
   - [x] Calculate stats (possession, shot/pass accuracy)
   - [x] Implement Pause menu
-  - [ ] Create menus and package the game as an excutable
+  - [x] Create menu
+  - [ ] Add sound
+  - [ ] Package the game as an executable
 - [ ] Convert to a static online game - Release - v2.0
   - [ ] Port to JavaScript
   - [ ] Set up local multiplayer (static - requires only frontend)

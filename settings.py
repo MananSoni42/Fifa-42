@@ -31,29 +31,28 @@ WALK_DELAY = 3 # Change walking sprite after this many presses
 
 
 
-############## Assets (images, fonts) ##############
+############## Assets (images, fonts, sounds) ##############
 ASSET_DIR = './assets/' # Path to assets
+IMG_DIR = ASSET_DIR + 'img/'
+SOUND_DIR = ASSET_DIR + 'sound/'
 
-FONT_PATH = ASSET_DIR + 'Roboto-Black.ttf'
+FONT_PATH = ASSET_DIR + 'fonts/Roboto-Black.ttf'
 
-MENU_BG = ASSET_DIR + 'menu_bg.jpg'
-
-CONTROLS_IMG = ASSET_DIR + 'controls.png'
-
-GET_FORM_BG = lambda team_id, formation_id: ASSET_DIR + f'formations/{team_id}-{formation_id}.jpg'
-
-BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "field.png"), (W, H))
-
-FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(ASSET_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
-
+MENU_BG = IMG_DIR + 'menu_bg.jpg'
+CONTROLS_IMG = IMG_DIR + 'controls.png'
+GET_FORM_BG = lambda team_id, formation_id: IMG_DIR + f'formations/{team_id}-{formation_id}.jpg' # Get correct formation img
+BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(IMG_DIR + "field.png"), (W, H)) # Background (not used currently)
+FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(IMG_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
 RUN = { # Sprites that animate the running player
     1: {
-        'L': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
-        'R': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'L': { i: pygame.transform.scale(pygame.image.load(IMG_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'R': { i: pygame.transform.scale(pygame.image.load(IMG_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
     },
     2: {
-        'L': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
-        'R': { i: pygame.transform.scale(pygame.image.load(ASSET_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'L': { i: pygame.transform.scale(pygame.image.load(IMG_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'R': { i: pygame.transform.scale(pygame.image.load(IMG_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
     },
 }
+
+SOUND_CROWD = SOUND_DIR + 'game/crowd.mp3'
 ######################################
