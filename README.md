@@ -1,44 +1,62 @@
-# Fifa-42
-This is the first game that was created by me along with a couple of my friends. It is written in ANSI C++ and works only on a console.
-It is a 9v9 Football game where you compete against the computer. 
 
-## Installation 
-* Download Turbo C++ from [here](https://developerinsider.co/download-turbo-c-for-windows-7-8-8-1-and-windows-10-32-64-bit-full-screen/).
-* Open Turbo C++ and navigate to fifa_42.CPP
-* Compile the file and enjoy the game!
+# Fifa-42 - Reborn!
+A modern port of a beloved game written by me along with a couple of friends.  
+The aim is to make the original game (written in ANSI C) more accessible.  
+The ideal outcome would be a python game with an AI that can learn from the opposing player's moves along with an online game that supports single-player as well multi-player
 
-## The game
-Once the program is compiled, the user is presented with a menu, you can use the left/right keys to toggle the menu.
+## Milestones
+- [ ] Create an executable game file (.exe /.rpm/.deb packages) - Release v1.0
+  - [x] Set up game environment and Human Agents
+  - [x] Calculate stats (possession, shot/pass accuracy)
+  - [x] Implement Pause menu
+  - [x] Create menu
+  - [ ] Add sound
+  - [ ] Package the game as an executable
+- [ ] Convert to a static online game - Release - v2.0
+  - [ ] Port to JavaScript
+  - [ ] Set up local multiplayer (static - requires only frontend)
+  - [ ] Enable online multiplayer (requires a backend)
+- [ ] Set up true single player
+  - [ ] Set up the original AI team (included in v1)
+  - [ ] Come up with an improved (hard-coded) AI team
+  - [ ] Train a realistic AI team using Reinforcement Learning (super hard)
 
-### Basic layout
-Once you click on the play button, a football field appears.
-Your team members are white circles while the opponent team members are blue circles. You are the yellow circle. 
-
-### Controls
-* Use arrow keys to move your player
-* Use the ```QWE, ASD, ZXC``` keys for passing the ball in an appropriate direction
-* In game, use the ```space``` key to toggle Position holding (whether your players return to their original positions)
-* Pause the game by pressing the ```esc``` key
-* Once in the pause menu, formations can be changed using the ```space``` key followed by the left/right arrow keys
-
-## Screens
-1. Main menu  
-<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu1.png" height=150px> | <img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu2.png" height=150px> | <img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/menu3.png" height=150px>
-
-2. Instructions (interactive)
-<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/instructions.png" height=250px>
-
-3. Game 
-<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/game.png" height=250px>
-
-4. Pause menu
-<img src="https://github.com/MananSoni42/Fifa-42/blob/update_readme/assets/pause_menu.png" height=250px>
+## Controls
+  Key                  | Action                     |
+  -------------------- | -------------------------- |
+  Arrow keys           | Move the (selected) player |
+  Q,W,E,A,Z,X,C        | Shoot the ball             |
+  ESC                  | Bring up Pause menu        |
+  BACKSPACE            | Collapse Pause menu        |
 
 
-## Developers
-* [Manan Soni](https://github.com/MananSoni42)
-* [Ashutosh Jani](https://github.com/AshutoshJani)
+## Setup
+### Structure
+```terminal
+.
+├── driver.py # Driver to test the game
+├── game.py # Class that controls the entire game
+├── ball.py # Football that can be passed around
+├── teams.py # Teams consisting of a set of agents
+├── agents.py # Agents that can play the game
+├── settings.py # Global settings and paths
+├── const.py # Important game constants
+├── stats.py # In-game statistics (possession, goals scored, pass/shot accuracy)
+└── point.py # class that handles 2-D co-ordinate manipulation
+```
+
+### Installing locally
+* The game requires Python3+  
+
+* Install dependancies using:  
+```terminal
+pip3 install -r requirements.txt
+```
+
+* Run the game using:  
+```terminal
+python3 driver.py
+```
 
 ## License
 This project is licensed under the [MIT](https://opensource.org/licenses/MIT) License
-
