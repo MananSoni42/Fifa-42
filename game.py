@@ -17,8 +17,8 @@ class Game:
 
         self.end = False # True when the game ends (never probably)
         self.pause = False
-        self.state = 0 # game state to be passed to agents (see get_state() function)
-        self.rewards = 0
+        self.state = None # game state to be passed to agents (see get_state() function)
+        self.rewards = None
 
     def check_interruptions(self):
         for event in pygame.event.get():
@@ -196,12 +196,19 @@ class Game:
         """
         The state object: a summary of the entire game as seen by the agent
         """
-        pos1 = [P(1/W,1/H)*player.pos for player in self.team1.players]
-        pos2 = [P(1/W,1/H)*player.pos for player in self.team2.players]
+        pos1 = [player.pos for player in self.team1.players]
+        pos2 = [player.pos for player in self.team2.players]
         return {
             'team1': pos1,
             'team2': pos2,
-            'ball': P(1/W,1/H)*self.ball.pos
+            'ball': self.ball.pos,
+            'misc': {
+                'goal_y': {
+                    1: self.team1.goal_y,
+                    2: self.team2.goal_y
+                },
+
+            }
         }
 
     def next(self):

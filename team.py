@@ -1,7 +1,7 @@
 from settings import *
 from const import FORM, recolor
 from abc import ABC, abstractmethod
-from agents import HumanAgent, RandomAgent
+from agents import HumanAgent, RandomAgent, OriginalAIAgent
 
 class Team(ABC):
     """
@@ -25,6 +25,12 @@ class Team(ABC):
         """
         self.id = id
         self.dir = dir
+
+        if self.dir == 'L':
+            self.goal_y = 0
+        else:
+            self.goal_y = W
+
         self.set_players()
         self.set_color()
 
@@ -155,10 +161,23 @@ class RandomTeam(Team):
         for i in range(NUM_TEAM):
             self.players.append(RandomAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]))
 
-        self.selected = NUM_TEAM//2
-
     def move(self, state, reward):
         """ Move each player randomly """
+        actions = []
+        for i,player in enumerate(self.players):
+            actions.append(player.move(state, reward))
+        return actions
+
+class OriginalAITeam(Team):
+    """The AI team used in the original (C++) version"""
+    def set_players(self):
+        self.players = []
+        #for i in range(NUM_TEAM):
+        i = 0
+        self.players.append(OriginalAIAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]))
+
+    def move(self, state, reward):
+        """ Move each player """
         actions = []
         for i,player in enumerate(self.players):
             actions.append(player.move(state, reward))

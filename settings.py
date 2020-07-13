@@ -28,6 +28,11 @@ GOAL_POS = [0.3,0.7] # goalpost positions in percentage of H
 LINE_WIDTH = 2
 ANIM_NUM = 7 # Number of images used for running animation
 WALK_DELAY = 3 # Change walking sprite after this many presses
+
+# Orginal AI related
+AI_FAR_RADIUS = 10*PLAYER_RADIUS
+AI_NEAR_RADIUS = 5*PLAYER_RADIUS
+AI_MIN_DIST = 3*PLAYER_RADIUS
 ######################################
 
 

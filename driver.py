@@ -1,4 +1,4 @@
-from team import HumanTeam, RandomTeam
+from team import HumanTeam, OriginalAITeam
 from game import Game
 from settings import *
 import time
@@ -14,7 +14,7 @@ pygame.display.set_caption("FIFA-42")
 
 # Define teams (Team 1 faces right by default)
 team1 = HumanTeam(formation='default', color=(0,32,255))
-team2 = RandomTeam(color=(255,128,0))
+team2 = OriginalAITeam(color=(255,128,0))
 
 def play_game():
     game = Game(team1,team2) # initialize the game
@@ -28,12 +28,13 @@ def play_game():
             game.draw(win)
             game.pause_draw(win) # Draws on-top of the (frozen) game
         else:
-            game.draw(win, debug=False)
+            game.draw(win, debug=True)
             game.next() # Move the game forward
 
         pygame.display.update() # refresh screen
     pygame.quit()
 
+"""
 ### The menu
 from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, f2, form_id, team_id
 
@@ -72,3 +73,6 @@ main_menu.add_button('Quit', pygame_menu.events.EXIT) # Add exit button
 ###########################################
 
 main_menu.mainloop(win, bgfun=draw_bg) # Show the menu
+"""
+
+play_game()

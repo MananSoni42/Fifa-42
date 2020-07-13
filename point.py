@@ -20,6 +20,11 @@ class P:
         """ Return the value of the point as a tuple rounded to the nearest integer point """
         return (int(round(self.x,0)), int(round(self.y,0)))
 
+    @property    
+    def mag(self):
+        """ Return the magnitude of the point, basically it's distance from zero or it's mod """
+        return np.sqrt(self.x**2 + self.y**2)
+
     def __str__(self):
         return f'P({self.x}, {self.y})'
 
