@@ -203,9 +203,9 @@ class Game:
             'team2': pos2,
             'ball': self.ball.pos,
             'misc': {
-                'goal_y': {
-                    1: self.team1.goal_y,
-                    2: self.team2.goal_y
+                'goal_x': {
+                    1: self.team1.goal_x,
+                    2: self.team2.goal_x
                 },
 
             }

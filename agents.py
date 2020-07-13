@@ -117,9 +117,9 @@ class OriginalAIAgent(Agent):
     def ai_pass(self, pos):
         pass
 
-    def ai_move_ball(self, pos, goal_y):
+    def ai_move_with_ball(self, pos, goal_x):
         """
-        If this player does not have the ball
+        If this player has the ball
         Calculate vectors towards the goal and away from nearby players of the opposite team
         Add up all these vectors and move in that direction (probabilistically)
         """
@@ -130,7 +130,7 @@ class OriginalAIAgent(Agent):
                 mag = (AI_NEAR_RADIUS*PLAYER_RADIUS/dir.mag)**2 # magnitude of vector is proportional to inverse of distance
                 player_vec -= P(mag/dir.mag,mag/dir.mag)*dir
 
-        goal_vec = P(goal_y, H//2) - self.pos # Direction vector to move due to goal
+        goal_vec = P(goal_x, H//2) - self.pos # Direction vector to move due to goal
         goal_vec *= P(1/goal_vec.mag, 1/goal_vec.mag) # O
 
         final_vec = goal_vec + player_vec # Final vector is sum
@@ -144,6 +144,23 @@ class OriginalAIAgent(Agent):
 
         return chosen_dir
 
+    def ai_move_without_ball(self, ball_pos):
+        """
+        Move towards the ball if it is nearby
+        Moves probabilistically
+        """
+        if self.pos.dist(ball_pos) < AI_FAR_RADIUS:
+            vec = ball_pos - self.pos
+            vec_dir = P(1/vec.mag,1/vec.mag)*vec
+
+            possible_dir = ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']
+            dist_to_dir = [vec_dir.dist(ACT[dir]) for dir in possible_dir]
+            prob_dist = np.clip(np.exp([1/(d+pow(10,-6)) for d in dist_to_dir]), 0, 1000)
+            chosen_dir = np.random.choice(possible_dir, p=np.array(prob_dist)/np.sum(prob_dist))
+            return chosen_dir
+        else:
+            return 'NOTHING'
+
     def ai_shoot(self, pos):
         pass
 
@@ -153,8 +170,15 @@ class OriginalAIAgent(Agent):
         else:
             return np.random.choice(['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C'])
 
-    def move(self, state, reward):
-        if state :
-            return self.ai_move_ball(state['team1'], state['misc']['goal_y'][1])
+    def move(self, state, reward, selected):
+        if state:
+            if selected == self.id and self.pos.dist(state['ball']) < PLAYER_RADIUS + BALL_RADIUS:
+                return self.ai_move_with_ball(state['team1'], state['misc']['goal_x'][1])
+            else:
+                move = self.ai_move_without_ball(state['ball'])
+                if move!= 'NOTHING':
+                    return move
+                else:
+                    return 'FORM'
         else:
             return 'NOTHING'
