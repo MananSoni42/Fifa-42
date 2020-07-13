@@ -35,7 +35,7 @@ WALK_DELAY = 3 # Change walking sprite after this many presses
 ############## Assets (images, fonts, sounds) ##############
 ASSET_DIR = './assets/' # Path to assets
 IMG_DIR = ASSET_DIR + 'img/'
-SOUND_DIR = ASSET_DIR + 'sound/'
+SOUND_DIR = ASSET_DIR + 'sounds/'
 
 FONT_PATH = ASSET_DIR + 'fonts/Roboto-Black.ttf'
 
@@ -55,5 +55,15 @@ RUN = { # Sprites that animate the running player
     },
 }
 
-SOUND_CROWD = SOUND_DIR + 'game/crowd.mp3'
+# SOUND_CROWD = SOUND_DIR + 'game/crowd.mp3'
+#Sounds
+applause = SOUND_DIR + 'applause2.wav'
+kick = SOUND_DIR + 'FOOTBALLKICK.wav'
+menu_music = SOUND_DIR + 'menu-music.wav'
+single_short_whistle = SOUND_DIR + 'single-short-whistle.wav'
+single_long_whistle = SOUND_DIR + 'single-long-whistle.wav'
+three_whistles = SOUND_DIR + 'three-whistles.wav'
+two_kicks = SOUND_DIR + 'two-kicks.wav'
+goal = SOUND_DIR + 'goal.wav'
+
 ######################################
