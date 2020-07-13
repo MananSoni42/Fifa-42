@@ -28,8 +28,11 @@ class Game:
         keys = pygame.key.get_pressed() # Pause
         if keys[pygame.K_ESCAPE]:
             self.pause = True
-        if keys[pygame.K_BACKSPACE]:
+        elif keys[pygame.K_BACKSPACE]:
             self.pause = False
+        if keys[pygame.K_SPACE]:
+            self.team1.maintain_formation = not self.team1.maintain_formation
+            self.team2.maintain_formation = not self.team2.maintain_formation
 
     def same_team_collision(self, team, actions, free):
         """ Check if current player collides with any other players (same team) """
@@ -96,7 +99,6 @@ class Game:
 
     def field_draw(self,win):
         """ Draw the football pitch """
-        #win.blit(BACKGROUND_IMG, (0, 0)) # grass
         win.fill((14, 156, 23)) # constant green
 
         pygame.draw.rect(win, (255, 255, 255), (0, 0, W - LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH) # border
