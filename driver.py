@@ -1,5 +1,6 @@
 from team import HumanTeam, RandomTeam
 from game import Game
+from pygame import mixer
 from settings import *
 import time
 import pygame_menu
@@ -12,11 +13,21 @@ win = pygame.display.set_mode((W,H)) # Reference to window needed for drawing an
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
+# Init music
+pygame.mixer.init(44100, -16,2,2048)
+menu_music = mixer.Sound(menu_music)
+single_short_whistle = mixer.Sound(single_short_whistle)
+applause = mixer.Sound(applause)
+menu_music.play(-1)
+
 # Define teams (Team 1 faces right by default)
 team1 = HumanTeam(formation='default', color=(0,32,255))
 team2 = RandomTeam(color=(255,128,0))
 
 def play_game():
+    mixer.pause()
+    single_short_whistle.play()
+    applause.play(-1)
     game = Game(team1,team2) # initialize the game
     """ Game loop """
     while not game.end: # Game loop

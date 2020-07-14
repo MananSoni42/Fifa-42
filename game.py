@@ -2,6 +2,17 @@ from settings import *
 from const import ACT
 from ball import Ball
 from stats import Stats
+from pygame import mixer
+import time
+
+# Sound Init
+pygame.mixer.init(44100, -16,2,2048)
+applause = mixer.Sound(applause)
+kick = mixer.Sound(kick)
+single_short_whistle = mixer.Sound(single_short_whistle)
+single_long_whistle = mixer.Sound(single_long_whistle)
+three_whistles = mixer.Sound(three_whistles)
+two_kicks = mixer.Sound(two_kicks)
 
 class Game:
     """ Class that controls the entire game """
@@ -23,12 +34,18 @@ class Game:
     def check_interruptions(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # Quit
+                mixer.pause()
+                three_whistles.play()
                 self.end = True
 
         keys = pygame.key.get_pressed() # Pause
         if keys[pygame.K_ESCAPE]:
+            mixer.pause()
+            single_long_whistle.play()
             self.pause = True
         elif keys[pygame.K_BACKSPACE]:
+            single_short_whistle.play()
+            applause.play(-1)
             self.pause = False
         if keys[pygame.K_SPACE]:
             self.team1.maintain_formation = not self.team1.maintain_formation
