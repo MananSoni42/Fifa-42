@@ -299,9 +299,10 @@ class OriginalAIAgent(Agent):
         else:
             return 'FORM'
 
-    def gk_pass(self, enemy_players):
+    def gk_pass(self, enemy_players, goal_x):
         """
-        Pass such that the nearest enemy player does not get the ball
+        Pass such that enemy players in AI_SHOOT_RADIUS do not get the ball
+        goal_x: Self team's goal position
         """
 
         angles  = {
@@ -318,8 +319,8 @@ class OriginalAIAgent(Agent):
         }
 
         self_pos  = P(self.pos.x, H-self.pos.y)
-        enemy_pos = enemy_players[np.argmin([self.pos.dist(player.pos) for player in enemy_players])].pos
-        enemy_pos  = P(enemy_pos.x, H-enemy_pos.y)
+        near_enemy_players = [player for player in enemy_players if player.pos.dist(P(goal_x,H//2)) <= AI_SHOOT_RADIUS]
+        near_enemy_pos  = [P(player.pos.x, H - player.pos.y) for player in near_enemy_players]
 
         possible_passes = []
         for k,v in angles[self.team_id].items():
@@ -328,7 +329,9 @@ class OriginalAIAgent(Agent):
                     -np.cos(v), # y coeff
                     self_pos.y*np.cos(v) - self_pos.x*np.sin(v), # constant
             ]
-            dist = self.dist_to_line(line, enemy_pos)
+            dist = np.inf
+            dir = 'NOTHING'
+            dist = np.min([self.dist_to_line(line, pos) for pos in near_enemy_pos])
             possible_passes.append((-dist,k))
 
         if possible_passes:
@@ -349,7 +352,7 @@ class OriginalAIAgent(Agent):
 
         if state:
             if self.id == 0: # Special for the goal-keeper
-                ai_gk_pass = self.gk_pass(other_team['players'])
+                ai_gk_pass = self.gk_pass(other_team['players'], self_team['goal_x'])
                 ai_gk_move = self.gk_move(self_team['goal_x'], state['ball'])
                 if selected == self.id and state['ball'].ball_stats['player'] == self.id: # GK has the ball
                     if ai_gk_pass != 'NOTHING':
