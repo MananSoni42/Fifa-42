@@ -115,6 +115,9 @@ class Game:
     def draw(self, win, debug=False):
         """ Draw the game """
         self.field_draw(win)
+        if debug:
+            pygame.draw.circle(win, (64, 128, 255), (0, H//2), AI_SHOOT_RADIUS, LINE_WIDTH) # mid circle
+            pygame.draw.circle(win, (64, 128, 255), (W, H//2), AI_SHOOT_RADIUS, LINE_WIDTH) # mid circle
         self.goal_draw(win)
         self.team1.draw(win, debug=debug)
         self.team2.draw(win, debug=debug)
@@ -199,16 +202,15 @@ class Game:
         pos1 = [player.pos for player in self.team1.players]
         pos2 = [player.pos for player in self.team2.players]
         return {
-            'team1': pos1,
-            'team2': pos2,
-            'ball': self.ball.pos,
-            'misc': {
-                'goal_x': {
-                    1: self.team1.goal_x,
-                    2: self.team2.goal_x
-                },
-
-            }
+            'team1': {
+                'players': self.team1.players,
+                'goal_x': self.team1.goal_x,
+            },
+            'team2': {
+                'players': self.team2.players,
+                'goal_x': self.team1.goal_x,
+            },
+            'ball': self.ball,
         }
 
     def next(self):

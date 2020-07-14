@@ -175,16 +175,16 @@ class OriginalAITeam(Team):
         for i in range(NUM_TEAM):
             self.players.append(OriginalAIAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]))
 
-    def select_player(self, ball_pos):
+    def select_player(self, ball):
         """
         Select the player that is controlled by the keyboard
             - If ball is near the D-area, keeper gets automatic control
             - Otherwise the player nearest to the ball has control (ties are broken randomly)
         """
-        dists = [player.pos.dist(ball_pos) + player.rnd for player in self.players]
+        dists = [player.pos.dist(ball.pos) + player.rnd for player in self.players]
         self.selected = np.argmin(dists) # Default - Ball goes to nearest player
 
-        if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball_pos.x - self.goal_x) < W//5:
+        if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball.pos.x - self.goal_x) < W//5:
             # If the ball is within the D and is not very near to any other player, give control to the keeper
             self.selected = 0
 

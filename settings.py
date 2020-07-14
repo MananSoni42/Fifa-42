@@ -32,7 +32,8 @@ WALK_DELAY = 3 # Change walking sprite after this many presses
 # Orginal AI related
 AI_FAR_RADIUS = 10*PLAYER_RADIUS # Far radius to look for ball
 AI_NEAR_RADIUS = 5*PLAYER_RADIUS # Near radius to ward off enemy players
-AI_MIN_PASS_DIST = 10 # Min perpendicular distance to consider for a successfull pass
+AI_MIN_PASS_DIST = 15 # Min perpendicular distance to consider for a successfull pass
+AI_SHOOT_RADIUS = 9*W//40 # Dist from center of goal post within which AI starts shooting
 ######################################
 
 

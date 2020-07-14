@@ -25,8 +25,8 @@ def play_game():
         game.check_interruptions() # Check for pause or quit keys
 
         if game.pause:
-            game.draw(win, debug=False)
-            game.pause_draw(win) # Draws on-top of the (frozen) game
+            game.draw(win, debug=True)
+            #game.pause_draw(win) # Draws on-top of the (frozen) game
         else:
             game.draw(win, debug=False)
             game.next() # Move the game forward
@@ -34,7 +34,6 @@ def play_game():
         pygame.display.update() # refresh screen
     pygame.quit()
 
-"""
 ### The menu
 from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, f2, form_id, team_id
 
@@ -73,6 +72,3 @@ main_menu.add_button('Quit', pygame_menu.events.EXIT) # Add exit button
 ###########################################
 
 main_menu.mainloop(win, bgfun=draw_bg) # Show the menu
-"""
-
-play_game()
