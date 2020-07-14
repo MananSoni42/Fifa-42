@@ -34,7 +34,7 @@ AI_FAR_RADIUS = 8*PLAYER_RADIUS # Far radius to look for ball
 AI_NEAR_RADIUS = 3*PLAYER_RADIUS # Near radius to ward off enemy players
 AI_MIN_PASS_DIST = 25 # Min perpendicular distance to consider for a successfull pass
 AI_SHOOT_RADIUS = W//4 # Dist from center of goal post within which AI starts shooting
-AI_PASS_PROB = 0.8 # Probability that AI moves instead of passing
+AI_PASS_PROB = 0.95 # Probability that AI moves instead of passing
 ######################################
 
 

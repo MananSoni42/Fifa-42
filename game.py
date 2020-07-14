@@ -43,8 +43,22 @@ class Game:
         for player1 in team.players:
             for player2 in team.players:
                 if player1.id != player2.id and abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
-                    player1.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player1.id]])
-                    player2.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player2.id]])
+                    #player1.pos -= P(factor_x, PLAYER_SPEED)*P(ACT[actions[player1.id]])
+                    #player2.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player2.id]])
+                    xincr = 1 + PLAYER_RADIUS - abs(player1.pos.x-player2.pos.x)//2
+                    xdir = (1,-1)
+                    yincr = 1 + PLAYER_RADIUS - abs(player1.pos.y-player2.pos.y)//2
+                    ydir = (1,-1)
+
+                    if player1.pos.x < player2.pos.x:
+                        xdir = (-1,1)
+                    if player1.pos.y < player2.pos.y:
+                        ydir = (-1,1)
+
+                    player1.pos.x += xdir[0]*xincr
+                    player2.pos.x += xdir[1]*xincr
+                    player1.pos.y += ydir[0]*yincr
+                    player2.pos.y += ydir[1]*yincr
 
     def diff_team_collision(self, team1, team2, free):
         """ Check if current player collides with any other players (different teams) """
