@@ -25,10 +25,10 @@ def play_game():
         game.check_interruptions() # Check for pause or quit keys
 
         if game.pause:
-            game.draw(win)
+            game.draw(win, debug=False)
             game.pause_draw(win) # Draws on-top of the (frozen) game
         else:
-            game.draw(win, debug=True)
+            game.draw(win, debug=False)
             game.next() # Move the game forward
 
         pygame.display.update() # refresh screen
