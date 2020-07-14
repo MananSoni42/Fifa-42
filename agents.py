@@ -273,14 +273,58 @@ class OriginalAIAgent(Agent):
 
         return shot
 
-    def random_move(self, state, reward):
-        if np.random.rand() < 0.6:
-            return np.random.choice(['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R'])
+
+    def gk_move(self, goal_x, ball):
+        """
+        Move towards the ball and stay within the goal's limits
+        """
+        if ball.pos.dist(P(goal_x,H//2)) < AI_SHOOT_RADIUS:
+            if abs(self.pos.x - goal_x) > BALL_RADIUS + PLAYER_RADIUS: # Goal keeper does not go into the goal himself
+                if ball.pos.y == self.pos.y: # Do nothing if ball is directly in your path
+                    return 'NOTHING'
+                elif PLAYER_RADIUS and GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
+                    if ball.pos.y - self.pos.y >= 0:
+                        return 'MOVE_D'
+                    else:
+                        return 'MOVE_U'
+                else:
+                    return 'FORM' # IMM_PASS
         else:
-            return np.random.choice(['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C'])
+            return 'FORM'
+
+    def gk_pass(self,enemy_players):
+        """
+        Pass such that the nearest enemy player does not get the ball
+        """
+
+        angles  = {
+            'SHOOT_Q': np.pi*3/4,
+            'SHOOT_A': np.pi,
+            'SHOOT_Z': -np.pi*5/4,
+        }
+
+        self_pos  = P(self.pos.x, H-self.pos.y)
+        enemy_pos = enemy_players[np.argmin([self.pos.dist(player.pos) for player in enemy_players])].pos
+        enemy_pos  = P(enemy_pos.x, H-enemy_pos.y)
+
+        possible_passes = []
+        for k,v in angles.items():
+            line = [ # Equation of line as A*x +B*y + C = 0
+                    np.sin(v), # x coeff
+                    -np.cos(v), # y coeff
+                    self_pos.y*np.cos(v) - self_pos.x*np.sin(v), # constant
+            ]
+            dist = self.dist_to_line(line, enemy_pos)
+            possible_passes.append((-dist,k))
+
+        if possible_passes:
+            shot = sorted(possible_passes)[0][1]
+        else:
+            shot = 'NOTHING'
+
+        return shot
 
     def move(self, state, reward, selected):
-
         if state:
             if self.team_id == 1: # Set correct teams based on team id
                 self_team = state['team1']
@@ -290,7 +334,18 @@ class OriginalAIAgent(Agent):
                 other_team = state['team1']
 
         if state:
-            if selected == self.id and self.pos.dist(state['ball'].pos) < PLAYER_RADIUS + BALL_RADIUS: # Selected player has the ball
+            if self.id == 0: # Special for the goal-keeper
+                ai_gk_pass = self.gk_pass(other_team['players'])
+                ai_gk_move = self.gk_move(self_team['goal_x'], state['ball'])
+                if selected == self.id and state['ball'].ball_stats['player'] == self.id: # GK has the ball
+                    if ai_gk_pass != 'NOTHING':
+                        return ai_gk_pass
+                    else:
+                        return ai_gk_move
+                else:
+                    return ai_gk_move
+
+            if selected == self.id and state['ball'].ball_stats['player'] == self.id: # Selected player has the ball
                 ai_shoot = self.ai_shoot(other_team['players'][0], other_team['goal_x'])
                 ai_pass =  self.ai_pass(self_team['players'], other_team['players'])
 

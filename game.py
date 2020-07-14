@@ -208,7 +208,7 @@ class Game:
             },
             'team2': {
                 'players': self.team2.players,
-                'goal_x': self.team1.goal_x,
+                'goal_x': self.team2.goal_x,
             },
             'ball': self.ball,
         }
