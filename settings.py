@@ -65,5 +65,6 @@ single_long_whistle = SOUND_DIR + 'single-long-whistle.wav'
 three_whistles = SOUND_DIR + 'three-whistles.wav'
 two_kicks = SOUND_DIR + 'two-kicks.wav'
 goal = SOUND_DIR + 'goal.wav'
+click = SOUND_DIR + 'click.wav'
 
 ######################################

@@ -4,6 +4,10 @@ from const import FORM
 
 MAX_CHAR = 50
 
+# Init sound
+engine = pygame_menu.sound.Sound()
+engine.set_sound(pygame_menu.sound.SOUND_TYPE_CLICK_MOUSE, click)
+
 # Custom theme
 menu_bg = pygame_menu.baseimage.BaseImage( # load background image
     image_path=MENU_BG,
@@ -35,6 +39,7 @@ about_menu = pygame_menu.Menu(H, W, ' About',
                              theme=custom_theme,
                              mouse_motion_selection=True,
                              mouse_visible=True)
+about_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus
 
 about_menu.add_label('Written by:', max_char=MAX_CHAR)
 about_menu.add_label('Manan Soni', max_char=MAX_CHAR)
@@ -53,6 +58,8 @@ instr_menu = pygame_menu.Menu(H, W, ' Instructions',
                              #columns=2,
                              #rows=21,
 )
+instr_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus
+
 """
 # Col 1
 instr_menu.add_label('This is an 11 v 11 Football game where you play against an AI computer.', max_char=MAX_CHAR)
@@ -126,6 +133,7 @@ sett_menu = pygame_menu.Menu(H, W, ' Settings',
                              center_content=False,
                              mouse_motion_selection=True,
                              mouse_visible=True)
+sett_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus                             
 
 colors = [
     ('DEFAULT', None),
@@ -193,5 +201,6 @@ main_menu = pygame_menu.Menu(H, W, ' FIFA 42',
                              theme=custom_theme,
                              mouse_motion_selection=True,
                              mouse_visible=True)
+main_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus
 
 #################################
