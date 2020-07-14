@@ -90,7 +90,7 @@ class HumanTeam(Team):
         dists = [player.pos.dist(ball.pos) + player.rnd for player in self.players]
         self.selected = np.argmin(dists) # Default - Ball goes to nearest player
 
-        if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball.pos.x - self.players[0].pos.x) < W//5:
+        if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball.pos.x - self.goal_x) < W//5:
             # If the ball is within the D and is not very near to any other player, give control to the keeper
             self.selected = 0
 

@@ -21,7 +21,7 @@ def play_game():
     game = Game(team1,team2) # initialize the game
     """ Game loop """
     while not game.end: # Game loop
-        clock.tick(100) # FPS
+        clock.tick(FPS) # FPS
 
         game.check_interruptions() # Check for pause or quit keys
 

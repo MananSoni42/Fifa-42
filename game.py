@@ -43,8 +43,22 @@ class Game:
         for player1 in team.players:
             for player2 in team.players:
                 if player1.id != player2.id and abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
-                    player1.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player1.id]])
-                    player2.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player2.id]])
+                    #player1.pos -= P(factor_x, PLAYER_SPEED)*P(ACT[actions[player1.id]])
+                    #player2.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player2.id]])
+                    xincr = 1 + PLAYER_RADIUS - abs(player1.pos.x-player2.pos.x)//2
+                    xdir = (1,-1)
+                    yincr = 1 + PLAYER_RADIUS - abs(player1.pos.y-player2.pos.y)//2
+                    ydir = (1,-1)
+
+                    if player1.pos.x < player2.pos.x:
+                        xdir = (-1,1)
+                    if player1.pos.y < player2.pos.y:
+                        ydir = (-1,1)
+
+                    player1.pos.x += xdir[0]*xincr
+                    player2.pos.x += xdir[1]*xincr
+                    player1.pos.y += ydir[0]*yincr
+                    player2.pos.y += ydir[1]*yincr
 
     def diff_team_collision(self, team1, team2, free):
         """ Check if current player collides with any other players (different teams) """
@@ -144,8 +158,8 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (15*H_)//100, W_, (10*H_)//100))
 
         pos = self.stats.get_possession()
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pos[0],2))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pos[1],2))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pos[0],0)))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pos[1],0)))+"%", True, (255,255,255))
 
         if int(pos[0]*W_) - 2*pad > min_len: # Team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_) - 3*pad, (5*H_)//100))
@@ -162,8 +176,8 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (35*H_)//100, W_, (10*H_)//100))
 
         pa = self.stats.get_pass_acc()
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pa[0],2))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*pa[1],2))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pa[0],0)))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pa[1],0)))+"%", True, (255,255,255))
 
         if int(pa[0]*W_//2) > min_len: # team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (45*H_)//100, int(pa[0]*W_//2) - pad, (5*H_)//100))
@@ -181,8 +195,8 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (55*H_)//100, W_, (10*H_)//100))
 
         sa = self.stats.get_shot_acc()
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*sa[0],2))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(round(100*sa[1],2))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*sa[0],0)))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*sa[1],0)))+"%", True, (255,255,255))
 
         if int(sa[0]*W_//2) > min_len: # team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (65*H_)//100, int(sa[0]*W_//2) - pad, (5*H_)//100))
