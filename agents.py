@@ -184,14 +184,14 @@ class OriginalAIAgent(Agent):
         self_pos  = P(self.pos.x, H-self.pos.y)
 
         prefs  = { # directions are wrt origin at bottom-right
-            'SHOOT_Q': {'priority': 1, 'angle': np.pi*3/4, 'dir': P(-1,1)},
-            'SHOOT_Z': {'priority': 1, 'angle': -np.pi*3/4, 'dir': P(-1,-1)},
-            'SHOOT_A': {'priority': 1, 'angle': np.pi, 'dir': P(-1,0)},
-            'SHOOT_W': {'priority': 2, 'angle': np.pi/2, 'dir': P(0,1)},
-            'SHOOT_X': {'priority': 2, 'angle': -np.pi/2, 'dir': P(0,-1)},
-            'SHOOT_E': {'priority': 3, 'angle': np.pi/4, 'dir': P(1,1)},
-            'SHOOT_C': {'priority': 3, 'angle': -np.pi/4, 'dir': P(1,-1)},
-            'SHOOT_D': {'priority': 4, 'angle': 0, 'dir': P(1,0)},
+            'SHOOT_A': {'priority': {1: 4, 2: 1}, 'angle': np.pi, 'dir': P(-1,0)},
+            'SHOOT_Q': {'priority': {1: 3, 2: 1}, 'angle': np.pi*3/4, 'dir': P(-1,1)},
+            'SHOOT_Z': {'priority': {1: 3, 2: 1}, 'angle': -np.pi*3/4, 'dir': P(-1,-1)},
+            'SHOOT_W': {'priority': {1: 2, 2: 2}, 'angle': np.pi/2, 'dir': P(0,1)},
+            'SHOOT_X': {'priority': {1: 2, 2: 2}, 'angle': -np.pi/2, 'dir': P(0,-1)},
+            'SHOOT_E': {'priority': {1: 1, 2: 3}, 'angle': np.pi/4, 'dir': P(1,1)},
+            'SHOOT_C': {'priority': {1: 1, 2: 3}, 'angle': -np.pi/4, 'dir': P(1,-1)},
+            'SHOOT_D': {'priority': {1: 1, 2: 4}, 'angle': 0, 'dir': P(1,0)},
         }
 
         possible_passes  = []
@@ -223,7 +223,7 @@ class OriginalAIAgent(Agent):
                             continue
                         else:
                             possible_passes.append(
-                                (v['priority'],
+                                (v['priority'][self.team_id],
                                 team_dist,
                                 k,
                                 enemy_dist
@@ -247,16 +247,23 @@ class OriginalAIAgent(Agent):
         goal_x: X coordinate of goal post
         """
         angles  = {
-            'SHOOT_Q': np.pi*3/4,
-            'SHOOT_A': np.pi,
-            'SHOOT_Z': -np.pi*5/4,
+            1: { # For team 1
+                'SHOOT_E': np.pi/4,
+                'SHOOT_D': 0,
+                'SHOOT_C': -np.pi/4,
+            },
+            2: { # For team 2
+                'SHOOT_Q': np.pi*3/4,
+                'SHOOT_A': np.pi,
+                'SHOOT_Z': -np.pi*5/4,
+            },
         }
 
         self_pos  = P(self.pos.x, H-self.pos.y)
         gk_pos  = P(gk.pos.x, H-gk.pos.y)
 
         possible_shots = []
-        for k,v in angles.items():
+        for k,v in angles[self.team_id].items():
             line = [ # Equation of line as A*x +B*y + C = 0
                     np.sin(v), # x coeff
                     -np.cos(v), # y coeff
@@ -292,15 +299,22 @@ class OriginalAIAgent(Agent):
         else:
             return 'FORM'
 
-    def gk_pass(self,enemy_players):
+    def gk_pass(self, enemy_players):
         """
         Pass such that the nearest enemy player does not get the ball
         """
 
         angles  = {
-            'SHOOT_Q': np.pi*3/4,
-            'SHOOT_A': np.pi,
-            'SHOOT_Z': -np.pi*5/4,
+            1: { # For team 1
+                'SHOOT_E': np.pi/4,
+                'SHOOT_D': 0,
+                'SHOOT_C': -np.pi/4,
+            },
+            2: { # For team 2
+                'SHOOT_Q': np.pi*3/4,
+                'SHOOT_A': np.pi,
+                'SHOOT_Z': -np.pi*5/4,
+            },
         }
 
         self_pos  = P(self.pos.x, H-self.pos.y)
@@ -308,7 +322,7 @@ class OriginalAIAgent(Agent):
         enemy_pos  = P(enemy_pos.x, H-enemy_pos.y)
 
         possible_passes = []
-        for k,v in angles.items():
+        for k,v in angles[self.team_id].items():
             line = [ # Equation of line as A*x +B*y + C = 0
                     np.sin(v), # x coeff
                     -np.cos(v), # y coeff
@@ -351,7 +365,7 @@ class OriginalAIAgent(Agent):
 
                 if self.pos.dist(P(other_team['goal_x'],H//2)) <= AI_SHOOT_RADIUS and ai_shoot != 'NOTHING': # If shot is possible, take it
                     return ai_shoot
-                elif ai_pass != 'NOTHING': # Else, pass if possible (passes towards the enemy goal are prioritized)
+                elif ai_pass != 'NOTHING' and np.random.rand() >= AI_PASS_PROB: # Else, pass if possible (passes towards the enemy goal are prioritized)
                     return ai_pass
                 else:
                     return self.ai_move_with_ball(other_team['players'], other_team['goal_x']) # Move towards the goal

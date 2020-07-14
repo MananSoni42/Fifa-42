@@ -12,7 +12,7 @@ NUM_TEAM = 11 # Number of players in a team
 FONT_SIZE = 45
 W = get_monitors()[0].width # Width
 H = 9*get_monitors()[0].height//10 # Height
-FPS = 27
+FPS = 100
 
 PLAYER_SPEED = 3
 PLAYER_RADIUS = 20
@@ -32,8 +32,9 @@ WALK_DELAY = 3 # Change walking sprite after this many presses
 # Orginal AI related
 AI_FAR_RADIUS = 8*PLAYER_RADIUS # Far radius to look for ball
 AI_NEAR_RADIUS = 3*PLAYER_RADIUS # Near radius to ward off enemy players
-AI_MIN_PASS_DIST = 15 # Min perpendicular distance to consider for a successfull pass
+AI_MIN_PASS_DIST = 25 # Min perpendicular distance to consider for a successfull pass
 AI_SHOOT_RADIUS = W//4 # Dist from center of goal post within which AI starts shooting
+AI_PASS_PROB = 0.8 # Probability that AI moves instead of passing
 ######################################
 
 

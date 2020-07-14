@@ -13,14 +13,15 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
 # Define teams (Team 1 faces right by default)
-team1 = HumanTeam(formation='default', color=(0,32,255))
+#team1 = HumanTeam(formation='default', color=(0,32,255))
+team1 = OriginalAITeam(color=(0,32,255))
 team2 = OriginalAITeam(color=(255,128,0))
 
 def play_game():
     game = Game(team1,team2) # initialize the game
     """ Game loop """
     while not game.end: # Game loop
-        clock.tick(FPS) # FPS
+        clock.tick(100) # FPS
 
         game.check_interruptions() # Check for pause or quit keys
 
