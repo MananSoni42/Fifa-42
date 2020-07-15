@@ -116,8 +116,11 @@ class Game:
         text = goal_font.render(str(self.stats.goals[2]), True, (0,0,0))
         self.text_draw(win, text, goal2_rect)
 
-    def field_draw(self,win):
-        """ Draw the football pitch """
+    def field_draw(self,win, hints):
+        """
+        Draw the football pitch
+        hints: Enable to add control hints
+        """
         win.fill((14, 156, 23)) # constant green
 
         pygame.draw.rect(win, (255, 255, 255), (0, 0, W - LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH) # border
@@ -131,24 +134,26 @@ class Game:
         pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
         pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
 
-        field_font = pygame.font.Font(FONT_PATH, FONT_SIZE//2)
-        text_esc = field_font.render('Esc: pause', True, (0,100,0))
-        text_back = field_font.render('Backspace: return to menu', True, (0,100,0))
-        text_space = field_font.render('Space: Toggle formation', True, (0,100,0))
-        text_team1_form = field_font.render(f'Maintain formation: {"ON" if self.team1.maintain_formation else "OFF"}', True, (0,100,0))
+        if hints:
+            field_font = pygame.font.Font(FONT_PATH, FONT_SIZE//2)
+            text_esc = field_font.render('Esc: pause', True, (0,100,0))
+            text_back = field_font.render('Backspace: return to menu', True, (0,100,0))
+            text_space = field_font.render('Space: Toggle formation', True, (0,100,0))
+            text_team1_form = field_font.render(f'Maintain formation: {"ON" if self.team1.maintain_formation else "OFF"}', True, (0,100,0))
 
-        self.text_draw(win, text_esc, (W - 2*W//10 - 3*LINE_WIDTH, 3*LINE_WIDTH, 2*W//10, H//24), align='right')
-        self.text_draw(win, text_space, (W - 3*W//10 - 3*LINE_WIDTH, 3*LINE_WIDTH, 2*W//10, H//24), align='left')
-        self.text_draw(win, text_back, (W - W//5 - 3*LINE_WIDTH, 3*LINE_WIDTH + H//24, W//5, H//24), align='left')
-        self.text_draw(win, text_team1_form, (3*LINE_WIDTH, 3*LINE_WIDTH, W//5, H//24), align='left')
+            self.text_draw(win, text_esc, (W - 2*W//10 - 3*LINE_WIDTH, 3*LINE_WIDTH, 2*W//10, H//24), align='right')
+            self.text_draw(win, text_space, (W - 3*W//10 - 3*LINE_WIDTH, 3*LINE_WIDTH, 2*W//10, H//24), align='left')
+            self.text_draw(win, text_back, (W - W//5 - 3*LINE_WIDTH, 3*LINE_WIDTH + H//24, W//5, H//24), align='left')
+            self.text_draw(win, text_team1_form, (3*LINE_WIDTH, 3*LINE_WIDTH, W//5, H//24), align='left')
 
-    def draw(self, win, debug=False):
+    def draw(self, win, debug=False, hints=True):
         """ Draw the game """
-        self.field_draw(win)
+        self.field_draw(win, hints=hints)
         if debug:
             pygame.draw.circle(win, (64, 128, 255), (0, H//2), AI_SHOOT_RADIUS, LINE_WIDTH) # mid circle
             pygame.draw.circle(win, (64, 128, 255), (W, H//2), AI_SHOOT_RADIUS, LINE_WIDTH) # mid circle
-        self.goal_draw(win)
+        if hints:
+            self.goal_draw(win)
         self.team1.draw(win, debug=debug)
         self.team2.draw(win, debug=debug)
         self.ball.draw(win, debug=debug)

@@ -130,26 +130,4 @@ def draw_form(win, curr_form):
     for pos in FORM[curr_form]['L']:
         win.blit(RUN[1]['L'][0], (pos - PLAYER_CENTER).val)
 
-def choose_formation(win):
-    chosen = False
-    poss_form = list(FORM.keys())
-    num_formations = len(poss_form)
-    ind = 0
-    print(poss_form, num_formations)
-    while not chosen:
-        keys = pygame.key.get_pressed() # Pause
-        if keys[pygame.K_ESCAPE]:
-            print(1)
-            break
-        elif keys[pygame.K_SPACE]:
-            print(2)
-            chosen = True
-        elif keys[pygame.K_LEFT]:
-            print(3)
-            ind = (ind - 1)%num_formations
-        elif keys[pygame.K_RIGHT]:
-            print(4)
-            ind = (ind + 1)%num_formations
-        draw_form(win, poss_form[ind])
-        pygame.display.update() # refresh screen
 ######################################

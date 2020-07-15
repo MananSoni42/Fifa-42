@@ -36,32 +36,30 @@ def play_game():
     main_menu.mainloop(win, bgfun=draw_bg) # Game never ends - Show the menu
 
 ### The menu
-from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, f2, form_id, team_id
+from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, f2, selected_team, selected_formation
 
 def color_change(widget, col, team): # Change color of widget and corresponding team
     if col:
         widget.set_background_color(col)
         team.color = col
 
-def set_form(form): # Change team 1's formation and widget's background
-    global form_id, team_id
-    form_id = form[1]
-    if team_id == 1:
-        team1.formation = form[0]
-    else:
-        team2.formation = form[0]
+def set_form(form, team_id): # Change team 1's formation and widget's background
+    global selected_team, selected_formation
 
-def set_team(id):
-    global team_id
-    team_id = id
+    selected_team = team_id
+    selected_formation[selected_team] = form
+
+    team1.formation = selected_formation[1][0]
+    team2.formation = selected_formation[2][0]
 
 def draw_bg():
-    win.blit(pygame.transform.scale(pygame.image.load(GET_FORM_BG(team_id,form_id)), (W,H)), (0,0))
+    dummy_game = Game(team1,team2)
+    dummy_game.draw(win, hints=False)
 
 s1.change = lambda col: color_change(s1, col, team1) # set team 1's color
 s2.change = lambda col: color_change(s2, col, team2) # Set team 2's color
-f1.change = set_team # set team 1's color
-f2.change = set_form # set team 1's color
+f1.change = lambda id: set_form(id,team_id=1) # set team 1's formation
+f2.change = lambda id: set_form(id,team_id=2) # set team 2's formation
 
 main_menu.add_button('Play', play_game)
 main_menu.add_button('Instructions', instr_menu)
