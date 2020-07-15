@@ -1,5 +1,11 @@
 from settings import *
 from const import ACT
+from pygame import mixer
+
+# Init Sounds
+mixer.init(44100, -16,2,2048)
+single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
+goal_sound = mixer.Sound(GOAL)
 
 class Ball:
     """Implements the football used in the game"""
@@ -47,6 +53,11 @@ class Ball:
                 side = 2
 
             if GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
+
+                # Play celebration sound
+                single_short_whistle.play()
+                goal_sound.play()
+
                 goal = True
                 stats.goals[3-side] += 1 # maps 1 -> 2, 2 -> 1 bcoz the goal goes to the other side!
                 pos = P(W//2, H//2)

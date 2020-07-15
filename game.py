@@ -7,12 +7,12 @@ import time
 
 # Sound Init
 pygame.mixer.init(44100, -16,2,2048)
-applause = mixer.Sound(applause)
-kick = mixer.Sound(kick)
-single_short_whistle = mixer.Sound(single_short_whistle)
-single_long_whistle = mixer.Sound(single_long_whistle)
-three_whistles = mixer.Sound(three_whistles)
-two_kicks = mixer.Sound(two_kicks)
+applause = mixer.Sound(APPLAUSE)
+kick = mixer.Sound(KICK)
+single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
+single_long_whistle = mixer.Sound(SINGLE_LONG_WHISLTE)
+three_whistles = mixer.Sound(THREE_WHISTLES)
+two_kicks = mixer.Sound(TWO_KICKS)
 
 class Game:
     """ Class that controls the entire game """
