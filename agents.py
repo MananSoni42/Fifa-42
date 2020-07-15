@@ -147,7 +147,7 @@ class OriginalAIAgent(Agent):
 
         possible_dir = ['NOTHING', 'MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']
         dist_to_dir = [dir_final.dist(ACT[dir]) for dir in possible_dir]
-        prob_dist = np.clip(np.exp([1/(d+pow(10,-6)) for d in dist_to_dir]), 0, 1000)
+        prob_dist = [np.exp(1/d) if d >= 0.1 else np.exp(10) for d in dist_to_dir]
         chosen_dir = np.random.choice(possible_dir, p=np.array(prob_dist)/np.sum(prob_dist))
 
         return chosen_dir
@@ -163,7 +163,7 @@ class OriginalAIAgent(Agent):
 
             possible_dir = ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']
             dist_to_dir = [vec_dir.dist(ACT[dir]) for dir in possible_dir]
-            prob_dist = np.clip(np.exp([1/(d+pow(10,-6)) for d in dist_to_dir]), 0, 1000)
+            prob_dist = [np.exp(1/d) if d >= 0.1 else np.exp(10) for d in dist_to_dir]
             chosen_dir = np.random.choice(possible_dir, p=np.array(prob_dist)/np.sum(prob_dist))
             return chosen_dir
         else:
@@ -329,10 +329,11 @@ class OriginalAIAgent(Agent):
                     -np.cos(v), # y coeff
                     self_pos.y*np.cos(v) - self_pos.x*np.sin(v), # constant
             ]
-            dist = np.inf
-            dir = 'NOTHING'
-            dist = np.min([self.dist_to_line(line, pos) for pos in near_enemy_pos])
-            possible_passes.append((-dist,k))
+            if near_enemy_pos:
+                dist = np.inf
+                dir = 'NOTHING'
+                dist = np.min([self.dist_to_line(line, pos) for pos in near_enemy_pos])
+                possible_passes.append((-dist,k))
 
         if possible_passes:
             shot = sorted(possible_passes)[0][1]

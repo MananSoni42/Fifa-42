@@ -23,16 +23,14 @@ class Game:
     def check_interruptions(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # Quit
-                self.end = True
-
-        keys = pygame.key.get_pressed() # Pause
-        if keys[pygame.K_ESCAPE]:
-            self.pause = True
-        elif keys[pygame.K_BACKSPACE]:
-            self.pause = False
-        if keys[pygame.K_SPACE]:
-            self.team1.maintain_formation = not self.team1.maintain_formation
-            self.team2.maintain_formation = not self.team2.maintain_formation
+                pygame.quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    self.team1.maintain_formation = not self.team1.maintain_formation
+                if event.key == pygame.K_ESCAPE:
+                    self.pause = not self.pause
+                if event.key == pygame.K_BACKSPACE:
+                    self. end = True
 
     def same_team_collision(self, team, actions, free):
         """ Check if current player collides with any other players (same team) """
@@ -91,12 +89,19 @@ class Game:
         self.same_team_collision(team2, act2, self.ball.free)
         self.diff_team_collision(team1, team2, self.ball.free)
 
-    def text_draw(self, win, text, rect):
-        center_x = rect[0] + rect[2]//2
-        center_y = rect[1] + rect[3]//2
+    def text_draw(self, win, text, rect, align='center'):
         width = text.get_width()
         height = text.get_height()
-        win.blit(text, (center_x - width//2, center_y - height//2))
+        center_x = rect[0] + rect[2]//2
+        center_y = rect[1] + rect[3]//2
+
+        if align == 'left':
+            final_rect = (rect[0], center_y - height//2)
+        elif align == 'right':
+            final_rect = (rect[0] + rect[2] - width, center_y - height//2)
+        else: # Center
+            final_rect = (center_x - width//2, center_y - height//2)
+        win.blit(text, final_rect)
 
     def goal_draw(self,win):
         """ Show game score """
@@ -126,6 +131,17 @@ class Game:
         pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
         pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
 
+        field_font = pygame.font.Font(FONT_PATH, FONT_SIZE//2)
+        text_esc = field_font.render('Esc: pause', True, (0,100,0))
+        text_back = field_font.render('Backspace: return to menu', True, (0,100,0))
+        text_space = field_font.render('Space: Toggle formation', True, (0,100,0))
+        text_team1_form = field_font.render(f'Maintain formation: {"ON" if self.team1.maintain_formation else "OFF"}', True, (0,100,0))
+
+        self.text_draw(win, text_esc, (W - 2*W//10 - 3*LINE_WIDTH, 3*LINE_WIDTH, 2*W//10, H//24), align='right')
+        self.text_draw(win, text_space, (W - 3*W//10 - 3*LINE_WIDTH, 3*LINE_WIDTH, 2*W//10, H//24), align='left')
+        self.text_draw(win, text_back, (W - W//5 - 3*LINE_WIDTH, 3*LINE_WIDTH + H//24, W//5, H//24), align='left')
+        self.text_draw(win, text_team1_form, (3*LINE_WIDTH, 3*LINE_WIDTH, W//5, H//24), align='left')
+
     def draw(self, win, debug=False):
         """ Draw the game """
         self.field_draw(win)
@@ -148,10 +164,13 @@ class Game:
         min_len = 10
 
         # Exit
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE).render("x", True, (255,0,0))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render("(Backspace)", True, (255,0,0))
-        self.text_draw(win, text1, (W0 + pad, H0 + (3*H_)//100, W_//10, (5*H_)//100))
-        self.text_draw(win, text2, (W0 + pad, H0 + (8*H_)//100, W_//10, (5*H_)//100))
+        text_title = pygame.font.Font(FONT_PATH, FONT_SIZE).render("Pause Menu", True, (255,255,255))
+        self.text_draw(win, text_title, (W0 + pad, H0 + (5*H_)//100, W_ - pad, (4*H_)//100))
+
+        text_close1 = pygame.font.Font(FONT_PATH, FONT_SIZE).render("x", True, (255,0,0))
+        text_close2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render("(ESCAPE)", True, (255,0,0))
+        self.text_draw(win, text_close1, (W0 + 9*W_//10 - pad, H0 + (3*H_)//100, W_//10, (5*H_)//100))
+        self.text_draw(win, text_close2, (W0 + 9*W_//10 - pad, H0 + (8*H_)//100, W_//10, (5*H_)//100))
 
         # Possession
         text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("POSSESSION", True, (255,255,255))
@@ -162,12 +181,12 @@ class Game:
         text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pos[1],0)))+"%", True, (255,255,255))
 
         if int(pos[0]*W_) - 2*pad > min_len: # Team 1
-            pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_) - 3*pad, (5*H_)//100))
+            pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_), (5*H_)//100))
             self.text_draw(win, text1, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_) - 3*pad, (5*H_)//100))
 
         if int(pos[1]*W_) - pad > min_len: # Team 2
-            pygame.draw.rect(win, self.team2.color, (W0 + int(pos[0]*W_) - 2*pad, H0 + (25*H_)//100, int(pos[1]*W_), (5*H_)//100))
-            self.text_draw(win, text2, (W0 + int(pos[0]*W_) - 2*pad, H0 + (25*H_)//100, int(pos[1]*W_), (5*H_)//100))
+            pygame.draw.rect(win, self.team2.color, (W0 + int(pos[0]*W_) + pad, H0 + (25*H_)//100, int(pos[1]*W_) - 3*pad, (5*H_)//100))
+            self.text_draw(win, text2, (W0 + int(pos[0]*W_) + pad, H0 + (25*H_)//100, int(pos[1]*W_) - 3*pad, (5*H_)//100))
 
         pygame.draw.rect(win, (0,0,0), (W0 + pad, H0 + (25*H_)//100, W_ - 3*pad, (5*H_)//100), LINE_WIDTH) # border
 
@@ -183,9 +202,9 @@ class Game:
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (45*H_)//100, int(pa[0]*W_//2) - pad, (5*H_)//100))
             self.text_draw(win, text1, (W0 + pad, H0 + (45*H_)//100, int(pa[0]*W_//2) - pad, (5*H_)//100))
 
-        if int(pa[1]*W_//2) - pad > min_len: # team 2
-            pygame.draw.rect(win, self.team2.color, (W0 + W_ - pad - int(pa[1]*W_//2), H0 + (45*H_)//100, int(pa[1]*W_//2) - pad, (5*H_)//100))
-            self.text_draw(win, text2, (W0 + W_ - pad - int(pa[1]*W_//2), H0 + (45*H_)//100, int(pa[1]*W_//2) - pad, (5*H_)//100))
+        if int(pa[1]*W_//2) - 2*pad > min_len: # team 2
+            pygame.draw.rect(win, self.team2.color, (W0 + W_ - int(pa[1]*W_//2), H0 + (45*H_)//100, int(pa[1]*W_//2) - 2*pad, (5*H_)//100))
+            self.text_draw(win, text2, (W0 + W_ - int(pa[1]*W_//2), H0 + (45*H_)//100, int(pa[1]*W_//2) - 2*pad, (5*H_)//100))
 
         pygame.draw.rect(win, (0,0,0), (W0 + pad, H0 + (45*H_)//100, W_ - 3*pad, (5*H_)//100), LINE_WIDTH) # border
         pygame.draw.rect(win, (0,0,0), (W0 + W_//2 - LINE_WIDTH//2, H0 + (45*H_)//100, LINE_WIDTH, (5*H_)//100)) # center line

@@ -13,8 +13,7 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
 # Define teams (Team 1 faces right by default)
-#team1 = HumanTeam(formation='default', color=(0,32,255))
-team1 = OriginalAITeam(color=(0,32,255))
+team1 = HumanTeam(formation='default', color=(0,32,255))
 team2 = OriginalAITeam(color=(255,128,0))
 
 def play_game():
@@ -33,7 +32,8 @@ def play_game():
             game.next() # Move the game forward
 
         pygame.display.update() # refresh screen
-    pygame.quit()
+
+    main_menu.mainloop(win, bgfun=draw_bg) # Game never ends - Show the menu
 
 ### The menu
 from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, f2, form_id, team_id
