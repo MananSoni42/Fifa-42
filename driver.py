@@ -8,7 +8,7 @@ import pygame_menu
 Driver program to test the game
 """
 pygame.init()
-win = pygame.display.set_mode((W,H)) # Reference to window needed for drawing anything
+win = pygame.display.set_mode((W,H), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
@@ -53,8 +53,9 @@ def set_form(form, team_id): # Change team 1's formation and widget's background
     team2.formation = selected_formation[2][0]
 
 def draw_bg():
-    dummy_game = Game(team1,team2)
-    dummy_game.draw(win, hints=False)
+    if main_menu.get_current().get_title() == 'Formation':
+        dummy_game = Game(team1,team2)
+        dummy_game.draw(win, hints=False)
 
 s1.change = lambda col: color_change(s1, col, team1) # set team 1's color
 s2.change = lambda col: color_change(s2, col, team2) # Set team 2's color
