@@ -20,10 +20,10 @@ custom_theme = pygame_menu.themes.Theme(
     title_background_color = (52, 168, 235),
     title_shadow = True,
     title_shadow_offset = 5,
-    title_font = pygame_menu.font.FONT_8BIT,
+    title_font = FONT_8BIT,
     title_font_size = 3*FONT_SIZE//2,
     widget_font_color = (52, 168, 235),
-    widget_font = pygame_menu.font.FONT_NEVIS,
+    widget_font = FONT_NEVIS,
     widget_font_size = FONT_SIZE,
     scrollbar_color = (42,42,42),
     scrollbar_slider_color = (52, 168, 235)
@@ -53,40 +53,7 @@ instr_menu = pygame_menu.Menu(H, W, ' Instructions',
                              #columns=2,
                              #rows=21,
 )
-"""
-# Col 1
-instr_menu.add_label('This is an 11 v 11 Football game where you play against an AI computer.', max_char=MAX_CHAR)
-instr_menu.add_label('You control a single player (marked by a red dot on top of him)', max_char=MAX_CHAR)
-instr_menu.add_vertical_margin(40)
-instr_menu.add_label('Controls', align=pygame_menu.locals.ALIGN_RIGHT)
-instr_menu.add_vertical_margin(40)
-instr_menu.add_label('< ^ v >')
-instr_menu.add_vertical_margin(40)
-instr_menu.add_image(CONTROLS_IMG)
-instr_menu.add_vertical_margin(40)
-instr_menu.add_label('SPACE')
-instr_menu.add_vertical_margin(40)
-instr_menu.add_label('ESC')
-instr_menu.add_vertical_margin(40)
-instr_menu.add_label('BACKSPACE')
-instr_menu.add_vertical_margin(0)
 
-# Col 2
-#instr_menu.add_vertical_margin(490)
-instr_menu.add_vertical_margin(490)
-instr_menu.add_vertical_margin(40)
-instr_menu.add_label('Move player')
-instr_menu.add_vertical_margin(300)
-instr_menu.add_label('Shoot the ball')
-instr_menu.add_vertical_margin(250)
-instr_menu.add_label('Toggle')
-instr_menu.add_vertical_margin(40)
-instr_menu.add_label('Pause game (view stats)')
-instr_menu.add_vertical_margin(40)
-instr_menu.add_label('Resume game')
-instr_menu.add_vertical_margin(60)
-instr_menu.add_button('Back', pygame_menu.events.BACK,align=pygame_menu.locals.ALIGN_LEFT)
-"""
 instr_menu.add_label('This is an 11 v 11 Football game where you play against an AI computer.', max_char=MAX_CHAR)
 instr_menu.add_vertical_margin(40)
 instr_menu.add_label('You control a single player (marked by a red dot)', max_char=MAX_CHAR)
@@ -158,10 +125,10 @@ form_theme = pygame_menu.themes.Theme(
     title_background_color = (52, 168, 235,42),
     title_shadow = True,
     title_shadow_offset = 5,
-    title_font = pygame_menu.font.FONT_8BIT,
+    title_font = FONT_8BIT,
     title_font_size = 3*FONT_SIZE//2,
     widget_font_color = (52, 168, 235,42),
-    widget_font = pygame_menu.font.FONT_NEVIS,
+    widget_font = FONT_NEVIS,
     widget_font_size = FONT_SIZE,
     scrollbar_color = (42,42,42),
     scrollbar_slider_color = (52, 168, 235)

@@ -1,0 +1,8 @@
+pyinstaller \
+    --onefile \
+    --name "Fifa-42" \
+    --add-data "assets/fonts/*":"assets/fonts" \
+    --add-data "assets/img/*":"assets/img" \
+    --add-data "assets/img/formations/*":"assets/img/formations" \
+    --add-data "assets/img/running/*":"assets/img/running" \
+    driver.py

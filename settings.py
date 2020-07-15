@@ -2,10 +2,21 @@ import pygame
 import numpy as np
 from point import P
 from screeninfo import get_monitors
+import sys
+import os
 
 """
 Settings and paths
 """
+
+# Required for pyinstaller
+if getattr(sys, 'frozen', False): # PyInstaller adds this attribute
+    # Running in a bundle
+    CurrentPath = sys._MEIPASS
+else:
+    # Running in normal Python environment
+    CurrentPath = os.path.dirname(__file__)
+
 
 ############## Settings ##############
 NUM_TEAM = 11 # Number of players in a team
@@ -38,27 +49,28 @@ AI_PASS_PROB = 0.95 # Probability that AI moves instead of passing
 ######################################
 
 
-
 ############## Assets (images, fonts, sounds) ##############
-ASSET_DIR = './assets/' # Path to assets
-IMG_DIR = ASSET_DIR + 'img/'
-SOUND_DIR = ASSET_DIR + 'sound/'
+ASSET_DIR = os.path.join(CurrentPath, 'assets') # Path to assets
+IMG_DIR = os.path.join(ASSET_DIR, 'img')
+SOUND_DIR = os.path.join(ASSET_DIR, 'sound')
 
-FONT_PATH = ASSET_DIR + 'fonts/Roboto-Black.ttf'
+FONT_ROBOTO = os.path.join(ASSET_DIR, 'fonts', 'Roboto-Black.ttf')
+FONT_8BIT = os.path.join(ASSET_DIR, 'fonts', '8bit.ttf')
+FONT_NEVIS = os.path.join(ASSET_DIR, 'fonts', 'nevis.ttf')
 
-MENU_BG = IMG_DIR + 'menu_bg.jpg'
-CONTROLS_IMG = IMG_DIR + 'controls.png'
-GET_FORM_BG = lambda team_id, formation_id: IMG_DIR + f'formations/{team_id}-{formation_id}.jpg' # Get correct formation img
-BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(IMG_DIR + "field.png"), (W, H)) # Background (not used currently)
-FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(IMG_DIR + "football.png"), (2*BALL_RADIUS, 2*BALL_RADIUS))
+MENU_BG = os.path.join(IMG_DIR, 'menu_bg.jpg')
+CONTROLS_IMG = os.path.join(IMG_DIR, 'controls.png')
+GET_FORM_BG = lambda team_id, formation_id: os.path.join(IMG_DIR,'formations', f'{team_id}-{formation_id}.jpg') # Get correct formation img
+BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'field.png')), (W, H)) # Background (not used currently)
+FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'football.png')), (2*BALL_RADIUS, 2*BALL_RADIUS))
 RUN = { # Sprites that animate the running player
     1: {
-        'L': { i: pygame.transform.scale(pygame.image.load(IMG_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
-        'R': { i: pygame.transform.scale(pygame.image.load(IMG_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'L': { i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'R': { i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
     },
     2: {
-        'L': { i: pygame.transform.scale(pygame.image.load(IMG_DIR + f'running/l{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
-        'R': { i: pygame.transform.scale(pygame.image.load(IMG_DIR + f'running/r{i}.png'), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'L': { i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
+        'R': { i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
     },
 }
 

@@ -107,7 +107,7 @@ class Game:
         """ Show game score """
         goal1_rect = (W//2 - GOAL_DISP_SIZE - 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
         goal2_rect = (W//2 + 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
-        goal_font = pygame.font.Font(FONT_PATH, FONT_SIZE)
+        goal_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
 
         pygame.draw.rect(win, (255, 255, 255), goal1_rect)
         pygame.draw.rect(win, (255, 255, 255), goal2_rect)
@@ -131,7 +131,7 @@ class Game:
         pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
         pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
 
-        field_font = pygame.font.Font(FONT_PATH, FONT_SIZE//2)
+        field_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2)
         text_esc = field_font.render('Esc: pause', True, (0,100,0))
         text_back = field_font.render('Backspace: return to menu', True, (0,100,0))
         text_space = field_font.render('Space: Toggle formation', True, (0,100,0))
@@ -164,21 +164,21 @@ class Game:
         min_len = 10
 
         # Exit
-        text_title = pygame.font.Font(FONT_PATH, FONT_SIZE).render("Pause Menu", True, (255,255,255))
+        text_title = pygame.font.Font(FONT_ROBOTO, FONT_SIZE).render("Pause Menu", True, (255,255,255))
         self.text_draw(win, text_title, (W0 + pad, H0 + (5*H_)//100, W_ - pad, (4*H_)//100))
 
-        text_close1 = pygame.font.Font(FONT_PATH, FONT_SIZE).render("x", True, (255,0,0))
-        text_close2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render("(ESCAPE)", True, (255,0,0))
+        text_close1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE).render("x", True, (255,0,0))
+        text_close2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render("(ESCAPE)", True, (255,0,0))
         self.text_draw(win, text_close1, (W0 + 9*W_//10 - pad, H0 + (3*H_)//100, W_//10, (5*H_)//100))
         self.text_draw(win, text_close2, (W0 + 9*W_//10 - pad, H0 + (8*H_)//100, W_//10, (5*H_)//100))
 
         # Possession
-        text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("POSSESSION", True, (255,255,255))
+        text_pos = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2).render("POSSESSION", True, (255,255,255))
         self.text_draw(win, text_pos, (W0, H0 + (15*H_)//100, W_, (10*H_)//100))
 
         pos = self.stats.get_possession()
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pos[0],0)))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pos[1],0)))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*pos[0],0)))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*pos[1],0)))+"%", True, (255,255,255))
 
         if int(pos[0]*W_) - 2*pad > min_len: # Team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_), (5*H_)//100))
@@ -191,12 +191,12 @@ class Game:
         pygame.draw.rect(win, (0,0,0), (W0 + pad, H0 + (25*H_)//100, W_ - 3*pad, (5*H_)//100), LINE_WIDTH) # border
 
         # Pass accuracy
-        text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("Pass Accuracy", True, (255,255,255))
+        text_pos = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2).render("Pass Accuracy", True, (255,255,255))
         self.text_draw(win, text_pos, (W0, H0 + (35*H_)//100, W_, (10*H_)//100))
 
         pa = self.stats.get_pass_acc()
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pa[0],0)))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*pa[1],0)))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*pa[0],0)))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*pa[1],0)))+"%", True, (255,255,255))
 
         if int(pa[0]*W_//2) > min_len: # team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (45*H_)//100, int(pa[0]*W_//2) - pad, (5*H_)//100))
@@ -210,12 +210,12 @@ class Game:
         pygame.draw.rect(win, (0,0,0), (W0 + W_//2 - LINE_WIDTH//2, H0 + (45*H_)//100, LINE_WIDTH, (5*H_)//100)) # center line
 
         # Shot accuracy
-        text_pos = pygame.font.Font(FONT_PATH, FONT_SIZE//2).render("Shot Accuracy", True, (255,255,255))
+        text_pos = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2).render("Shot Accuracy", True, (255,255,255))
         self.text_draw(win, text_pos, (W0, H0 + (55*H_)//100, W_, (10*H_)//100))
 
         sa = self.stats.get_shot_acc()
-        text1 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*sa[0],0)))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_PATH, FONT_SIZE//5).render(str(int(round(100*sa[1],0)))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*sa[0],0)))+"%", True, (255,255,255))
+        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*sa[1],0)))+"%", True, (255,255,255))
 
         if int(sa[0]*W_//2) > min_len: # team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (65*H_)//100, int(sa[0]*W_//2) - pad, (5*H_)//100))
