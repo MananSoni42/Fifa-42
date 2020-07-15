@@ -8,10 +8,10 @@ Important constants used in the game
 ############## Custom types ##############
 
 # actions that can be performed by a plyer at any given time
-ACT = { 'NOTHING': (0,0), None: (0,0),
-        'MOVE_U': (0,-1), 'MOVE_D': (0,1), 'MOVE_L': (-1,0), 'MOVE_R': (1,0),
-        'SHOOT_Q': (-0.707,-0.707), 'SHOOT_W': (0,-1), 'SHOOT_E': (0.707,-0.707), 'SHOOT_A': (-1,0),
-        'SHOOT_D': (1,0), 'SHOOT_Z': (-0.707,0.707), 'SHOOT_X': (0,1), 'SHOOT_C': (0.707,0.707) }
+ACT = { 'NOTHING': P(0,0), None: P(0,0),
+        'MOVE_U': P(0,-1), 'MOVE_D': P(0,1), 'MOVE_L': P(-1,0), 'MOVE_R': P(1,0),
+        'SHOOT_Q': P(-0.707,-0.707), 'SHOOT_W': P(0,-1), 'SHOOT_E': P(0.707,-0.707), 'SHOOT_A': P(-1,0),
+        'SHOOT_D': P(1,0), 'SHOOT_Z': P(-0.707,0.707), 'SHOOT_X': P(0,1), 'SHOOT_C': P(0.707,0.707) }
 # 0.717 = 1/sqrt(2)
 
 """
