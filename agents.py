@@ -25,7 +25,7 @@ class Agent(ABC):
             pygame.draw.circle(win, (255,0,0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
             pygame.draw.circle(win, (255,0,0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
 
-            pl_font = pygame.font.Font(FONT_PATH, FONT_SIZE)
+            pl_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
             text = pl_font.render(str(self.id), True, (0,0,0))
             win.blit(text, self.pos.val)
 

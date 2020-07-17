@@ -14,7 +14,7 @@ pygame.display.set_caption("FIFA-42")
 
 # Define teams (Team 1 faces right by default)
 team1 = HumanTeam(formation='default', color=(0,32,255))
-team2 = OriginalAITeam(color=(255,128,0))
+team2 = OriginalAITeam(formation='balanced-1', color=(255,128,0))
 
 def play_game():
     game = Game(team1,team2) # initialize the game
