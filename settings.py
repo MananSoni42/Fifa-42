@@ -63,7 +63,7 @@ FONT_NEVIS = os.path.join(ASSET_DIR, 'fonts', 'nevis.ttf')
 MENU_BG = os.path.join(IMG_DIR, 'menu_bg.jpg')
 CONTROLS_IMG = os.path.join(IMG_DIR, 'controls.png')
 GET_FORM_BG = lambda team_id, formation_id: os.path.join(IMG_DIR,'formations', f'{team_id}-{formation_id}.jpg') # Get correct formation img
-BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'field.png')), (W, H)) # Background (not used currently)
+# BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'field.png')), (W, H)) # Background (not used currently)
 FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'football.png')), (2*BALL_RADIUS, 2*BALL_RADIUS))
 RUN = { # Sprites that animate the running player
     1: {
