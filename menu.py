@@ -6,7 +6,7 @@ MAX_CHAR = 50
 
 # Init sound
 engine = pygame_menu.sound.Sound()
-engine.set_sound(pygame_menu.sound.SOUND_TYPE_CLICK_MOUSE, click)
+engine.set_sound(pygame_menu.sound.SOUND_TYPE_CLICK_MOUSE, CLICK)
 
 # Custom theme
 menu_bg = pygame_menu.baseimage.BaseImage( # load background image

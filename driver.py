@@ -15,9 +15,9 @@ pygame.display.set_caption("FIFA-42")
 
 # Init music
 pygame.mixer.init(44100, -16,2,2048)
-menu_music = mixer.Sound(menu_music)
-single_short_whistle = mixer.Sound(single_short_whistle)
-applause = mixer.Sound(applause)
+menu_music = mixer.Sound(MENU_MUSIC)
+single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
+applause = mixer.Sound(APPLAUSE)
 menu_music.play(-1)
 
 # Define teams (Team 1 faces right by default)

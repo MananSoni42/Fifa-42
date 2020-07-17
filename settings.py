@@ -57,14 +57,14 @@ RUN = { # Sprites that animate the running player
 
 # SOUND_CROWD = SOUND_DIR + 'game/crowd.mp3'
 #Sounds
-applause = SOUND_DIR + 'applause2.wav'
-kick = SOUND_DIR + 'FOOTBALLKICK.wav'
-menu_music = SOUND_DIR + 'menu-music.wav'
-single_short_whistle = SOUND_DIR + 'single-short-whistle.wav'
-single_long_whistle = SOUND_DIR + 'single-long-whistle.wav'
-three_whistles = SOUND_DIR + 'three-whistles.wav'
-two_kicks = SOUND_DIR + 'two-kicks.wav'
-goal = SOUND_DIR + 'goal.wav'
-click = SOUND_DIR + 'click.wav'
+APPLAUSE = SOUND_DIR + 'applause2.wav'
+KICK = SOUND_DIR + 'FOOTBALLKICK.wav'
+MENU_MUSIC = SOUND_DIR + 'menu-music.wav'
+SINGLE_SHORT_WHISTLE = SOUND_DIR + 'single-short-whistle.wav'
+SINGLE_LONG_WHISLTE = SOUND_DIR + 'single-long-whistle.wav'
+THREE_WHISTLES = SOUND_DIR + 'three-whistles.wav'
+TWO_KICKS = SOUND_DIR + 'two-kicks.wav'
+GOAL = SOUND_DIR + 'goal.wav'
+CLICK = SOUND_DIR + 'click.wav'
 
 ######################################
