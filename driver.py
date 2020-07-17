@@ -1,8 +1,9 @@
-from team import HumanTeam, OriginalAITeam
-from game import Game
-from settings import *
 import time
 import pygame_menu
+from settings import *
+from game import Game
+from teams.human import HumanTeam
+from teams.original_ai import OriginalAITeam
 
 """
 Driver program to test the game
