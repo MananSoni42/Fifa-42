@@ -131,8 +131,11 @@ class Game:
         pygame.draw.rect(win, (255, 255, 255), (4*W//5-LINE_WIDTH//2, 0.1*H, W//5, 0.8*H), LINE_WIDTH) # right D
         pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, 0.1*H, W//5, 0.8*H), LINE_WIDTH) # left D
 
-        pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
-        pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
+        pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right penalty
+        pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # left penalty
+
+        pygame.draw.rect(win, self.team2.color, (W - 3*LINE_WIDTH, GOAL_POS[0]*H, 3*LINE_WIDTH, (GOAL_POS[1]-GOAL_POS[0])*H)) # right goal
+        pygame.draw.rect(win, self.team1.color, (0, GOAL_POS[0]*H, 3*LINE_WIDTH, (GOAL_POS[1]-GOAL_POS[0])*H)) # left goal
 
         if hints:
             field_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2)
@@ -162,6 +165,9 @@ class Game:
         """ Draw the pause menu """
         W_,H_ = int(0.8*W), int(0.8*H)
         W0,H0 = int(0.1*W), int(0.1*H)
+        col1 = (255-self.team1.color[0], 255-self.team1.color[1], 255-self.team1.color[2])
+        col2 = (255-self.team2.color[0], 255-self.team2.color[1], 255-self.team2.color[2])
+
         # background and border
         #win.fill((42, 42, 42)) # Gray
         pygame.draw.rect(win, (42, 42, 42), (W0, H0, W_ - LINE_WIDTH, H_ - LINE_WIDTH)) # border
@@ -182,8 +188,8 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (15*H_)//100, W_, (10*H_)//100))
 
         pos = self.stats.get_possession()
-        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*pos[0],0)))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*pos[1],0)))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pos[0],0))), True, col1)
+        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pos[1],0))), True, col2)
 
         if int(pos[0]*W_) - 2*pad > min_len: # Team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_), (5*H_)//100))
@@ -200,8 +206,8 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (35*H_)//100, W_, (10*H_)//100))
 
         pa = self.stats.get_pass_acc()
-        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*pa[0],0)))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*pa[1],0)))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pa[0],0))), True, col1)
+        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pa[1],0))), True, col2)
 
         if int(pa[0]*W_//2) > min_len: # team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (45*H_)//100, int(pa[0]*W_//2) - pad, (5*H_)//100))
@@ -219,8 +225,8 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (55*H_)//100, W_, (10*H_)//100))
 
         sa = self.stats.get_shot_acc()
-        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*sa[0],0)))+"%", True, (255,255,255))
-        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//5).render(str(int(round(100*sa[1],0)))+"%", True, (255,255,255))
+        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*sa[0],0))), True, col1)
+        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*sa[1],0))), True, col2)
 
         if int(sa[0]*W_//2) > min_len: # team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (65*H_)//100, int(sa[0]*W_//2) - pad, (5*H_)//100))

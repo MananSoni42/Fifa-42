@@ -1,5 +1,5 @@
-import pygame_menu
 from settings import *
+import pygame_menu
 from const import FORM
 
 MAX_CHAR = 50
@@ -94,12 +94,10 @@ instr_menu.add_button('Back', pygame_menu.events.BACK)
 ########### Settings  ###########
 sett_menu = pygame_menu.Menu(H, W, ' Settings',
                              theme=custom_theme,
-                             center_content=False,
                              mouse_motion_selection=True,
                              mouse_visible=True)
 
 colors = [
-    ('DEFAULT', None),
     ('BLACK' , (0,0,0)),
     ('RED'   , (255,0,0)),
     ('ORANGE', (255,165,0)),
@@ -110,9 +108,12 @@ colors = [
     ('CYAN'  , (0,255,255))
 ]
 
-sett_menu.add_vertical_margin(V_PAD)
-s1 = sett_menu.add_selector('Team 1 color:', colors, font_color=(255,255,255))
-s2 = sett_menu.add_selector('Team 2 color:', colors, font_color=(255,255,255))
+s1 = sett_menu.add_selector('Team 1 color:', colors, default=2, font_color=(255,255,255))
+s1.set_background_color((255,165,0))
+
+s2 = sett_menu.add_selector('Team 2 color:', colors, default=6, font_color=(255,255,255))
+s2.set_background_color((0,0,255))
+
 sett_menu.add_vertical_margin(V_PAD)
 sett_menu.add_button('Back', pygame_menu.events.BACK)
 #################################
@@ -135,11 +136,11 @@ form_opts = [ # Get formation options from the settings (FORM)
 selected_team = 1
 selected_formation = {
     1: ('default', 0),
-    2: ('default', 0),
+    2: ('balanced-1', 1),
 }
 
-f1 = form_menu.add_selector('Team 1 formation:  ', form_opts)
-f2 = form_menu.add_selector('Team 2 formation:  ', form_opts)
+f1 = form_menu.add_selector('Team 1 formation:  ', form_opts, default=selected_formation[1][1])
+f2 = form_menu.add_selector('Team 2 formation:  ', form_opts, default=selected_formation[2][1])
 
 form_menu.add_vertical_margin(V_PAD)
 form_menu.add_button('Back', pygame_menu.events.BACK)

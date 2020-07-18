@@ -1,6 +1,6 @@
 import time
-import pygame_menu
 from settings import *
+import pygame_menu
 from game import Game
 from teams.human import HumanTeam
 from teams.original_ai import OriginalAITeam
@@ -40,9 +40,8 @@ def play_game():
 from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, f2, selected_team, selected_formation
 
 def color_change(widget, col, team): # Change color of widget and corresponding team
-    if col:
-        widget.set_background_color(col)
-        team.color = col
+    widget.set_background_color(col)
+    team.color = col
 
 def set_form(form, team_id): # Change team 1's formation and widget's background
     global selected_team, selected_formation
