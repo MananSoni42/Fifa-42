@@ -4,7 +4,14 @@ from teams.agent import Agent
 from teams.team import Team
 
 class OriginalAIAgent(Agent):
-    """ Agents that play like the orginal AI """
+    """ Agents that play like the original AI """
+
+    def draw(self, win, team_id, debug=False):
+        if debug:
+            pygame.draw.circle(win, (0, 100, 0), (self.pos-PLAYER_CENTER).val, AI_NEAR_RADIUS, LINE_WIDTH)
+            pygame.draw.circle(win, (0, 200, 0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
+
+        super().draw(win, team_id, debug=debug)
 
     def dist_to_line(self, line, pt):
         """

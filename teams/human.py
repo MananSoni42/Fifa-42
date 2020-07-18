@@ -6,11 +6,9 @@ from teams.team import Team
 class HumanAgent(Agent):
     """ Agents controlled by humans """
     def draw(self, win, team_id, selected=False, debug=False):
-        if debug:
-            pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
         if selected:
             pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
-        win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
+        super().draw(win, team_id, debug=debug)    
 
     def move(self, state, reward):
         keys = pygame.key.get_pressed()
@@ -44,16 +42,13 @@ class HumanAgent(Agent):
 
 class HumanTeam(Team):
     """A team of human players"""
-    def draw(self,win, debug=False):
-        for i,player in enumerate(self.players):
-            if i == self.selected:
-                player.draw(win, team_id=self.id, selected=True, debug=debug)
-            else:
-                player.draw(win, team_id=self.id, debug=debug)
-
     def update(self, action, ball):
         self.select_player(ball)
         super().update(action,ball)
+
+    def draw(self, win, debug):
+        for i,player in enumerate(self.players):
+            player.draw(win, self.id, selected=(i == self.selected), debug=debug)
 
     def select_player(self, ball):
         """

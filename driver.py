@@ -23,14 +23,14 @@ def play_game():
     while not game.end: # Game loop
         clock.tick(FPS) # FPS
 
-        game.check_interruptions() # Check for pause or quit keys
+        game.check_interruptions() # Check for special keys (quit, pause, etc)
 
-        if game.pause:
-            game.draw(win, debug=False)
+        if game.pause: # game is paused - display pause menu
+            game.draw(win)
             game.pause_draw(win) # Draws on-top of the (frozen) game
-        else:
-            game.draw(win, debug=False)
-            game.next() # Move the game forward
+        else: # Continue with the game
+            game.draw(win)
+            game.next()
 
         pygame.display.update() # refresh screen
 
