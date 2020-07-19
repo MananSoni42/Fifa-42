@@ -17,7 +17,7 @@ The ideal outcome would be a python game with an AI that can learn from the oppo
   - [ ] Set up local multiplayer (static - requires only frontend)
   - [ ] Enable online multiplayer (requires a backend)
 - [ ] Set up true single player
-  - [ ] Set up the original AI team (included in v1)
+  - [x] Set up the original AI team (included in v1)
   - [ ] Come up with an improved (hard-coded) AI team
   - [ ] Train a realistic AI team using Reinforcement Learning (super hard)
 

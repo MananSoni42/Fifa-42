@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 class Agent(ABC):
     """
     Abstract class that controls agents in the football game
-    Implement the move method to instantiate
+    Implement the move method to instantiate a valid agent
     """
     def __init__(self, id, team_id, pos, dir='L'):
         self.id = id # Unique ID starts from 0 (also denotes it's position in team array)
@@ -21,6 +21,14 @@ class Agent(ABC):
     def draw(self, win, team_id, debug=False):
         if debug:
             pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
+            pygame.draw.circle(win, (255,128,0), (self.pos-PLAYER_CENTER).val, AI_NEAR_RADIUS, LINE_WIDTH)
+            pygame.draw.circle(win, (255,0,0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
+            pygame.draw.circle(win, (255,0,0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
+
+            pl_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
+            text = pl_font.render(str(self.id), True, (0,0,0))
+            win.blit(text, self.pos.val)
+
         win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
 
     def update(self, action, players):
@@ -55,53 +63,3 @@ class Agent(ABC):
     def move(self, state, reward):
         """ Implement this method for a valid agent """
         pass
-
-class HumanAgent(Agent):
-    """ Agents controlled by humans """
-    def draw(self, win, team_id, selected=False, debug=False):
-        if debug:
-            pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
-        if selected:
-            pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
-        win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
-
-    def move(self, state, reward):
-        keys = pygame.key.get_pressed()
-        
-        if keys[pygame.K_a]:
-            return 'SHOOT_A'
-        elif keys[pygame.K_d]:
-            return 'SHOOT_D'
-        elif keys[pygame.K_w]:
-            return 'SHOOT_W'
-        elif keys[pygame.K_x]:
-            return 'SHOOT_X'
-        elif keys[pygame.K_q]:
-            return 'SHOOT_Q'
-        elif keys[pygame.K_c]:
-            return 'SHOOT_C'
-        elif keys[pygame.K_e]:
-            return 'SHOOT_E'
-        elif keys[pygame.K_z]:
-            return 'SHOOT_Z'
-        elif keys[pygame.K_LEFT]:
-            return 'MOVE_L'
-        elif keys[pygame.K_RIGHT]:
-            return 'MOVE_R'
-        elif keys[pygame.K_UP]:
-            return 'MOVE_U'
-        elif keys[pygame.K_DOWN]:
-            return 'MOVE_D'
-        else:
-            return 'NOTHING'
-
-class RandomAgent(Agent):
-    """ Agents that move randomly """
-    def move(self, state, reward):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-        if np.random.rand() < 0.6:
-            return np.random.choice(['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R'])
-        else:
-            return np.random.choice(['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C'])

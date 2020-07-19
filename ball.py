@@ -155,13 +155,13 @@ class Ball:
             self.free = True
             # Ball relearse mechanics (when player shoots)
             const = PLAYER_RADIUS + BALL_RADIUS + 1
-            if self.dir == 'R' and ACT[a][0] >= 0:
+            if self.dir == 'R' and ACT[a].x >= 0:
                 self.pos.x += const - BALL_RADIUS*BALL_OFFSET.x
-            elif self.dir == 'R' and ACT[a][0] < 0:
+            elif self.dir == 'R' and ACT[a].x < 0:
                 self.pos.x -= const + BALL_RADIUS*BALL_OFFSET.x
-            elif self.dir == 'L' and ACT[a][0] > 0:
+            elif self.dir == 'L' and ACT[a].x > 0:
                 self.pos.x += const + BALL_RADIUS*BALL_OFFSET.x
-            elif self.dir == 'L' and ACT[a][0] <= 0:
+            elif self.dir == 'L' and ACT[a].x <= 0:
                 self.pos.x -= const - BALL_RADIUS*BALL_OFFSET.x
 
         self.check_capture(team1, team2, stats)

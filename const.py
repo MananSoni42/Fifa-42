@@ -8,10 +8,10 @@ Important constants used in the game
 ############## Custom types ##############
 
 # actions that can be performed by a plyer at any given time
-ACT = { 'NOTHING': (0,0), None: (0,0),
-        'MOVE_U': (0,-1), 'MOVE_D': (0,1), 'MOVE_L': (-1,0), 'MOVE_R': (1,0),
-        'SHOOT_Q': (-0.707,-0.707), 'SHOOT_W': (0,-1), 'SHOOT_E': (0.707,-0.707), 'SHOOT_A': (-1,0),
-        'SHOOT_D': (1,0), 'SHOOT_Z': (-0.707,0.707), 'SHOOT_X': (0,1), 'SHOOT_C': (0.707,0.707) }
+ACT = { 'NOTHING': P(0,0), None: P(0,0),
+        'MOVE_U': P(0,-1), 'MOVE_D': P(0,1), 'MOVE_L': P(-1,0), 'MOVE_R': P(1,0),
+        'SHOOT_Q': P(-0.707,-0.707), 'SHOOT_W': P(0,-1), 'SHOOT_E': P(0.707,-0.707), 'SHOOT_A': P(-1,0),
+        'SHOOT_D': P(1,0), 'SHOOT_Z': P(-0.707,0.707), 'SHOOT_X': P(0,1), 'SHOOT_C': P(0.707,0.707) }
 # 0.717 = 1/sqrt(2)
 
 """
@@ -130,26 +130,4 @@ def draw_form(win, curr_form):
     for pos in FORM[curr_form]['L']:
         win.blit(RUN[1]['L'][0], (pos - PLAYER_CENTER).val)
 
-def choose_formation(win):
-    chosen = False
-    poss_form = list(FORM.keys())
-    num_formations = len(poss_form)
-    ind = 0
-    print(poss_form, num_formations)
-    while not chosen:
-        keys = pygame.key.get_pressed() # Pause
-        if keys[pygame.K_ESCAPE]:
-            print(1)
-            break
-        elif keys[pygame.K_SPACE]:
-            print(2)
-            chosen = True
-        elif keys[pygame.K_LEFT]:
-            print(3)
-            ind = (ind - 1)%num_formations
-        elif keys[pygame.K_RIGHT]:
-            print(4)
-            ind = (ind + 1)%num_formations
-        draw_form(win, poss_form[ind])
-        pygame.display.update() # refresh screen
 ######################################
