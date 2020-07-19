@@ -2,8 +2,11 @@
 An 11 v 11 football game where you play against the computer. Choose your own formations and get ready to play!
 
 ## Play
-
 ### [Windows](https://github.com/MananSoni42/Fifa-42/releases/download/v1.0.0/Fifa-42-win.exe) |  [Linux](https://github.com/MananSoni42/Fifa-42/releases/download/v1.0.0/Fifa-42-linux)
+> Note: On Linux, you will need to make the game file executable to run the game. Use the command given below before you click on the game.
+```
+chmod +x Fifa-42-linux
+```
 ### Basics
 * This is an 11v11 football game where you (Team 1) play against the computer (Team 2)
 * You control a single player (marked by a red dot on top)
