@@ -54,7 +54,7 @@ AI_PASS_PROB = 0.95 # Probability that AI moves instead of passing
 ############## Assets (images, fonts, sounds) ##############
 ASSET_DIR = os.path.join(CurrentPath, 'assets') # Path to assets
 IMG_DIR = os.path.join(ASSET_DIR, 'img')
-SOUND_DIR = os.path.join(ASSET_DIR, 'sound')
+SOUND_DIR = os.path.join(ASSET_DIR, 'sounds')
 
 FONT_ROBOTO = os.path.join(ASSET_DIR, 'fonts', 'Roboto-Black.ttf')
 FONT_8BIT = os.path.join(ASSET_DIR, 'fonts', '8bit.ttf')
@@ -75,5 +75,18 @@ RUN = { # Sprites that animate the running player
         'R': { i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7) },
     },
 }
+
+#Sounds
+APPLAUSE = os.path.join(SOUND_DIR, 'applause2.wav')
+KICK = os.path.join(SOUND_DIR, 'FOOTBALLKICK.wav')
+MENU_MUSIC = os.path.join(SOUND_DIR, 'menu-music.wav')
+SINGLE_SHORT_WHISTLE = os.path.join(SOUND_DIR, 'single-short-whistle.wav')
+SINGLE_LONG_WHISLTE = os.path.join(SOUND_DIR, 'single-long-whistle.wav')
+THREE_WHISTLES = os.path.join(SOUND_DIR, 'three-whistles.wav')
+TWO_KICKS = os.path.join(SOUND_DIR, 'two-kicks.wav')
+GOAL = os.path.join(SOUND_DIR, 'goal.wav')
+CLICK = os.path.join(SOUND_DIR, 'click.wav')
+BOOING = os.path.join(SOUND_DIR, 'boo.wav')
+BOUNCE = os.path.join(SOUND_DIR, 'bounce2.wav')
 
 ######################################

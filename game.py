@@ -2,6 +2,16 @@ from settings import *
 from const import ACT
 from ball import Ball
 from stats import Stats
+from pygame import mixer
+import time
+
+# Sound Init
+pygame.mixer.init(44100, -16,2,2048)
+applause = mixer.Sound(APPLAUSE)
+kick = mixer.Sound(KICK)
+single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
+single_long_whistle = mixer.Sound(SINGLE_LONG_WHISLTE)
+three_whistles = mixer.Sound(THREE_WHISTLES)
 
 class Game:
     """ Class that controls the entire game """
@@ -24,20 +34,34 @@ class Game:
     def check_interruptions(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # Quit
+                mixer.pause()
+                three_whistles.play()
+                self.end = True
                 pygame.quit()
+
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
+
+                if event.key == pygame.K_ESCAPE: # Pause menu
+                    self.pause = not self.pause
+                    if self.pause:
+                        mixer.pause()
+                        single_long_whistle.play()
+                    else:
+                        single_short_whistle.play()
+                        applause.play(-1)
+
+                if event.key == pygame.K_BACKSPACE: # Return to main menu
+                    mixer.stop()
+                    menu_music = mixer.Sound(MENU_MUSIC)
+                    menu_music.play(-1)
+                    self.end = True
+
+                if event.key == pygame.K_SPACE: # Toggle whether to maintain formation
                     self.team1.maintain_formation = not self.team1.maintain_formation
 
-                if event.key == pygame.K_ESCAPE:
-                    self.pause = not self.pause
-
-                if event.key == pygame.K_BACKSPACE:
-                    self. end = True
-
-                elif event.key == pygame.K_d: # Debug mode
+                if event.key == pygame.K_d: # Debug mode
                     mods = pygame.key.get_mods()
-                    if mods and pygame.KMOD_CTRL and mods and pygame.KMOD_SHIFT and mods and pygame.KMOD_ALT:
+                    if mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT and mods & pygame.KMOD_ALT:
                         self.debug = not self.debug
 
     def same_team_collision(self, team, actions, free):

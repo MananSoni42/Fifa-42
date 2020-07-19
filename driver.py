@@ -1,5 +1,6 @@
 import time
 from settings import *
+from pygame import mixer
 import pygame_menu
 from game import Game
 from teams.human import HumanTeam
@@ -13,11 +14,21 @@ win = pygame.display.set_mode((W,H), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
+# Init music
+mixer.init(44100, -16,2,2048)
+menu_music = mixer.Sound(MENU_MUSIC)
+single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
+applause = mixer.Sound(APPLAUSE)
+menu_music.play(-1)
+
 # Define teams (Team 1 faces right by default)
 team1 = HumanTeam(formation='default', color=(0,32,255))
 team2 = OriginalAITeam(formation='balanced-1', color=(255,128,0))
 
 def play_game():
+    mixer.pause()
+    single_short_whistle.play()
+    applause.play(-1)
     game = Game(team1,team2) # initialize the game
     """ Game loop """
     while not game.end: # Game loop
