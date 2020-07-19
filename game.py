@@ -2,6 +2,16 @@ from settings import *
 from const import ACT
 from ball import Ball
 from stats import Stats
+from pygame import mixer
+import time
+
+# Sound Init
+pygame.mixer.init(44100, -16,2,2048)
+applause = mixer.Sound(APPLAUSE)
+kick = mixer.Sound(KICK)
+single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
+single_long_whistle = mixer.Sound(SINGLE_LONG_WHISLTE)
+three_whistles = mixer.Sound(THREE_WHISTLES)
 
 class Game:
     """ Class that controls the entire game """
@@ -23,15 +33,25 @@ class Game:
     def check_interruptions(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # Quit
+                mixer.pause()
+                three_whistles.play()
+                self.end = True
                 pygame.quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    self.team1.maintain_formation = not self.team1.maintain_formation
+            if event.type == pygame.KEYDOWN
                 if event.key == pygame.K_ESCAPE:
                     self.pause = not self.pause
+                    if self.pause: 
+                        mixer.pause()
+                        single_long_whistle.play()
+                    else:  
+                        self. end = True
+                        single_short_whistle.play()
+                        applause.play(-1)
                 if event.key == pygame.K_BACKSPACE:
-                    self. end = True
-
+                    self.pause = False
+                if event.key == pygame.K_SPACE:
+                    self.team1.maintain_formation = not self.team1.maintain_formation
+                    
     def same_team_collision(self, team, actions, free):
         """ Check if current player collides with any other players (same team) """
         min_dist  = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)

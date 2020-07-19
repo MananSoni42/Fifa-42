@@ -76,4 +76,17 @@ RUN = { # Sprites that animate the running player
     },
 }
 
+#Sounds
+APPLAUSE = os.path.join(SOUND_DIR, 'applause2.wav')
+KICK = os.path.join(SOUND_DIR, 'FOOTBALLKICK.wav')
+MENU_MUSIC = os.path.join(SOUND_DIR, 'menu-music.wav')
+SINGLE_SHORT_WHISTLE = os.path.join(SOUND_DIR, 'single-short-whistle.wav')
+SINGLE_LONG_WHISLTE = os.path.join(SOUND_DIR, 'single-long-whistle.wav')
+THREE_WHISTLES = os.path.join(SOUND_DIR, 'three-whistles.wav')
+TWO_KICKS = os.path.join(SOUND_DIR, 'two-kicks.wav')
+GOAL = os.path.join(SOUND_DIR, 'goal.wav')
+CLICK = os.path.join(SOUND_DIR, 'click.wav')
+BOOING = os.path.join(SOUND_DIR, 'boo.wav')
+BOUNCE = os.path.join(SOUND_DIR, 'bounce2.wav')
+
 ######################################

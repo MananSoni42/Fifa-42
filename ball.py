@@ -1,5 +1,12 @@
 from settings import *
 from const import ACT
+from pygame import mixer
+
+# Init Sounds
+mixer.init(44100, -16,2,2048)
+single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
+goal_sound = mixer.Sound(GOAL)
+bounce = mixer.Sound(BOUNCE)
 
 class Ball:
     """Implements the football used in the game"""
@@ -47,6 +54,11 @@ class Ball:
                 side = 2
 
             if GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
+
+                # Play celebration sound
+                single_short_whistle.play()
+                goal_sound.play()
+
                 goal = True
                 stats.goals[3-side] += 1 # maps 1 -> 2, 2 -> 1 bcoz the goal goes to the other side!
                 pos = P(W//2, H//2)
@@ -131,9 +143,12 @@ class Ball:
             if not (BALL_RADIUS <= self.pos.x <= W - BALL_RADIUS): # Ball X overflow
                 self.pos.x = min(max(BALL_RADIUS, self.pos.x),W - BALL_RADIUS)
                 self.vel.x *= (-1) # Flip X velocity
+                bounce.play() # Bounce sound
+
             if not(BALL_RADIUS <= self.pos.y <= H - BALL_RADIUS): # Ball Y overflow
                 self.pos.y = min(max(BALL_RADIUS, self.pos.y),H - BALL_RADIUS)
                 self.vel.y *= (-1) # Flip Y velocity
+                bounce.play() # Bounce sound
 
         elif a in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']: # Player shoots
             self.vel = P(ACT[a])
