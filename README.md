@@ -20,19 +20,13 @@ An 11 v 11 football game where you play against the computer. Choose your own fo
 
 ## Screens
 ### Main menu
-<p align="center">
-	<img src="https://github.com/MananSoni42/Fifa-42/tree/master/screens/menu.png" alt="menu" />
-</p>
+![menu](screens/menu.png)
 
 ### In-game
-<p align="center">
-	<img src="https://github.com/MananSoni42/Fifa-42/tree/master/screens/game.gif" alt="game" />
-</p>  
+![menu](screens/game.gif)
 
 ### Pause menu
-<p align="center">
-	<img src="https://github.com/MananSoni42/Fifa-42/tree/master/screens/pause.png" alt="pause" />
-</p>
+![menu](screens/pause.png)
 
 ## Contributing
 Feel free to contribute features / point out errors. Fork this repository and make a pull request.  
