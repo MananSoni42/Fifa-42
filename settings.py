@@ -66,5 +66,7 @@ THREE_WHISTLES = SOUND_DIR + 'three-whistles.wav'
 TWO_KICKS = SOUND_DIR + 'two-kicks.wav'
 GOAL = SOUND_DIR + 'goal.wav'
 CLICK = SOUND_DIR + 'click.wav'
+BOOING = SOUND_DIR + 'boo.wav'
+BOUNCE = SOUND_DIR + 'bounce2.wav'
 
 ######################################
