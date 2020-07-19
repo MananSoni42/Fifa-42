@@ -7,6 +7,7 @@ mixer.init(44100, -16,2,2048)
 single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
 goal_sound = mixer.Sound(GOAL)
 bounce = mixer.Sound(BOUNCE)
+boo_sound = mixer.Sound(BOOING)
 
 class Ball:
     """Implements the football used in the game"""
@@ -101,6 +102,7 @@ class Ball:
                 stats.shot_acc[self.ball_stats['team']]['succ'] += 1
             else:
                 stats.shot_acc[self.ball_stats['team']]['fail'] += 1
+                boo_sound.play() # Play when missed shot
 
     def ball_player_collision(self, team, stats):
         for player in team.players:
