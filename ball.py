@@ -6,6 +6,7 @@ from pygame import mixer
 mixer.init(44100, -16,2,2048)
 single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
 goal_sound = mixer.Sound(GOAL)
+bounce = mixer.Sound(BOUNCE)
 
 class Ball:
     """Implements the football used in the game"""
@@ -142,9 +143,12 @@ class Ball:
             if not (BALL_RADIUS <= self.pos.x <= W - BALL_RADIUS): # Ball X overflow
                 self.pos.x = min(max(BALL_RADIUS, self.pos.x),W - BALL_RADIUS)
                 self.vel.x *= (-1) # Flip X velocity
+                bounce.play() # Bounce sound
+
             if not(BALL_RADIUS <= self.pos.y <= H - BALL_RADIUS): # Ball Y overflow
                 self.pos.y = min(max(BALL_RADIUS, self.pos.y),H - BALL_RADIUS)
                 self.vel.y *= (-1) # Flip Y velocity
+                bounce.play() # Bounce sound
 
         elif a in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']: # Player shoots
             self.vel = P(ACT[a])

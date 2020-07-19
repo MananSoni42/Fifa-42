@@ -12,7 +12,6 @@ kick = mixer.Sound(KICK)
 single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
 single_long_whistle = mixer.Sound(SINGLE_LONG_WHISLTE)
 three_whistles = mixer.Sound(THREE_WHISTLES)
-two_kicks = mixer.Sound(TWO_KICKS)
 
 class Game:
     """ Class that controls the entire game """
@@ -126,8 +125,11 @@ class Game:
         pygame.draw.rect(win, (255, 255, 255), (4*W//5-LINE_WIDTH//2, 0.1*H, W//5, 0.8*H), LINE_WIDTH) # right D
         pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, 0.1*H, W//5, 0.8*H), LINE_WIDTH) # left D
 
-        pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
-        pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
+        pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right penalty box
+        pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2, GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # left penalty box
+
+        # pygame.draw.rect(win, (255, 255, 255), (19*W//20-LINE_WIDTH//3, GOAL_POS[0]*H, W//30, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # right goal
+        # pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//3, GOAL_POS[0]*H, W//30, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH) # left goal
 
     def draw(self, win, debug=False):
         """ Draw the game """
