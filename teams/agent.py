@@ -19,17 +19,11 @@ class Agent(ABC):
         return f'\nAgent {self.id} - {self.pos}'
 
     def draw(self, win, team_id, debug=False):
-        if debug:
-            pygame.draw.rect(win, (255,255,255), (self.pos.x-PLAYER_RADIUS, self.pos.y-PLAYER_RADIUS,PLAYER_RADIUS*2,PLAYER_RADIUS*2))
-            pygame.draw.circle(win, (255,128,0), (self.pos-PLAYER_CENTER).val, AI_NEAR_RADIUS, LINE_WIDTH)
-            pygame.draw.circle(win, (255,0,0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
-            pygame.draw.circle(win, (255,0,0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
-
-            pl_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
-            text = pl_font.render(str(self.id), True, (0,0,0))
-            win.blit(text, self.pos.val)
-
         win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
+        if debug:
+            pl_font = pygame.font.Font(FONT_NEVIS, FONT_SIZE//3)
+            text = pl_font.render(str(self.id), True, (0,0,0))
+            win.blit(text, (self.pos-PLAYER_CENTER).val)
 
     def update(self, action, players):
         """ Update player's state (in-game) based on action """

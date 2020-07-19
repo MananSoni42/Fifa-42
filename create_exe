@@ -6,4 +6,5 @@ pyinstaller \
     --add-data "assets/fonts/*":"assets/fonts" \
     --add-data "assets/img/*":"assets/img" \
     --add-data "assets/img/running/*":"assets/img/running" \
+    --add-data "assets/sounds*":"assets/sounds" \
     driver.py

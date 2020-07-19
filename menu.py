@@ -38,12 +38,12 @@ about_menu = pygame_menu.Menu(H, W, ' About',
                              theme=custom_theme,
                              mouse_motion_selection=True,
                              mouse_visible=True)
-about_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus
+#about_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus
 
-about_menu.add_label('Written by:', max_char=MAX_CHAR, align=pygame_menu.locals.ALIGN_LEFT)
-about_menu.add_label('* Manan Soni', align=pygame_menu.locals.ALIGN_LEFT)
-about_menu.add_label('* Ashutosh Jani', align=pygame_menu.locals.ALIGN_LEFT)
-about_menu.add_label('To know more visit: github.com/MananSoni42/Fifa-42 ', max_char=MAX_CHAR, align=pygame_menu.locals.ALIGN_LEFT)
+about_menu.add_label('Written by:', max_char=MAX_CHAR)
+about_menu.add_label('* Manan Soni')
+about_menu.add_label('* Ashutosh Jani')
+about_menu.add_label('To know more visit: github.com/MananSoni42/Fifa-42 ', max_char=MAX_CHAR)
 about_menu.add_vertical_margin(V_PAD)
 about_menu.add_button('Back', pygame_menu.events.BACK)
 #################################
@@ -59,7 +59,7 @@ instr_menu = pygame_menu.Menu(H, W, ' Instructions',
                              #columns=2,
                              #rows=21,
 )
-instr_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus
+# instr_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus
 
 instr_menu.add_label('Basics')
 instr_menu.add_vertical_margin(V_PAD)
@@ -102,7 +102,7 @@ sett_menu = pygame_menu.Menu(H, W, ' Settings',
                              theme=custom_theme,
                              mouse_motion_selection=True,
                              mouse_visible=True)
-sett_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus                             
+# sett_menu.set_sound(engine, recursive=True)  # Apply on menu and all sub-menus
 
 colors = [
     ('BLACK' , (0,0,0)),

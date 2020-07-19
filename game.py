@@ -25,6 +25,7 @@ class Game:
         self.ball = Ball(pos=(W//2, H//2))
         self.stats = Stats()
 
+        self.debug = False
         self.end = False # True when the game ends (never probably)
         self.pause = False
         self.state = None # game state to be passed to agents (see get_state() function)
@@ -37,21 +38,32 @@ class Game:
                 three_whistles.play()
                 self.end = True
                 pygame.quit()
-            if event.type == pygame.KEYDOWN
-                if event.key == pygame.K_ESCAPE:
+
+            if event.type == pygame.KEYDOWN:
+
+                if event.key == pygame.K_ESCAPE: # Pause menu
                     self.pause = not self.pause
-                    if self.pause: 
+                    if self.pause:
                         mixer.pause()
                         single_long_whistle.play()
-                    else:  
-                        self. end = True
+                    else:
                         single_short_whistle.play()
                         applause.play(-1)
-                if event.key == pygame.K_BACKSPACE:
-                    self.pause = False
-                if event.key == pygame.K_SPACE:
+
+                if event.key == pygame.K_BACKSPACE: # Return to main menu
+                    mixer.stop()
+                    menu_music = mixer.Sound(MENU_MUSIC)
+                    menu_music.play(-1)
+                    self.end = True
+
+                if event.key == pygame.K_SPACE: # Toggle whether to maintain formation
                     self.team1.maintain_formation = not self.team1.maintain_formation
-                    
+
+                if event.key == pygame.K_d: # Debug mode
+                    mods = pygame.key.get_mods()
+                    if mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT and mods & pygame.KMOD_ALT:
+                        self.debug = not self.debug
+
     def same_team_collision(self, team, actions, free):
         """ Check if current player collides with any other players (same team) """
         min_dist  = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
@@ -169,17 +181,20 @@ class Game:
             self.text_draw(win, text_back, (W - W//5 - 3*LINE_WIDTH, 3*LINE_WIDTH + H//24, W//5, H//24), align='left')
             self.text_draw(win, text_team1_form, (3*LINE_WIDTH, 3*LINE_WIDTH, W//5, H//24), align='left')
 
-    def draw(self, win, debug=False, hints=True):
+            if self.debug:
+                pygame.draw.circle(win, (0, 200, 100), (0, H//2), AI_SHOOT_RADIUS, LINE_WIDTH) # AI Shoot radius
+                pygame.draw.circle(win, (0, 200, 100), (W, H//2), AI_SHOOT_RADIUS, LINE_WIDTH) # AI shoot radius
+                text_debug = field_font.render(f'Developer mode: ON', True, (0,100,0))
+                self.text_draw(win, text_debug, (3*LINE_WIDTH, 3*LINE_WIDTH + H//24, W//5, H//24), align='left') # Developer model
+
+    def draw(self, win, hints=True):
         """ Draw the game """
         self.field_draw(win, hints=hints)
-        if debug:
-            pygame.draw.circle(win, (64, 128, 255), (0, H//2), AI_SHOOT_RADIUS, LINE_WIDTH) # mid circle
-            pygame.draw.circle(win, (64, 128, 255), (W, H//2), AI_SHOOT_RADIUS, LINE_WIDTH) # mid circle
         if hints:
             self.goal_draw(win)
-        self.team1.draw(win, debug=debug)
-        self.team2.draw(win, debug=debug)
-        self.ball.draw(win, debug=debug)
+        self.team1.draw(win, debug=self.debug)
+        self.team2.draw(win, debug=self.debug)
+        self.ball.draw(win, debug=self.debug)
 
     def pause_draw(self,win):
         """ Draw the pause menu """
@@ -189,7 +204,6 @@ class Game:
         col2 = (255-self.team2.color[0], 255-self.team2.color[1], 255-self.team2.color[2])
 
         # background and border
-        #win.fill((42, 42, 42)) # Gray
         pygame.draw.rect(win, (42, 42, 42), (W0, H0, W_ - LINE_WIDTH, H_ - LINE_WIDTH)) # border
         pad = LINE_WIDTH*2
         min_len = 10
@@ -208,8 +222,12 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (15*H_)//100, W_, (10*H_)//100))
 
         pos = self.stats.get_possession()
-        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pos[0],0))), True, col1)
-        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pos[1],0))), True, col2)
+        if self.debug:
+            text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(f'{int(round(100*pos[0],0))} ({self.stats.pos[1]})', True, col1)
+            text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(f'{int(round(100*pos[1],0))} ({self.stats.pos[2]})', True, col2)
+        else:
+            text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pos[0],0))), True, col1)
+            text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pos[1],0))), True, col2)
 
         if int(pos[0]*W_) - 2*pad > min_len: # Team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (25*H_)//100, int(pos[0]*W_), (5*H_)//100))
@@ -226,8 +244,12 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (35*H_)//100, W_, (10*H_)//100))
 
         pa = self.stats.get_pass_acc()
-        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pa[0],0))), True, col1)
-        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pa[1],0))), True, col2)
+        if self.debug:
+            text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(f'{int(round(100*pa[0],0))} ({self.stats.pass_acc[1]["succ"]}/{self.stats.pass_acc[1]["succ"]+self.stats.pass_acc[1]["fail"]})', True, col1)
+            text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(f'{int(round(100*pa[1],0))} ({self.stats.pass_acc[2]["succ"]}/{self.stats.pass_acc[2]["succ"]+self.stats.pass_acc[2]["fail"]})', True, col2)
+        else:
+            text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pa[0],0))), True, col1)
+            text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*pa[1],0))), True, col2)
 
         if int(pa[0]*W_//2) > min_len: # team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (45*H_)//100, int(pa[0]*W_//2) - pad, (5*H_)//100))
@@ -245,8 +267,12 @@ class Game:
         self.text_draw(win, text_pos, (W0, H0 + (55*H_)//100, W_, (10*H_)//100))
 
         sa = self.stats.get_shot_acc()
-        text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*sa[0],0))), True, col1)
-        text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*sa[1],0))), True, col2)
+        if self.debug:
+            text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(f'{int(round(100*sa[0],0))} ({self.stats.shot_acc[1]["succ"]}/{self.stats.shot_acc[1]["succ"]+self.stats.shot_acc[1]["fail"]})', True, col1)
+            text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(f'{int(round(100*sa[1],0))} ({self.stats.shot_acc[2]["succ"]}/{self.stats.shot_acc[2]["succ"]+self.stats.shot_acc[2]["fail"]})', True, col2)
+        else:
+            text1 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*sa[0],0))), True, col1)
+            text2 = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(str(int(round(100*sa[1],0))), True, col2)
 
         if int(sa[0]*W_//2) > min_len: # team 1
             pygame.draw.rect(win, self.team1.color, (W0 + pad, H0 + (65*H_)//100, int(sa[0]*W_//2) - pad, (5*H_)//100))

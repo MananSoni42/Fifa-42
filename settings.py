@@ -54,7 +54,7 @@ AI_PASS_PROB = 0.95 # Probability that AI moves instead of passing
 ############## Assets (images, fonts, sounds) ##############
 ASSET_DIR = os.path.join(CurrentPath, 'assets') # Path to assets
 IMG_DIR = os.path.join(ASSET_DIR, 'img')
-SOUND_DIR = os.path.join(ASSET_DIR, 'sound')
+SOUND_DIR = os.path.join(ASSET_DIR, 'sounds')
 
 FONT_ROBOTO = os.path.join(ASSET_DIR, 'fonts', 'Roboto-Black.ttf')
 FONT_8BIT = os.path.join(ASSET_DIR, 'fonts', '8bit.ttf')
