@@ -1,62 +1,42 @@
+# Fifa-42  <br/>![version](https://img.shields.io/badge/version-1.0.0-green.svg) ![os](https://img.shields.io/badge/Platform-windows%20%7C%20linux-lightgrey) 	![size](https://img.shields.io/badge/Size-33mb-yellow) ![lic](https://img.shields.io/badge/License-MIT-blue) ![milestones](https://img.shields.io/github/milestones/all/MananSoni42/Fifa-42)
+An 11 v 11 football game where you play against the computer. Choose your own formations and get ready to play!
 
-# Fifa-42 - Reborn!
-A modern port of a beloved game written by me along with a couple of friends.  
-The aim is to make the original game (written in ANSI C) more accessible.  
-The ideal outcome would be a python game with an AI that can learn from the opposing player's moves along with an online game that supports single-player as well multi-player
+## Play
 
-## Milestones
-- [ ] Create an executable game file (.exe /.rpm/.deb packages) - Release v1.0
-  - [x] Set up game environment and Human Agents
-  - [x] Calculate stats (possession, shot/pass accuracy)
-  - [x] Implement Pause menu
-  - [x] Create menu
-  - [x] Add sound
-  - [ ] Package the game as an executable
-- [ ] Convert to a static online game - Release - v2.0
-  - [ ] Port to JavaScript
-  - [ ] Set up local multiplayer (static - requires only frontend)
-  - [ ] Enable online multiplayer (requires a backend)
-- [ ] Set up true single player
-  - [x] Set up the original AI team (included in v1)
-  - [ ] Come up with an improved (hard-coded) AI team
-  - [ ] Train a realistic AI team using Reinforcement Learning (super hard)
+### [Windows](https://github.com/MananSoni42/Fifa-42/releases/download/v1.0.0/Fifa-42-win.exe) |  [Linux](https://github.com/MananSoni42/Fifa-42/releases/download/v1.0.0/Fifa-42-linux)
+### Basics
+* This is an 11v11 football game where you (Team 1) play against the computer (Team 2)
+* You control a single player (marked by a red dot on top)
+* Running into opponent players causes both of you to be thrown back and lose possession of the ball
 
-## Controls
-  Key                  | Action                     |
-  -------------------- | -------------------------- |
-  Arrow keys           | Move the (selected) player |
-  Q,W,E,A,Z,X,C        | Shoot the ball             |
-  ESC                  | Bring up Pause menu        |
-  BACKSPACE            | Collapse Pause menu        |
+### Controls
+  Key                  | Action                    
+  -------------------- | --------------------------
+  Arrow keys           | Move the (selected) player
+  Q,W,E - A,D - Z,X,C  | Shoot the ball
+  ESC                  | Bring up / Collapse Pause menu
+  SPACE                | Toggle if teams maintain formation
+  BACKSPACE            | Quit and return to main menu
 
+## Screens
+### Main menu
+<p align="center">
+	<img src="https://github.com/MananSoni42/Fifa-42/tree/master/screens/menu.png" alt="menu" />
+</p>
 
-## Setup
-### Structure
-```terminal
-.
-├── driver.py # Driver to test the game
-├── game.py # Class that controls the entire game
-├── ball.py # Football that can be passed around
-├── teams.py # Teams consisting of a set of agents
-├── agents.py # Agents that can play the game
-├── settings.py # Global settings and paths
-├── const.py # Important game constants
-├── stats.py # In-game statistics (possession, goals scored, pass/shot accuracy)
-└── point.py # class that handles 2-D co-ordinate manipulation
-```
+### In-game
+<p align="center">
+	<img src="https://github.com/MananSoni42/Fifa-42/tree/master/screens/game.gif" alt="game" />
+</p>  
 
-### Installing locally
-* The game requires Python3+  
+### Pause menu
+<p align="center">
+	<img src="https://github.com/MananSoni42/Fifa-42/tree/master/screens/pause.png" alt="pause" />
+</p>
 
-* Install dependancies using:  
-```terminal
-pip3 install -r requirements.txt
-```
-
-* Run the game using:  
-```terminal
-python3 driver.py
-```
+## Contributing
+Feel free to contribute features / point out errors. Fork this repository and make a pull request.  
+Make sure you go through the [wiki](https://github.com/MananSoni42/Fifa-42/wiki) to get an idea of how the code is structured and the conventions that we have used.
 
 ## License
 This project is licensed under the [MIT](https://opensource.org/licenses/MIT) License
