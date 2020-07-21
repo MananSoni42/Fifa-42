@@ -6,10 +6,10 @@ from teams.team import Team
 class RandomAgent(Agent):
     """ Agents that move randomly """
     def move(self, state, reward):
-        if np.random.rand() < 0.6:
-            return np.random.choice(['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R'])
+        if random.random() < 0.6:
+            return random.choice(['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R'])
         else:
-            return np.random.choice(['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C'])
+            return random.choice(['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C'])
 
 class RandomTeam(Team):
     """A team of random agents"""

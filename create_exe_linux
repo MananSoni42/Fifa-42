@@ -1,5 +1,4 @@
-pyinstaller \
-    --onefile \
+python3 -OO -m PyInstaller \
     --name "Fifa-42" \
     --icon "assetes/icon.ico" \
     --add-data "teams/*":"teams" \
