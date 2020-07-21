@@ -1,11 +1,11 @@
 import os
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-import pygame
-import numpy as np
-from point import P
-from screeninfo import get_monitors
 import sys
-import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+import math
+import random
+import pygame
+from screeninfo import get_monitors
+from point import P
 
 """
 Settings and paths

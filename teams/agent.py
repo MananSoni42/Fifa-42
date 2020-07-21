@@ -13,7 +13,7 @@ class Agent(ABC):
         self.pos = P(pos) # Starting position
         self.walk_dir = dir # options are R (right), L (left)
         self.walk_count = 0 # For running animation
-        self.rnd = 0.01*np.random.rand()
+        self.rnd = 0.01*random.random()
 
     def __str__(self):
         return f'\nAgent {self.id} - {self.pos}'

@@ -8,7 +8,7 @@ class HumanAgent(Agent):
     def draw(self, win, team_id, selected=False, debug=False):
         if selected:
             pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
-        super().draw(win, team_id, debug=debug)    
+        super().draw(win, team_id, debug=debug)
 
     def move(self, state, reward):
         keys = pygame.key.get_pressed()
@@ -57,7 +57,7 @@ class HumanTeam(Team):
             - Otherwise the player nearest to the ball has control (ties are broken randomly)
         """
         dists = [player.pos.dist(ball.pos) + player.rnd for player in self.players]
-        self.selected = np.argmin(dists) # Default - Ball goes to nearest player
+        self.selected = dists.index(min(dists)) # Default - Ball goes to nearest player
 
         if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball.pos.x - self.goal_x) < W//5:
             # If the ball is within the D and is not very near to any other player, give control to the keeper
@@ -95,14 +95,14 @@ class HumanTeam(Team):
                 return 'MOVE_R'
         elif (player.pos.x - FORM[self.formation][self.dir][id].x) > min_dist:
             if (player.pos.y - FORM[self.formation][self.dir][id].y) > min_dist:
-                return np.random.choice(['MOVE_L', 'MOVE_U'])
+                return random.choice(['MOVE_L', 'MOVE_U'])
             else:
-                return np.random.choice(['MOVE_L', 'MOVE_D'])
+                return random.choice(['MOVE_L', 'MOVE_D'])
         elif (player.pos.x - FORM[self.formation][self.dir][id].x) < - min_dist:
             if (player.pos.y - FORM[self.formation][self.dir][id].y) > min_dist:
-                return np.random.choice(['MOVE_R', 'MOVE_U'])
+                return random.choice(['MOVE_R', 'MOVE_U'])
             else:
-                return np.random.choice(['MOVE_R', 'MOVE_D'])
+                return random.choice(['MOVE_R', 'MOVE_D'])
         else:
             return 'NOTHING'
 

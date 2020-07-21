@@ -19,7 +19,7 @@ class OriginalAIAgent(Agent):
             line: x*line[0] + y*line[1] + line[2] = 0
             from point: p
         """
-        return np.abs(line[0]*pt.x + line[1]*pt.y + line[2])/np.sqrt(line[0]**2 + line[1]**2)
+        return abs(line[0]*pt.x + line[1]*pt.y + line[2])/math.sqrt(line[0]**2 + line[1]**2)
 
     def ai_move_with_ball(self, enemy_players, goal_x):
         """
@@ -46,8 +46,8 @@ class OriginalAIAgent(Agent):
 
         possible_dir = ['NOTHING', 'MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']
         dist_to_dir = [dir_final.dist(ACT[dir]) for dir in possible_dir]
-        prob_dist = [np.exp(1/d) if d >= 0.1 else np.exp(10) for d in dist_to_dir]
-        chosen_dir = np.random.choice(possible_dir, p=np.array(prob_dist)/np.sum(prob_dist))
+        prob_dist = [math.exp(1/d) if d >= 0.1 else math.exp(10) for d in dist_to_dir]
+        chosen_dir = random.choices(possible_dir, weights=[prob/sum(prob_dist) for prob in prob_dist])[0]
 
         return chosen_dir
 
@@ -62,8 +62,8 @@ class OriginalAIAgent(Agent):
 
             possible_dir = ['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R']
             dist_to_dir = [vec_dir.dist(ACT[dir]) for dir in possible_dir]
-            prob_dist = [np.exp(1/d) if d >= 0.1 else np.exp(10) for d in dist_to_dir]
-            chosen_dir = np.random.choice(possible_dir, p=np.array(prob_dist)/np.sum(prob_dist))
+            prob_dist = [math.exp(1/d) if d >= 0.1 else math.exp(10) for d in dist_to_dir]
+            chosen_dir = random.choices(possible_dir, weights=[prob/sum(prob_dist) for prob in prob_dist])[0]
             return chosen_dir
         else:
             return 'NOTHING'
@@ -83,13 +83,13 @@ class OriginalAIAgent(Agent):
         self_pos  = P(self.pos.x, H-self.pos.y)
 
         prefs  = { # directions are wrt origin at bottom-right
-            'SHOOT_A': {'priority': {1: 4, 2: 1}, 'angle': np.pi, 'dir': P(-1,0)},
-            'SHOOT_Q': {'priority': {1: 3, 2: 1}, 'angle': np.pi*3/4, 'dir': P(-1,1)},
-            'SHOOT_Z': {'priority': {1: 3, 2: 1}, 'angle': -np.pi*3/4, 'dir': P(-1,-1)},
-            'SHOOT_W': {'priority': {1: 2, 2: 2}, 'angle': np.pi/2, 'dir': P(0,1)},
-            'SHOOT_X': {'priority': {1: 2, 2: 2}, 'angle': -np.pi/2, 'dir': P(0,-1)},
-            'SHOOT_E': {'priority': {1: 1, 2: 3}, 'angle': np.pi/4, 'dir': P(1,1)},
-            'SHOOT_C': {'priority': {1: 1, 2: 3}, 'angle': -np.pi/4, 'dir': P(1,-1)},
+            'SHOOT_A': {'priority': {1: 4, 2: 1}, 'angle': math.pi, 'dir': P(-1,0)},
+            'SHOOT_Q': {'priority': {1: 3, 2: 1}, 'angle': math.pi*3/4, 'dir': P(-1,1)},
+            'SHOOT_Z': {'priority': {1: 3, 2: 1}, 'angle': -math.pi*3/4, 'dir': P(-1,-1)},
+            'SHOOT_W': {'priority': {1: 2, 2: 2}, 'angle': math.pi/2, 'dir': P(0,1)},
+            'SHOOT_X': {'priority': {1: 2, 2: 2}, 'angle': -math.pi/2, 'dir': P(0,-1)},
+            'SHOOT_E': {'priority': {1: 1, 2: 3}, 'angle': math.pi/4, 'dir': P(1,1)},
+            'SHOOT_C': {'priority': {1: 1, 2: 3}, 'angle': -math.pi/4, 'dir': P(1,-1)},
             'SHOOT_D': {'priority': {1: 1, 2: 4}, 'angle': 0, 'dir': P(1,0)},
         }
 
@@ -97,9 +97,9 @@ class OriginalAIAgent(Agent):
 
         for k,v in prefs.items():
             line = [ # Equation of line as A*x +B*y + C = 0
-                    np.sin(v['angle']), # x coeff
-                    -np.cos(v['angle']), # y coeff
-                    self_pos.y*np.cos(v['angle']) - self_pos.x*np.sin(v['angle']), # constant
+                    math.sin(v['angle']), # x coeff
+                    -math.cos(v['angle']), # y coeff
+                    self_pos.y*math.cos(v['angle']) - self_pos.x*math.sin(v['angle']), # constant
             ]
             for player in team_players:
                 if player.id != self.id:
@@ -109,7 +109,7 @@ class OriginalAIAgent(Agent):
                          (self_pos.y - team_pos[player.id].y)*v['dir'].y <= 0): # In correct y-direction
 
                         # Consider enemy's distance as well
-                        enemy_dist = np.inf
+                        enemy_dist = math.inf
                         enemy_min_pos = P(0,0)
                         for enemy_player in enemy_team_players: # Check for all enemies
                             if self.dist_to_line(line, enemy_team_pos[enemy_player.id]) < enemy_dist:
@@ -147,14 +147,14 @@ class OriginalAIAgent(Agent):
         """
         angles  = {
             1: { # For team 1
-                'SHOOT_E': np.pi/4,
+                'SHOOT_E': math.pi/4,
                 'SHOOT_D': 0,
-                'SHOOT_C': -np.pi/4,
+                'SHOOT_C': -math.pi/4,
             },
             2: { # For team 2
-                'SHOOT_Q': np.pi*3/4,
-                'SHOOT_A': np.pi,
-                'SHOOT_Z': -np.pi*5/4,
+                'SHOOT_Q': math.pi*3/4,
+                'SHOOT_A': math.pi,
+                'SHOOT_Z': -math.pi*5/4,
             },
         }
 
@@ -164,9 +164,9 @@ class OriginalAIAgent(Agent):
         possible_shots = []
         for k,v in angles[self.team_id].items():
             line = [ # Equation of line as A*x +B*y + C = 0
-                    np.sin(v), # x coeff
-                    -np.cos(v), # y coeff
-                    self_pos.y*np.cos(v) - self_pos.x*np.sin(v), # constant
+                    math.sin(v), # x coeff
+                    -math.cos(v), # y coeff
+                    self_pos.y*math.cos(v) - self_pos.x*math.sin(v), # constant
             ]
             intersection_pt = -(line[2] + line[0]*goal_x)/line[1]
             if GOAL_POS[0]*H < intersection_pt < GOAL_POS[1]*H:
@@ -206,14 +206,14 @@ class OriginalAIAgent(Agent):
 
         angles  = {
             1: { # For team 1
-                'SHOOT_E': np.pi/4,
+                'SHOOT_E': math.pi/4,
                 'SHOOT_D': 0,
-                'SHOOT_C': -np.pi/4,
+                'SHOOT_C': -math.pi/4,
             },
             2: { # For team 2
-                'SHOOT_Q': np.pi*3/4,
-                'SHOOT_A': np.pi,
-                'SHOOT_Z': -np.pi*5/4,
+                'SHOOT_Q': math.pi*3/4,
+                'SHOOT_A': math.pi,
+                'SHOOT_Z': -math.pi*5/4,
             },
         }
 
@@ -224,14 +224,14 @@ class OriginalAIAgent(Agent):
         possible_passes = []
         for k,v in angles[self.team_id].items():
             line = [ # Equation of line as A*x +B*y + C = 0
-                    np.sin(v), # x coeff
-                    -np.cos(v), # y coeff
-                    self_pos.y*np.cos(v) - self_pos.x*np.sin(v), # constant
+                    math.sin(v), # x coeff
+                    -math.cos(v), # y coeff
+                    self_pos.y*math.cos(v) - self_pos.x*math.sin(v), # constant
             ]
             if near_enemy_pos:
-                dist = np.inf
+                dist = math.inf
                 dir = 'NOTHING'
-                dist = np.min([self.dist_to_line(line, pos) for pos in near_enemy_pos])
+                dist = min([self.dist_to_line(line, pos) for pos in near_enemy_pos])
                 possible_passes.append((-dist,k))
 
         if possible_passes:
@@ -265,17 +265,16 @@ class OriginalAIAgent(Agent):
             if selected == self.id and state['ball'].ball_stats['player'] == self.id: # Selected player has the ball
                 ai_shoot = self.ai_shoot(other_team['players'][0], other_team['goal_x'])
                 ai_pass =  self.ai_pass(self_team['players'], other_team['players'])
-
                 if self.pos.dist(P(other_team['goal_x'],H//2)) <= AI_SHOOT_RADIUS and ai_shoot != 'NOTHING': # If shot is possible, take it
                     return ai_shoot
-                elif ai_pass != 'NOTHING' and np.random.rand() >= AI_PASS_PROB: # Else, pass if possible (passes towards the enemy goal are prioritized)
+                elif ai_pass != 'NOTHING' and random.random() >= AI_PASS_PROB: # Else, pass if possible (passes towards the enemy goal are prioritized)
                     return ai_pass
                 else:
                     return self.ai_move_with_ball(other_team['players'], other_team['goal_x']) # Move towards the goal
 
             else: # Move towards the ball if posssbile, otherwise return to formation
                 move = self.ai_move_without_ball(state['ball'])
-                if move!= 'NOTHING':
+                if move != 'NOTHING':
                     return move
                 else:
                     return 'FORM' # Special action, not defined in ACT
@@ -296,7 +295,7 @@ class OriginalAITeam(Team):
             - Otherwise the player nearest to the ball has control (ties are broken randomly)
         """
         dists = [player.pos.dist(ball.pos) + player.rnd for player in self.players]
-        self.selected = np.argmin(dists) # Default - Ball goes to nearest player
+        self.selected = dists.index(min(dists)) # Default - Ball goes to nearest player
 
         if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball.pos.x - self.goal_x) < W//5:
             # If the ball is within the D and is not very near to any other player, give control to the keeper
@@ -326,14 +325,14 @@ class OriginalAITeam(Team):
                 return 'MOVE_R'
         elif (player.pos.x - FORM[self.formation][self.dir][id].x) > min_dist:
             if (player.pos.y - FORM[self.formation][self.dir][id].y) > min_dist:
-                return np.random.choice(['MOVE_L', 'MOVE_U'])
+                return random.choices(['MOVE_L', 'MOVE_U'])[0]
             else:
-                return np.random.choice(['MOVE_L', 'MOVE_D'])
+                return random.choices(['MOVE_L', 'MOVE_D'])[0]
         elif (player.pos.x - FORM[self.formation][self.dir][id].x) < - min_dist:
             if (player.pos.y - FORM[self.formation][self.dir][id].y) > min_dist:
-                return np.random.choice(['MOVE_R', 'MOVE_U'])
+                return random.choices(['MOVE_R', 'MOVE_U'])[0]
             else:
-                return np.random.choice(['MOVE_R', 'MOVE_D'])
+                return random.choices(['MOVE_R', 'MOVE_D'])[0]
         else:
             return 'NOTHING'
 
