@@ -5,7 +5,7 @@ from teams.team import Team
 
 class RandomAgent(Agent):
     """ Agents that move randomly """
-    def move(self, state, reward):
+    def move(self, state_prev, state, reward):
         if random.random() < 0.6:
             return random.choice(['MOVE_U', 'MOVE_D', 'MOVE_L', 'MOVE_R'])
         else:
@@ -18,9 +18,9 @@ class RandomTeam(Team):
         for i in range(NUM_TEAM):
             self.players.append(RandomAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]))
 
-    def move(self, state, reward):
+    def move(self, state_prev, state, reward):
         """ Move each player randomly """
         actions = []
         for i,player in enumerate(self.players):
-            actions.append(player.move(state, reward))
+            actions.append(player.move(state_prev, state, reward))
         return actions

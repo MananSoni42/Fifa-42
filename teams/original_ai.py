@@ -241,7 +241,7 @@ class OriginalAIAgent(Agent):
 
         return shot
 
-    def move(self, state, reward, selected):
+    def move(self, state_prev, state, reward, selected):
         if state:
             if self.team_id == 1: # Set correct teams based on team id
                 self_team = state['team1']
@@ -336,7 +336,7 @@ class OriginalAITeam(Team):
         else:
             return 'NOTHING'
 
-    def move(self, state, reward):
+    def move(self, state_prev, state, reward):
         """ Move each player """
         actions = []
         if state:
@@ -344,7 +344,7 @@ class OriginalAITeam(Team):
         else:
             self.selected = NUM_TEAM//2
         for i,player in enumerate(self.players):
-            move = player.move(state,reward,self.selected)
+            move = player.move(state_prev, state, reward,self.selected)
             if move != 'FORM':
                 actions.append(move)
             else:

@@ -10,7 +10,7 @@ class HumanAgent(Agent):
             pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
         super().draw(win, team_id, debug=debug)
 
-    def move(self, state, reward):
+    def move(self, state_prev, state, reward):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -106,7 +106,7 @@ class HumanTeam(Team):
         else:
             return 'NOTHING'
 
-    def move(self, state, reward):
+    def move(self, state_prev, state, reward):
         """
         Move a human team
             * Player nearest to the ball moves through keyboard
@@ -115,7 +115,7 @@ class HumanTeam(Team):
         actions = []
         for i,player in enumerate(self.players):
             if i == self.selected:
-                actions.append(player.move(state, reward))
+                actions.append(player.move(state_prev, state, reward))
             elif self.maintain_formation:
                 actions.append(self.formation_dir(i))
             else:

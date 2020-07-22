@@ -64,6 +64,8 @@ class Team(ABC):
         pass
 
     @abstractmethod
-    def move(self, state, reward):
-        """ Move the entire team (may use the player's move method) """
+    def move(self, state_prev, state, reward):
+        """ 
+        Move the entire team (may use the player's move method) 
+        """
         pass

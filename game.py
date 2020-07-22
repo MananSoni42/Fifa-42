@@ -28,6 +28,7 @@ class Game:
         self.debug = False
         self.end = False # True when the game ends (never probably)
         self.pause = False
+        self.state_prev = None
         self.state = None # game state to be passed to agents (see get_state() function)
         self.rewards = None
 
@@ -304,15 +305,18 @@ class Game:
         }
 
     def next(self):
-        a1 = self.team1.move(self.state, self.rewards)
-        a2 = self.team2.move(self.state, self.rewards)
-        self.state, self.rewards = self.move_next(a1,a2)
+        a1 = self.team1.move(self.state_prev, self.state, self.rewards)
+        a2 = self.team2.move(self.state_prev, self.state, self.rewards)
+        self.state_prev, self.state, self.rewards = self.move_next(a1,a2)
 
     def move_next(self, a1, a2):
         """
         Next loop that is the heart of the game
          - a1,a2 (list): Actions of each player in respective teams
         """
+
+        state_prev = self.get_state()
+
         self.team1.update(a1, self.ball) # Update team's state
         self.team2.update(a2, self.ball)
 
@@ -320,4 +324,5 @@ class Game:
 
         self.ball.update(self.team1, self.team2, a1, a2, self.stats) # Update ball's state
 
-        return self.get_state(), 0
+        state = self.get_state()
+        return state_prev, state, 0
