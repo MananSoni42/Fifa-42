@@ -16,7 +16,7 @@ class RandomTeam(Team):
     def set_players(self):
         self.players = []
         for i in range(NUM_TEAM):
-            self.players.append(RandomAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]))
+            self.players.append(RandomAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
 
     def move(self, state_prev, state, reward):
         """ Move each player randomly """

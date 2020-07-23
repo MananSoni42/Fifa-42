@@ -67,7 +67,7 @@ class HumanTeam(Team):
     def set_players(self):
         self.players = []
         for i in range(NUM_TEAM):
-            self.players.append(HumanAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]))
+            self.players.append(HumanAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
 
         self.selected = NUM_TEAM//2
 
@@ -80,26 +80,26 @@ class HumanTeam(Team):
         If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
         Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
         """
-        if abs(player.pos.x - FORM[self.formation][self.dir][id].x) <= min_dist and abs(player.pos.y - FORM[self.formation][self.dir][id].y) <= min_dist:
+        if abs(player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) <= min_dist and abs(player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) <= min_dist:
             player.walk_count = 0
             return 'NOTHING'
-        elif abs(player.pos.x - FORM[self.formation][self.dir][id].x) <= min_dist:
-            if (player.pos.y - FORM[self.formation][self.dir][id].y) > min_dist:
+        elif abs(player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) <= min_dist:
+            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
                 return 'MOVE_U'
             else:
                 return 'MOVE_D'
-        elif abs(player.pos.y - FORM[self.formation][self.dir][id].y) <= min_dist:
-            if (player.pos.x - FORM[self.formation][self.dir][id].x) > min_dist:
+        elif abs(player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) <= min_dist:
+            if (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) > min_dist:
                 return 'MOVE_L'
             else:
                 return 'MOVE_R'
-        elif (player.pos.x - FORM[self.formation][self.dir][id].x) > min_dist:
-            if (player.pos.y - FORM[self.formation][self.dir][id].y) > min_dist:
+        elif (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) > min_dist:
+            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
                 return random.choice(['MOVE_L', 'MOVE_U'])
             else:
                 return random.choice(['MOVE_L', 'MOVE_D'])
-        elif (player.pos.x - FORM[self.formation][self.dir][id].x) < - min_dist:
-            if (player.pos.y - FORM[self.formation][self.dir][id].y) > min_dist:
+        elif (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) < - min_dist:
+            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
                 return random.choice(['MOVE_R', 'MOVE_U'])
             else:
                 return random.choice(['MOVE_R', 'MOVE_D'])

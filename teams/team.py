@@ -1,5 +1,5 @@
 from settings import *
-from const import FORM, recolor
+from const import recolor
 from abc import ABC, abstractmethod
 
 class Team(ABC):
@@ -65,7 +65,7 @@ class Team(ABC):
 
     @abstractmethod
     def move(self, state_prev, state, reward):
-        """ 
-        Move the entire team (may use the player's move method) 
+        """
+        Move the entire team (may use the player's move method)
         """
         pass
