@@ -42,6 +42,14 @@ class HumanAgent(Agent):
 
 class HumanTeam(Team):
     """A team of human players"""
+    def set_players(self, ids=list(range(NUM_TEAM))):
+        self.players = []
+        for i in range(NUM_TEAM):
+            if i in ids:
+                self.players.append(HumanAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
+
+        self.selected = NUM_TEAM//2
+
     def update(self, action, ball):
         self.select_player(ball)
         super().update(action,ball)
@@ -62,14 +70,6 @@ class HumanTeam(Team):
         if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball.pos.x - self.goal_x) < W//5:
             # If the ball is within the D and is not very near to any other player, give control to the keeper
             self.selected = 0
-
-
-    def set_players(self):
-        self.players = []
-        for i in range(NUM_TEAM):
-            self.players.append(HumanAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
-
-        self.selected = NUM_TEAM//2
 
     def formation_dir(self, id):
         """ Send player with given id to his designated place in the formation """

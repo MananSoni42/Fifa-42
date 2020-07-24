@@ -283,10 +283,11 @@ class OriginalAIAgent(Agent):
 
 class OriginalAITeam(Team):
     """The AI team used in the original (C++) version"""
-    def set_players(self):
+    def set_players(self, ids=list(range(NUM_TEAM))):
         self.players = []
         for i in range(NUM_TEAM):
-            self.players.append(OriginalAIAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
+            if i in ids:
+                self.players.append(OriginalAIAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
 
     def select_player(self, ball):
         """

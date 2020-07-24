@@ -54,7 +54,7 @@ class Team(ABC):
             player.update(action[i], self.players)
 
     @abstractmethod
-    def set_players(self):
+    def set_players(self, ids=list(range(NUM_TEAM))):
         """
         Add players (of relevant class) to the team
         Requirements:
