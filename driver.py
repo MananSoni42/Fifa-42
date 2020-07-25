@@ -3,6 +3,7 @@ from settings import *
 from pygame import mixer
 import pygame_menu
 from game import Game
+from teams.no import NoTeam
 from teams.human import HumanTeam
 from teams.original_ai import OriginalAITeam
 
@@ -24,8 +25,9 @@ menu_music.play(-1)
 # Define teams (Team 1 faces right by default)
 team1 = HumanTeam(formation='default', color=(0,32,255))
 team2 = OriginalAITeam(formation='balanced-1', color=(255,128,0))
+no_team = NoTeam()
 
-def play_game():
+def play(): # Play the entire game
     mixer.pause()
     single_short_whistle.play()
     applause.play(-1)
@@ -42,6 +44,25 @@ def play_game():
         else: # Continue with the game
             game.draw(win)
             game.next()
+
+        pygame.display.update() # refresh screen
+
+    main_menu.mainloop(win, bgfun=draw_bg) # Game never ends - Show the menu
+
+def practice():
+    mixer.pause()
+    single_short_whistle.play()
+    applause.play(-1)
+    game = Game(team1, no_team) # initialize the game
+    """ Game loop """
+    while not game.end: # Game loop
+        clock.tick(FPS) # FPS
+
+        game.check_interruptions() # Check for special keys (quit, pause, etc)
+
+        game.draw(win, hints=False)
+        game.practice_instr_draw(win)
+        game.next()
 
         pygame.display.update() # refresh screen
 
@@ -73,7 +94,8 @@ s2.change = lambda col: color_change(s2, col, team2) # Set team 2's color
 f1.change = lambda id: set_form(id,team_id=1) # set team 1's formation
 f2.change = lambda id: set_form(id,team_id=2) # set team 2's formation
 
-main_menu.add_button('Play', play_game)
+main_menu.add_button('Play', play)
+main_menu.add_button('Practice', practice)
 main_menu.add_button('Instructions', instr_menu)
 main_menu.add_button('Choose formation', form_menu)
 main_menu.add_button('Settings', sett_menu)

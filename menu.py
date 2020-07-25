@@ -157,6 +157,15 @@ custom_theme.background_color = bc # Change backgroung back to image
 
 
 
+########### Practice ############
+practice_menu = pygame_menu.Menu(H, W, 'Formation',
+                             theme=custom_theme,
+                             mouse_motion_selection=True,
+                             mouse_visible=True)
+#################################
+
+
+
 ########### Main menu ###########
 main_menu = pygame_menu.Menu(H, W, ' FIFA 42',
                              theme=custom_theme,

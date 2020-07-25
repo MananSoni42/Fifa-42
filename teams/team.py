@@ -7,7 +7,7 @@ class Team(ABC):
     Abstract class for a team of agents
     Implement the move and set_players methods to instantiate
     """
-    def __init__(self, color, formation='default'):
+    def __init__(self, color=(0,0,0), formation='default'):
         """ call the init method to complete the proccess"""
         self.color = color
         self.formation = formation

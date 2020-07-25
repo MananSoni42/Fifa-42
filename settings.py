@@ -59,6 +59,7 @@ SOUND_DIR = os.path.join(ASSET_DIR, 'sounds')
 FONT_ROBOTO = os.path.join(ASSET_DIR, 'fonts', 'Roboto-Black.ttf')
 FONT_8BIT = os.path.join(ASSET_DIR, 'fonts', '8bit.ttf')
 FONT_NEVIS = os.path.join(ASSET_DIR, 'fonts', 'nevis.ttf')
+FONT_MONO = os.path.join(ASSET_DIR, 'fonts', 'mono.ttf')
 
 MENU_BG = os.path.join(IMG_DIR, 'menu_bg.jpg')
 CONTROLS_IMG = os.path.join(IMG_DIR, 'controls.png')

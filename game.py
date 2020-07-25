@@ -196,6 +196,22 @@ class Game:
         self.team2.draw(win, debug=self.debug)
         self.ball.draw(win, debug=self.debug)
 
+    def practice_instr_draw(self, win):
+        title_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
+        title_text = title_font.render('PRACTICE', True, (0,100,0))
+        self.text_draw(win, title_text, (0,0, W, H//10))
+
+        field_font = pygame.font.Font(FONT_MONO, FONT_SIZE//2)
+        text_shoot1 = field_font.render('       Q W E', True, (0,100,0))
+        text_shoot2 = field_font.render('Shoot: A   D', True, (0,100,0))
+        text_shoot3 = field_font.render('       Z X C', True, (0,100,0))
+        text_move = field_font.render(f'Move: Arrow keys', True, (0,100,0))
+
+        self.text_draw(win, text_move, (3*LINE_WIDTH, 3*LINE_WIDTH, W//5, H//24))
+        self.text_draw(win, text_shoot1, (3*LINE_WIDTH + W//5, 3*LINE_WIDTH, 2*W//10 + 2*LINE_WIDTH, H//24), align='left')
+        self.text_draw(win, text_shoot2, (3*LINE_WIDTH + W//5, 3*LINE_WIDTH + H//24, 2*W//10 + 2*LINE_WIDTH, H//24), align='left')
+        self.text_draw(win, text_shoot3, (3*LINE_WIDTH + W//5, 3*LINE_WIDTH + 2*H//24, 2*W//10 + 2*LINE_WIDTH, H//24), align='left')
+
     def pause_draw(self,win):
         """ Draw the pause menu """
         W_,H_ = int(0.8*W), int(0.8*H)
