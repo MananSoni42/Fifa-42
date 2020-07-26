@@ -10,6 +10,7 @@ from teams.original_ai import OriginalAITeam
 """
 Driver program to test the game
 """
+
 pygame.init()
 win = pygame.display.set_mode((W,H), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
@@ -20,7 +21,6 @@ mixer.init(44100, -16,2,2048)
 menu_music = mixer.Sound(MENU_MUSIC)
 single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
 applause = mixer.Sound(APPLAUSE)
-menu_music.play(-1)
 
 # Define teams (Team 1 faces right by default)
 team1 = HumanTeam(formation='default', color=(0,32,255))
@@ -104,4 +104,5 @@ main_menu.add_button('Quit', pygame_menu.events.EXIT) # Add exit button
 
 ###########################################
 
+menu_music.play(-1)
 main_menu.mainloop(win, bgfun=draw_bg) # Show the menu

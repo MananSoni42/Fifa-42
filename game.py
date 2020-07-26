@@ -5,8 +5,11 @@ from stats import Stats
 from pygame import mixer
 import time
 
-# Sound Init
-pygame.mixer.init(44100, -16,2,2048)
+"""
+Contains the central game class
+"""
+
+mixer.init(44100, -16,2,2048)
 applause = mixer.Sound(APPLAUSE)
 kick = mixer.Sound(KICK)
 single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
@@ -16,6 +19,13 @@ three_whistles = mixer.Sound(THREE_WHISTLES)
 class Game:
     """ Class that controls the entire game """
     def __init__(self, team1, team2):
+        """
+        Initializes the game
+
+        Attributes:
+            team1 (Team): Right-facing team
+            team2 (Team): Left-facing team
+        """
         self.team1 = team1
         self.team1.init(id=1, dir='L') # direction is hardcoded, don't change
 
@@ -28,10 +38,16 @@ class Game:
         self.debug = False
         self.end = False # True when the game ends (never probably)
         self.pause = False
+        self.state_prev = None
         self.state = None # game state to be passed to agents (see get_state() function)
         self.rewards = None
 
     def check_interruptions(self):
+        """
+        Check for special keyboard buttons
+
+        Sets internal flags to pause, quit the game or run it in debug mode
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # Quit
                 mixer.pause()
@@ -64,8 +80,10 @@ class Game:
                     if mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT and mods & pygame.KMOD_ALT:
                         self.debug = not self.debug
 
-    def same_team_collision(self, team, actions, free):
-        """ Check if current player collides with any other players (same team) """
+    def same_team_collision(self, team, free):
+        """
+        Check if current player collides with any other players of the same team
+        """
         min_dist  = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
         if not free:
             min_dist.x += BALL_RADIUS
@@ -73,8 +91,6 @@ class Game:
         for player1 in team.players:
             for player2 in team.players:
                 if player1.id != player2.id and abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
-                    #player1.pos -= P(factor_x, PLAYER_SPEED)*P(ACT[actions[player1.id]])
-                    #player2.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player2.id]])
                     xincr = 1 + PLAYER_RADIUS - abs(player1.pos.x-player2.pos.x)//2
                     xdir = (1,-1)
                     yincr = 1 + PLAYER_RADIUS - abs(player1.pos.y-player2.pos.y)//2
@@ -91,7 +107,9 @@ class Game:
                     player2.pos.y += ydir[1]*yincr
 
     def diff_team_collision(self, team1, team2, free):
-        """ Check if current player collides with any other players (different teams) """
+        """
+        Check if current player collides with any other players of the opposite team
+        """
         min_dist  = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
         if not free:
             min_dist.x += BALL_RADIUS
@@ -116,12 +134,24 @@ class Game:
                     player1.pos.y += ydir[0]*yincr
                     player2.pos.y += ydir[1]*yincr
 
-    def collision(self, team1, act1, team2, act2, ball):
-        self.same_team_collision(team1, act1, self.ball.free)
-        self.same_team_collision(team2, act2, self.ball.free)
+    def collision(self, team1, team2, ball):
+        """
+        Handle collisions between all in-game players.
+        """
+        self.same_team_collision(team1, self.ball.free)
+        self.same_team_collision(team2, self.ball.free)
         self.diff_team_collision(team1, team2, self.ball.free)
 
     def text_draw(self, win, text, rect, align='center'):
+        """
+        Utility to draw text
+
+        Attributes:
+            win (pygame.display): window for rendering
+            text (pygame.font (rendered)): The text object
+            rect (tuple): Rectangle specified as (x, y, width, height)
+            align (string): text alignment can be one of 'left', 'right', 'center' (defaults to 'center')
+        """
         width = text.get_width()
         height = text.get_height()
         center_x = rect[0] + rect[2]//2
@@ -136,7 +166,10 @@ class Game:
         win.blit(text, final_rect)
 
     def goal_draw(self,win):
-        """ Show game score """
+        """
+        Display the current score (goals for each side)
+        """
+        #""" Show game score """
         goal1_rect = (W//2 - GOAL_DISP_SIZE - 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
         goal2_rect = (W//2 + 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
         goal_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
@@ -151,7 +184,10 @@ class Game:
     def field_draw(self,win, hints):
         """
         Draw the football pitch
-        hints: Enable to add control hints
+
+        Attributes:
+            win (pygame.display): window for rendering
+            hints (bool): If (movement-based) hints are to be shown
         """
         win.fill((14, 156, 23)) # constant green
 
@@ -188,7 +224,11 @@ class Game:
                 self.text_draw(win, text_debug, (3*LINE_WIDTH, 3*LINE_WIDTH + H//24, W//5, H//24), align='left') # Developer model
 
     def draw(self, win, hints=True):
-        """ Draw the game """
+        """
+        Draw the entire game
+
+        Calls ```field_draw()``` along with the ```draw()``` methods for each team and the ball
+        """
         self.field_draw(win, hints=hints)
         if hints:
             self.goal_draw(win)
@@ -213,7 +253,11 @@ class Game:
         self.text_draw(win, text_shoot3, (3*LINE_WIDTH + W//5, 3*LINE_WIDTH + 2*H//24, 2*W//10 + 2*LINE_WIDTH, H//24), align='left')
 
     def pause_draw(self,win):
-        """ Draw the pause menu """
+        """
+        Draw the pause
+
+        Displays statistics for possession, pass accuracy and shot accuracy
+        """
         W_,H_ = int(0.8*W), int(0.8*H)
         W0,H0 = int(0.1*W), int(0.1*H)
         col1 = (255-self.team1.color[0], 255-self.team1.color[1], 255-self.team1.color[2])
@@ -303,7 +347,21 @@ class Game:
 
     def get_state(self):
         """
-        The state object: a summary of the entire game as seen by the agent
+        Create a state object that summarized the entire game
+
+        ```
+        state = {
+            'team1': {
+                'players' # list of the team player's coordinates
+                'goal_x' # The x-coordinate of their goal post
+            },
+            'team2': {
+                'players' # list of the team player's coordinates
+                'goal_x' # The x-coordinate of their goal post
+            },
+            'ball' # Position of the ball
+        }
+        ```
         """
         pos1 = [player.pos for player in self.team1.players]
         pos2 = [player.pos for player in self.team2.players]
@@ -320,20 +378,34 @@ class Game:
         }
 
     def next(self):
-        a1 = self.team1.move(self.state, self.rewards)
-        a2 = self.team2.move(self.state, self.rewards)
-        self.state, self.rewards = self.move_next(a1,a2)
+        """
+        Move the game forward by 1 frame
+
+        Passes state objects to the teams and pass their actions to ```move_next()```
+        """
+        a1 = self.team1.move(self.state_prev, self.state, self.rewards)
+        a2 = self.team2.move(self.state_prev, self.state, self.rewards)
+        self.state_prev, self.state, self.rewards = self.move_next(a1,a2)
 
     def move_next(self, a1, a2):
         """
-        Next loop that is the heart of the game
-         - a1,a2 (list): Actions of each player in respective teams
+        Update the players' and ball's internal state based on the teams' actions
+
+        Attributes:
+            a1 (list): list of actions (1 for each player) in team 1
+            a2 (list): list of actions (1 for each player) in team 2
+
+        Each action must be a key in the ```ACT``` dictionary found in ```const.py```
         """
+
+        state_prev = self.get_state()
+
         self.team1.update(a1, self.ball) # Update team's state
         self.team2.update(a2, self.ball)
 
-        self.collision(self.team1, a1, self.team2, a2, self.ball) # Check for collision between players
+        self.collision(self.team1, self.team2, self.ball) # Check for collision between players
 
         self.ball.update(self.team1, self.team2, a1, a2, self.stats) # Update ball's state
 
-        return self.get_state(), 0
+        state = self.get_state()
+        return state_prev, state, 0

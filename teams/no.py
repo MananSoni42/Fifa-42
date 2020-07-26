@@ -8,6 +8,6 @@ class NoTeam(Team):
     def set_players(self):
         self.players = []
 
-    def move(self, state, reward):
+    def move(self, state_prev, state, reward):
         """ Moves the entire team """
         return []
