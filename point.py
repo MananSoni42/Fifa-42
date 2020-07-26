@@ -1,9 +1,23 @@
 import math
 
 class P:
-    """ 2-D point """
+    """
+    Implementation of a 2-D point
+
+    """
 
     def __init__(self, x,y=None):
+        """
+        Initialize an point
+
+        Examples:
+        ```
+        pt1 = P(3,4)
+        pt2 = P((3,4))
+        pt3 = P([3,4])
+        pt4 = P(pt3)
+        ```
+        """
         if y is None:
             if isinstance(x,tuple):
                 self.x = x[0]
@@ -17,12 +31,16 @@ class P:
 
     @property
     def val(self):
-        """ Return the value of the point as a tuple rounded to the nearest integer point """
+        """
+        Return the value of the point as a tuple rounded to the nearest integer point
+        """
         return (int(round(self.x,0)), int(round(self.y,0)))
 
     @property
     def mag(self):
-        """ Return the magnitude of the point, basically it's distance from zero or it's mod """
+        """
+        Return the magnitude of the point (it's distance from zero)
+        """
         return math.sqrt(self.x**2 + self.y**2)
 
     def __str__(self):

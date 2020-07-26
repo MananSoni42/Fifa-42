@@ -9,6 +9,7 @@ from teams.original_ai import OriginalAITeam
 """
 Driver program to test the game
 """
+
 pygame.init()
 win = pygame.display.set_mode((W,H), pygame.FULLSCREEN)
 clock = pygame.time.Clock()
