@@ -4,13 +4,22 @@ from teams.agent import Agent
 from teams.team import Team
 
 class HumanAgent(Agent):
-    """ Agents controlled by humans """
+    """
+    Agents controlled by humans
+    """
+
     def draw(self, win, team_id, selected=False, debug=False):
+        """
+        Draw the human agent. Also draws a red circle on top of the selected player
+        """
         if selected:
             pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
         super().draw(win, team_id, debug=debug)
 
     def move(self, state_prev, state, reward):
+        """
+        Move the human agent based on the keyboard
+        """
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -41,7 +50,9 @@ class HumanAgent(Agent):
             return 'NOTHING'
 
 class HumanTeam(Team):
-    """A team of human players"""
+    """
+    A team of human players
+    """
     def set_players(self, ids=list(range(NUM_TEAM))):
         self.players = []
         for i in range(NUM_TEAM):
@@ -51,18 +62,27 @@ class HumanTeam(Team):
         self.selected = NUM_TEAM//2
 
     def update(self, action, ball):
+        """
+        Select a player (based on the Ball's state) and update the team's state based on the received actions and the ball's position
+        """
         self.select_player(ball)
         super().update(action,ball)
 
     def draw(self, win, debug):
+        """
+        Draw the human team
+        """
         for i,player in enumerate(self.players):
             player.draw(win, self.id, selected=(i == self.selected), debug=debug)
 
     def select_player(self, ball):
         """
         Select the player that is controlled by the keyboard
-            - If ball is near the D-area, keeper gets automatic control
-            - Otherwise the player nearest to the ball has control (ties are broken randomly)
+
+        **Working**:
+
+        - If ball is near the D-area, keeper gets automatic control
+        - Otherwise the player nearest to the ball has control (ties are broken randomly)
         """
         dists = [player.pos.dist(ball.pos) + player.rnd for player in self.players]
         self.selected = dists.index(min(dists)) # Default - Ball goes to nearest player
@@ -72,14 +92,17 @@ class HumanTeam(Team):
             self.selected = 0
 
     def formation_dir(self, id):
-        """ Send player with given id to his designated place in the formation """
+        """
+        Send player (with the given ID) to his designated place in the formation
+
+        **Working**:
+
+        - If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
+        - Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
+        """
         player = self.players[id]
         min_dist = 2
 
-        """
-        If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
-        Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
-        """
         if abs(player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) <= min_dist and abs(player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) <= min_dist:
             player.walk_count = 0
             return 'NOTHING'
@@ -109,8 +132,11 @@ class HumanTeam(Team):
     def move(self, state_prev, state, reward):
         """
         Move a human team
-            * Player nearest to the ball moves through keyboard
-            * All other players return to their original positions (if maintain_formation is set)
+
+        **Working**:
+
+        - Player nearest to the ball moves through keyboard
+        - All other players return to their original positions (if maintain_formation is set)
         """
         actions = []
         for i,player in enumerate(self.players):

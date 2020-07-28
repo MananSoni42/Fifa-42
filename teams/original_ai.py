@@ -4,9 +4,16 @@ from teams.agent import Agent
 from teams.team import Team
 
 class OriginalAIAgent(Agent):
-    """ Agents that play like the original AI """
+    """
+    Harcoded AI agents that play like the original AI (designed in 2013)
+    """
 
     def draw(self, win, team_id, debug=False):
+        """
+        Draw an AI agent
+
+        Also displays circles with ```AI_FAR_RADIUS``` and ```AI_NEAR_RADIUS``` when debug is True
+        """
         if debug:
             pygame.draw.circle(win, (0, 100, 0), (self.pos-PLAYER_CENTER).val, AI_NEAR_RADIUS, LINE_WIDTH)
             pygame.draw.circle(win, (0, 200, 0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
@@ -15,19 +22,30 @@ class OriginalAIAgent(Agent):
 
     def dist_to_line(self, line, pt):
         """
-        distance of
-            line: x*line[0] + y*line[1] + line[2] = 0
-            from point: p
+        perpendicular of a pt from the given line
+
+        Attributes:
+            line (tuple): A straight line representing x*line[0] + y*line[1] + line[2] = 0
+            pt (Point): a 2D point
         """
         return abs(line[0]*pt.x + line[1]*pt.y + line[2])/math.sqrt(line[0]**2 + line[1]**2)
 
     def ai_move_with_ball(self, enemy_players, goal_x):
         """
-        If this player has the ball
-        Calculate vectors towards the goal and away from nearby players of the opposite team
-        Add up all these vectors and move in that direction (probabilistically)
-        enemy_players: positions of all of the enemy team
-        goal_x: x-coordinate of enemy goal
+        How AI players move when they have the ball
+
+        Attributes:
+            enemy_players (list): A list of the positions (coordinates) of the enemy players
+            goal_x (int): The x-coordinate of the enemy's goal post
+
+        Returns an ACT
+
+        **Working**:
+
+        - If this player has the ball
+        - Calculate vectors towards the goal and away from nearby players of the opposite team
+        - Add up all these vectors and move in that direction (probabilistically)
+        - enemy_players: positions of all of the enemy team
         """
 
         player_vec = P(0,0) # Direction vector to move due to opposite team
@@ -53,8 +71,17 @@ class OriginalAIAgent(Agent):
 
     def ai_move_without_ball(self, ball):
         """
-        Move towards the ball if it is nearby
-        Moves probabilistically
+        How AI players move when they do not have the ball
+
+        Attributes:
+            ball (Point): position of the ball
+
+        Returns an ACT
+
+        **Working**:
+
+        - If the ball is within its ```AI_FAR_RADIUS```, move towards the ball (probabilistically)
+        - Otherwise, do ```NOTHING```
         """
         if self.pos.dist(ball.pos) < AI_FAR_RADIUS:
             vec = ball.pos - self.pos
@@ -70,11 +97,19 @@ class OriginalAIAgent(Agent):
 
     def ai_pass(self, team_players, enemy_team_players):
         """
-        Pass the ball such that the perpendicular distance to the pass line is less than
-        AI_MIN_PASS_DIST and no enemy is nearer than a team player in that direction
+        How AI players pass the ball
 
-        Note:   The origin is at top-left instead of the standard bottom-left
-                so, map y -> H-y
+        Attributes:
+            team_players (list): A list of the positions (coordinates) of the team players
+            enemy_team_players (list): A list of the positions (coordinates) of the enemy team players
+
+        Returns an ACT
+
+        **Working**:
+
+        - Pass the ball such that the perpendicular distance to the pass line is less than ```AI_MIN_PASS_DIST```
+        - Pass is valid if no enemy is nearer than a team player in that direction
+        Note:   The origin is at top-left instead of the standard bottom-left so we map y to H-y
         """
 
         # Invert coordinates
@@ -139,12 +174,21 @@ class OriginalAIAgent(Agent):
 
     def ai_shoot(self, gk, goal_x):
         """
-        Shoot the ball
-        Only shoots if within AI_SHOOT_RADIUS of goal
-        Shoots to maximize distance between keeper and shot while keeping the shot within goal boundaries
-        gk_pos: Goal keeper of the enemy team
-        goal_x: X coordinate of goal post
+        How AI players shoot the ball
+
+        Attributes:
+            gk (Agent): The enemy's goalkeeper agent
+            goal_x (int): the x-coordinate of the enemy's
+
+        Returns an ACT
+
+        **Working**:
+
+        - Only shoots if within ```AI_SHOOT_RADIUS``` of  the enemy goal
+        - Shoots to maximize distance between keeper and shot while keeping the shot within goal boundaries
+        Note:   The origin is at top-left instead of the standard bottom-left so we map y to H-y
         """
+
         angles  = {
             1: { # For team 1
                 'SHOOT_E': math.pi/4,
@@ -182,8 +226,20 @@ class OriginalAIAgent(Agent):
 
     def gk_move(self, goal_x, ball):
         """
-        Move towards the ball and stay within the goal's limits
+        How the AI goalkeeper moves
+
+        Attributes:
+            goal_x (int): the x-coordinate of the enemy's
+            ball (Ball): The football object
+
+        Returns an ACT
+
+        **Working**:
+
+        - Moves towards the ball (tracks the y coordinate)
+        - Does not go outside the goals boundary
         """
+
         if ball.pos.dist(P(goal_x,H//2)) < AI_SHOOT_RADIUS:
             if abs(self.pos.x - goal_x) > BALL_RADIUS + PLAYER_RADIUS: # Goal keeper does not go into the goal himself
                 if ball.pos.y == self.pos.y: # Do nothing if ball is directly in your path
@@ -200,8 +256,17 @@ class OriginalAIAgent(Agent):
 
     def gk_pass(self, enemy_players, goal_x):
         """
-        Pass such that enemy players in AI_SHOOT_RADIUS do not get the ball
-        goal_x: Self team's goal position
+        How the AI goalkeeper passes
+
+        Attributes:
+            enemy_players (list): A list of the positions (coordinates) of the enemy players
+            goal_x (int): The x-coordinate of the team's goal post
+
+        Returns an ACT
+
+        **Working**:
+
+        - Pass such that enemy players in AI_SHOOT_RADIUS do not get the ball
         """
 
         angles  = {
@@ -242,6 +307,20 @@ class OriginalAIAgent(Agent):
         return shot
 
     def move(self, state_prev, state, reward, selected):
+        """
+        Umbrella function that is used to move the player. Overrides the Agent's ```move()``` method
+
+        Returns an ACT
+
+        **Working**:
+
+        - if the selected player is the goal keeper and it has the ball: call ```ai_gk_pass()```
+        - else if the selected player is the goal keeper and it does not have the ball: call ```ai_gk_move()```
+        - else If the selected player is within ```AI_SHOOT_RADIUS``` of the enemy's goal post and it has the ball: call ```ai_shoot()```
+        - else If the selected player has the ball: call ```ai_pass()``` or ```ai_move()``` based on the ```PASS_PROB```
+        - else call ```ai_move_without_ball()``` or ```ai_move_with_ball()```
+        """
+
         if state:
             if self.team_id == 1: # Set correct teams based on team id
                 self_team = state['team1']
@@ -282,7 +361,9 @@ class OriginalAIAgent(Agent):
             return 'NOTHING' # Otherwise do nothing
 
 class OriginalAITeam(Team):
-    """The AI team used in the original (C++) version"""
+    """
+    The AI team used in the original (C++) version
+    """
     def set_players(self, ids=list(range(NUM_TEAM))):
         self.players = []
         for i in range(NUM_TEAM):
@@ -291,10 +372,14 @@ class OriginalAITeam(Team):
 
     def select_player(self, ball):
         """
-        Select the player that is controlled by the keyboard
-            - If ball is near the D-area, keeper gets automatic control
-            - Otherwise the player nearest to the ball has control (ties are broken randomly)
+        Select a player based on the balls position
+
+        **Working**:
+
+        - If ball is near the D-area, keeper gets automatic control
+        - Otherwise the player nearest to the ball has control (ties are broken randomly)
         """
+
         dists = [player.pos.dist(ball.pos) + player.rnd for player in self.players]
         self.selected = dists.index(min(dists)) # Default - Ball goes to nearest player
 
@@ -303,14 +388,17 @@ class OriginalAITeam(Team):
             self.selected = 0
 
     def formation_dir(self, id):
-        """ Send player with given id to his designated place in the formation """
+        """
+        Send player (with the given ID) to his designated place in the formation
+
+        **Working**:
+
+        - If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
+        - Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
+        """
         player = self.players[id]
         min_dist = 2
 
-        """
-        If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
-        Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
-        """
         if abs(player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) <= min_dist and abs(player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) <= min_dist:
             player.walk_count = 0
             return 'NOTHING'
@@ -338,7 +426,9 @@ class OriginalAITeam(Team):
             return 'NOTHING'
 
     def move(self, state_prev, state, reward):
-        """ Move each player """
+        """
+        Move each player in the team. Call this method to move the team
+        """
         actions = []
         if state:
             self.select_player(state['ball'])
