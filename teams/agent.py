@@ -2,6 +2,7 @@ from settings import *
 from const import ACT
 from abc import ABC, abstractmethod
 
+
 class Agent(ABC):
     """
     Abstract class that controls agents in the football game
@@ -19,11 +20,11 @@ class Agent(ABC):
             pos (Point): The player's initial position
             dir (string): The player's current direction (which way it faces). Either 'R' or 'L'
         """
-        self.id = id # Unique ID starts from 0 (also denotes it's position in team array)
-        self.team_id = team_id # ID of player's team
-        self.pos = P(pos) # Starting position
-        self.walk_dir = dir # options are R (right), L (left)
-        self.walk_count = 0 # For running animation
+        self.id = id  # Unique ID starts from 0 (also denotes it's position in team array)
+        self.team_id = team_id  # ID of player's team
+        self.pos = P(pos)  # Starting position
+        self.walk_dir = dir  # options are R (right), L (left)
+        self.walk_count = 0  # For running animation
         self.rnd = 0.01*random.random()
 
     def __str__(self):
@@ -38,10 +39,11 @@ class Agent(ABC):
             team_id (int): Required to get the correct sprite
             debug (bool): Show additional info including the player's ID and the square used to approximaate the player
         """
-        win.blit(RUN[team_id][self.walk_dir][self.walk_count//WALK_DELAY], (self.pos - PLAYER_CENTER).val)
+        win.blit(RUN[team_id][self.walk_dir][self.walk_count //
+                                             WALK_DELAY], (self.pos - PLAYER_CENTER).val)
         if debug:
             pl_font = pygame.font.Font(FONT_NEVIS, FONT_SIZE//3)
-            text = pl_font.render(str(self.id), True, (0,0,0))
+            text = pl_font.render(str(self.id), True, (0, 0, 0))
             win.blit(text, (self.pos-PLAYER_CENTER).val)
 
     def update(self, action, players):
@@ -72,7 +74,8 @@ class Agent(ABC):
                     self.walk_count = WALK_DELAY
 
             self.pos += P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[action])
-            self.pos = P(min(max(PLAYER_RADIUS,self.pos.x),W - PLAYER_RADIUS), min(max(PLAYER_RADIUS,self.pos.y), H - PLAYER_RADIUS)) # account for overflow
+            self.pos = P(min(max(PLAYER_RADIUS, self.pos.x), W - PLAYER_RADIUS), min(
+                max(PLAYER_RADIUS, self.pos.y), H - PLAYER_RADIUS))  # account for overflow
 
     @abstractmethod
     def move(self, state_prev, state, reward):

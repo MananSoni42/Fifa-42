@@ -3,6 +3,7 @@ from const import ACT, FORM
 from teams.agent import Agent
 from teams.team import Team
 
+
 class HumanAgent(Agent):
     """
     Agents controlled by humans
@@ -13,7 +14,8 @@ class HumanAgent(Agent):
         Draw the human agent. Also draws a red circle on top of the selected player
         """
         if selected:
-            pygame.draw.circle(win, (255, 0, 0), (self.pos - P(0,1.5)*P(0,PLAYER_RADIUS)).val, 5) # mid circle
+            pygame.draw.circle(win, (255, 0, 0), (self.pos -
+                                                  P(0, 1.5)*P(0, PLAYER_RADIUS)).val, 5)  # mid circle
         super().draw(win, team_id, debug=debug)
 
     def move(self, state_prev, state, reward):
@@ -49,15 +51,18 @@ class HumanAgent(Agent):
         else:
             return 'NOTHING'
 
+
 class HumanTeam(Team):
     """
     A team of human players
     """
+
     def set_players(self, ids=list(range(NUM_TEAM))):
         self.players = []
         for i in range(NUM_TEAM):
             if i in ids:
-                self.players.append(HumanAgent(id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
+                self.players.append(HumanAgent(
+                    id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
 
         self.selected = NUM_TEAM//2
 
@@ -66,14 +71,15 @@ class HumanTeam(Team):
         Select a player (based on the Ball's state) and update the team's state based on the received actions and the ball's position
         """
         self.select_player(ball)
-        super().update(action,ball)
+        super().update(action, ball)
 
     def draw(self, win, debug):
         """
         Draw the human team
         """
-        for i,player in enumerate(self.players):
-            player.draw(win, self.id, selected=(i == self.selected), debug=debug)
+        for i, player in enumerate(self.players):
+            player.draw(win, self.id, selected=(
+                i == self.selected), debug=debug)
 
     def select_player(self, ball):
         """
@@ -84,8 +90,10 @@ class HumanTeam(Team):
         - If ball is near the D-area, keeper gets automatic control
         - Otherwise the player nearest to the ball has control (ties are broken randomly)
         """
-        dists = [player.pos.dist(ball.pos) + player.rnd for player in self.players]
-        self.selected = dists.index(min(dists)) # Default - Ball goes to nearest player
+        dists = [player.pos.dist(ball.pos) +
+                 player.rnd for player in self.players]
+        # Default - Ball goes to nearest player
+        self.selected = dists.index(min(dists))
 
         if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball.pos.x - self.goal_x) < W//5:
             # If the ball is within the D and is not very near to any other player, give control to the keeper
@@ -139,7 +147,7 @@ class HumanTeam(Team):
         - All other players return to their original positions (if maintain_formation is set)
         """
         actions = []
-        for i,player in enumerate(self.players):
+        for i, player in enumerate(self.players):
             if i == self.selected:
                 actions.append(player.move(state_prev, state, reward))
             elif self.maintain_formation:

@@ -2,13 +2,15 @@ from settings import *
 from const import recolor
 from abc import ABC, abstractmethod
 
+
 class Team(ABC):
     """
     Abstract class that controls a team of agents.
 
     Implement the move and set_players methods to instantiate
     """
-    def __init__(self, color=(0,0,0), formation='default'):
+
+    def __init__(self, color=(0, 0, 0), formation='default'):
         """
         Initialize the teams (not completely, some paramters are set using the ```init()``` method)
 
@@ -55,7 +57,7 @@ class Team(ABC):
             recolor(RUN[self.id]['L'][k], color=self.color)
             recolor(RUN[self.id]['R'][k], color=self.color)
 
-    def set_formation(self,formation):
+    def set_formation(self, formation):
         """
         Set the teams formation
         """
@@ -67,7 +69,7 @@ class Team(ABC):
         """
         self.maintain_formation = not self.maintain_formation
 
-    def draw(self,win, debug=False):
+    def draw(self, win, debug=False):
         """
         Draw the team
 
@@ -83,7 +85,7 @@ class Team(ABC):
         Basically calls each players' ```update()``` method
         """
 
-        for i,player in enumerate(self.players):
+        for i, player in enumerate(self.players):
             player.update(action[i], self.players)
 
     @abstractmethod
