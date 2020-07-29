@@ -15,10 +15,11 @@ kick = mixer.Sound(KICK)
 single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
 single_long_whistle = mixer.Sound(SINGLE_LONG_WHISLTE)
 three_whistles = mixer.Sound(THREE_WHISTLES)
+applause = mixer.Sound(APPLAUSE)
 
 class Game:
     """ Class that controls the entire game """
-    def __init__(self, team1, team2):
+    def __init__(self, team1, team2, sound=True):
         """
         Initializes the game
 
@@ -32,15 +33,20 @@ class Game:
         self.team2 = team2
         self.team2.init(id=2, dir='R')
 
-        self.ball = Ball(pos=(W//2, H//2))
+        self.ball = Ball(pos=(W//2, H//2), sound=sound)
         self.stats = Stats()
 
+        self.sound = sound
         self.debug = False
         self.end = False # True when the game ends (never probably)
         self.pause = False
         self.state_prev = None
         self.state = None # game state to be passed to agents (see get_state() function)
         self.rewards = None
+
+        if self.sound:
+            single_short_whistle.play()
+            applause.play(-1)
 
     def check_interruptions(self):
         """
@@ -51,7 +57,8 @@ class Game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT: # Quit
                 mixer.pause()
-                three_whistles.play()
+                if self.sound:
+                    three_whistles.play()
                 self.end = True
                 pygame.quit()
 
@@ -61,15 +68,15 @@ class Game:
                     self.pause = not self.pause
                     if self.pause:
                         mixer.pause()
-                        single_long_whistle.play()
+                        if self.sound:
+                            single_long_whistle.play()
                     else:
-                        single_short_whistle.play()
-                        applause.play(-1)
+                        if self.sound:
+                            single_short_whistle.play()
+                            applause.play(-1)
 
                 if event.key == pygame.K_BACKSPACE: # Return to main menu
                     mixer.stop()
-                    menu_music = mixer.Sound(MENU_MUSIC)
-                    menu_music.play(-1)
                     self.end = True
 
                 if event.key == pygame.K_SPACE: # Toggle whether to maintain formation

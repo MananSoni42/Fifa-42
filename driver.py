@@ -6,7 +6,7 @@ from game import Game
 from teams.no import NoTeam
 from teams.human import HumanTeam
 from teams.original_ai import OriginalAITeam
-
+from menu import Menu
 """
 Driver program to test the game
 """
@@ -19,19 +19,16 @@ pygame.display.set_caption("FIFA-42")
 # Init music
 mixer.init(44100, -16,2,2048)
 menu_music = mixer.Sound(MENU_MUSIC)
-single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
-applause = mixer.Sound(APPLAUSE)
 
 # Define teams (Team 1 faces right by default)
 team1 = HumanTeam(formation='default', color=(0,32,255))
 team2 = OriginalAITeam(formation='balanced-1', color=(255,128,0))
 no_team = NoTeam()
 
-def play(): # Play the entire game
-    mixer.pause()
-    single_short_whistle.play()
-    applause.play(-1)
-    game = Game(team1,team2) # initialize the game
+def play(sound): # Play the entire game
+    mixer.stop()
+
+    game = Game(team1,team2,sound) # initialize the game
     """ Game loop """
     while not game.end: # Game loop
         clock.tick(FPS) # FPS
@@ -47,13 +44,12 @@ def play(): # Play the entire game
 
         pygame.display.update() # refresh screen
 
-    main_menu.mainloop(win, bgfun=draw_bg) # Game never ends - Show the menu
+    game_menu.start() # Return to main menu
 
 def practice():
-    mixer.pause()
-    single_short_whistle.play()
-    applause.play(-1)
-    game = Game(team1, no_team) # initialize the game
+    mixer.stop()
+
+    game = Game(team1, no_team, sound=False) # initialize the game
     """ Game loop """
     while not game.end: # Game loop
         clock.tick(FPS) # FPS
@@ -66,43 +62,10 @@ def practice():
 
         pygame.display.update() # refresh screen
 
-    main_menu.mainloop(win, bgfun=draw_bg) # Game never ends - Show the menu
+    game_menu.start() # Return to main menu
+
 
 ### The menu
-from menu import main_menu, instr_menu, about_menu, sett_menu, form_menu, s1, s2, f1, f2, selected_team, selected_formation
-
-def color_change(widget, col, team): # Change color of widget and corresponding team
-    widget.set_background_color(col)
-    team.color = col
-
-def set_form(form, team_id): # Change team 1's formation and widget's background
-    global selected_team, selected_formation
-
-    selected_team = team_id
-    selected_formation[selected_team] = form
-
-    team1.formation = selected_formation[1][0]
-    team2.formation = selected_formation[2][0]
-
-def draw_bg():
-    if main_menu.get_current().get_title() == 'Formation':
-        dummy_game = Game(team1,team2)
-        dummy_game.draw(win, hints=False)
-
-s1.change = lambda col: color_change(s1, col, team1) # set team 1's color
-s2.change = lambda col: color_change(s2, col, team2) # Set team 2's color
-f1.change = lambda id: set_form(id,team_id=1) # set team 1's formation
-f2.change = lambda id: set_form(id,team_id=2) # set team 2's formation
-
-main_menu.add_button('Play', play)
-main_menu.add_button('Practice', practice)
-main_menu.add_button('Instructions', instr_menu)
-main_menu.add_button('Choose formation', form_menu)
-main_menu.add_button('Settings', sett_menu)
-main_menu.add_button('About', about_menu)
-main_menu.add_button('Quit', pygame_menu.events.EXIT) # Add exit button
-
-###########################################
-
-menu_music.play(-1)
-main_menu.mainloop(win, bgfun=draw_bg) # Show the menu
+game_menu = Menu(win, team1, team2)
+game_menu.create_main_menu(play, practice)
+game_menu.start()
