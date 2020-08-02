@@ -1,11 +1,13 @@
-# Fifa-42  <br/>![version](https://img.shields.io/badge/version-1.0.0-green.svg) ![os](https://img.shields.io/badge/Platform-windows%20%7C%20linux-lightgrey) 	![size](https://img.shields.io/badge/Size-75mb-yellow) ![lic](https://img.shields.io/badge/License-MIT-blue) ![milestones](https://img.shields.io/github/milestones/all/MananSoni42/Fifa-42)
-An 11 v 11 football game where you play against the computer. Choose your own formations and get ready to play!
+# Fifa-42  <br/>![version](https://img.shields.io/badge/version-1.1.0-green.svg) ![os](https://img.shields.io/badge/Platform-windows%20%7C%20linux-lightgrey) 	![size](https://img.shields.io/badge/Size-75mb-yellow) ![lic](https://img.shields.io/badge/License-MIT-blue) ![milestones](https://img.shields.io/github/milestones/all/MananSoni42/Fifa-42)
+An 11 v 11 football game where you play against the computer. Choose your own formations and get ready to play!  
+> To know more about the game, check out our [wiki](https://github.com/MananSoni42/Fifa-42/wiki).
 
 ## Play
-### [Windows](https://github.com/MananSoni42/Fifa-42/releases/download/v1.0.0/Fifa-42-win.exe) |  [Linux](https://github.com/MananSoni42/Fifa-42/releases/download/v1.0.0/Fifa-42-linux)
-> Note: On Linux, you will need to make the game file executable to run the game. Use the command given below before you click on the game.
+### [Windows](https://github.com/MananSoni42/Fifa-42/releases/download/v1.1.0/Fifa-42-win.exe) |  [Linux](https://github.com/MananSoni42/Fifa-42/releases/download/v1.1.0/Fifa-42-linux)
 ```
-chmod +x Fifa-42-linux
+Instructions:
+* Download the ZIP file given below and extract it. 
+* Play the game by clicking the on `Fifa-42` 
 ```
 ### Basics
 * This is an 11v11 football game where you (Team 1) play against the computer (Team 2)
@@ -25,15 +27,17 @@ chmod +x Fifa-42-linux
 ### Main menu
 ![menu](screens/menu.png)
 
-### In-game
-![menu](screens/game.gif)
+### Gameplay
+<p align="center">
+  <img src="screens/game.gif" alt="game"/>
+</p>
 
 ### Pause menu
 ![menu](screens/pause.png)
 
 ## Contributing
 Feel free to contribute features / point out errors. Fork this repository and make a pull request.  
-Make sure you go through the [wiki](https://github.com/MananSoni42/Fifa-42/wiki) to get an idea of how the code is structured and the conventions that we have used.
+Make sure you go through the [wiki](https://github.com/MananSoni42/Fifa-42/wiki) before you submit a PR
 
 ## License
 This project is licensed under the [MIT](https://opensource.org/licenses/MIT) License
