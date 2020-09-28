@@ -233,7 +233,7 @@ class Menu:
 
     def draw_bg(self):
         if self.main_menu.get_current().get_title() == 'Formation':
-            dummy_game = Game(self.team1, self.team2)
+            dummy_game = Game(self.team1, self.team2, sound=False)
             dummy_game.draw(self.win, hints=False)
 
     def start(self):
@@ -241,5 +241,6 @@ class Menu:
         Display the game menu
         """
         if self.sound:
+            mixer.stop()
             menu_music.play(-1)
         self.main_menu.mainloop(self.win, bgfun=self.draw_bg)  # Show the menu
