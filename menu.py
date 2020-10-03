@@ -48,6 +48,7 @@ class Menu:
         self.team1 = team1
         self.team2 = team2
         self.sound = True
+        self.difficulty = 0.6
 
     def create_about_menu(self):
         about_menu = pygame_menu.Menu(H, W, ' About',
@@ -148,11 +149,16 @@ class Menu:
             s2, col, self.team2)  # Set team 2's color
         s2.set_background_color((0, 0, 255))
 
+        def set_difficulty(name, diff):
+            self.difficulty = diff/100
+
+        sett_menu.add_selector(
+            'Difficulty', [(f'{i}%', i) for i in range(10,100+10,10)], default=5, onchange=set_difficulty)
+
         sett_menu.add_selector(
             'Sound', [('ON', True), ('OFF', False)], default=0, onchange=self.set_menu_sound)
         sett_menu.add_vertical_margin(V_PAD)
 
-        # s3.change =  # Toggle menu's sound
         sett_menu.add_button('Back', pygame_menu.events.BACK)
         return sett_menu
 
@@ -202,7 +208,7 @@ class Menu:
         # Apply on menu and all sub-menus
         main_menu.set_sound(engine, recursive=True)
 
-        main_menu.add_button('Play', lambda: play(sound=self.sound))
+        main_menu.add_button('Play', lambda: play(sound=self.sound, difficulty=self.difficulty))
         main_menu.add_button('Practice', practice)
         main_menu.add_button('Instructions', self.create_instr_menu())
         main_menu.add_button('Choose formation', self.create_form_menu())

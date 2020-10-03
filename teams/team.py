@@ -28,9 +28,10 @@ class Team(ABC):
             s += player.__str__()
         return s
 
-    def init(self, id, dir):
+    def init(self, id, dir, diff):
         """
-        Set the teams id and direction. Also recolor the sprites based on this team's color
+        Set the teams id, direction and difficulty (only for AI teams)
+        Also recolor the sprites based on the team's chosen color
 
         Attributes:
             id (int): The team's id (must be either 1 or 2)
@@ -40,6 +41,7 @@ class Team(ABC):
         """
         self.id = id
         self.dir = dir
+        self.difficulty = diff
 
         if self.dir == 'L':
             self.goal_x = 0

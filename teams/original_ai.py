@@ -7,7 +7,12 @@ from teams.team import Team
 class OriginalAIAgent(Agent):
     """
     Harcoded AI agents that play like the original AI (designed in 2013)
+    Takes an additional difficulty arguement
     """
+
+    def __init__(self, id, team_id, pos, dir='L', diff=0.6):
+        super().__init__(id, team_id, pos, dir)
+        self.difficulty = diff
 
     def draw(self, win, team_id, debug=False):
         """
@@ -17,9 +22,9 @@ class OriginalAIAgent(Agent):
         """
         if debug:
             pygame.draw.circle(
-                win, (0, 100, 0), (self.pos-PLAYER_CENTER).val, AI_NEAR_RADIUS, LINE_WIDTH)
+                win, (0, 100, 0), (self.pos-PLAYER_CENTER).val, AI_NEAR_RADIUS(self.difficulty), LINE_WIDTH)
             pygame.draw.circle(
-                win, (0, 200, 0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS, LINE_WIDTH)
+                win, (0, 200, 0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS(self.difficulty), LINE_WIDTH)
 
         super().draw(win, team_id, debug=debug)
 
@@ -53,10 +58,10 @@ class OriginalAIAgent(Agent):
 
         player_vec = P(0, 0)  # Direction vector to move due to opposite team
         for player in enemy_players:
-            if self.pos.dist(player.pos) < AI_NEAR_RADIUS:
+            if self.pos.dist(player.pos) < AI_NEAR_RADIUS(self.difficulty):
                 dir = player.pos - self.pos
                 # magnitude of vector is proportional to inverse of distance
-                mag = (AI_NEAR_RADIUS*PLAYER_RADIUS/dir.mag)**2
+                mag = (AI_NEAR_RADIUS(self.difficulty)*PLAYER_RADIUS/dir.mag)**2
                 player_vec -= P(mag/dir.mag, mag/dir.mag)*dir
 
         # Direction vector to move due to goal
@@ -90,7 +95,7 @@ class OriginalAIAgent(Agent):
         - If the ball is within its ```AI_FAR_RADIUS```, move towards the ball (probabilistically)
         - Otherwise, do ```NOTHING```
         """
-        if self.pos.dist(ball.pos) < AI_FAR_RADIUS:
+        if self.pos.dist(ball.pos) < AI_FAR_RADIUS(self.difficulty):
             vec = ball.pos - self.pos
             vec_dir = P(1/vec.mag, 1/vec.mag)*vec
 
@@ -397,7 +402,7 @@ class OriginalAITeam(Team):
         for i in range(NUM_TEAM):
             if i in ids:
                 self.players.append(OriginalAIAgent(
-                    id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
+                    id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord'], diff=self.difficulty))
 
     def select_player(self, ball):
         """

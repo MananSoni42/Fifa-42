@@ -26,10 +26,10 @@ team2 = OriginalAITeam(formation='balanced-1', color=(255, 128, 0))
 no_team = NoTeam()
 
 
-def play(sound):  # Play the entire game
+def play(sound, difficulty):  # Play the entire game
     mixer.stop()
 
-    game = Game(team1, team2, sound)  # initialize the game
+    game = Game(team1, team2, sound, difficulty)  # initialize the game
     """ Game loop """
     while not game.end:  # Game loop
         clock.tick(FPS)  # FPS

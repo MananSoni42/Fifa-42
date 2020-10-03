@@ -21,7 +21,7 @@ applause = mixer.Sound(APPLAUSE)
 class Game:
     """ Class that controls the entire game """
 
-    def __init__(self, team1, team2, sound=True):
+    def __init__(self, team1, team2, sound=True, difficulty=0.6):
         """
         Initializes the game
 
@@ -29,17 +29,19 @@ class Game:
             team1 (Team): Right-facing team
             team2 (Team): Left-facing team
         """
+        self.sound = sound
+        self.difficulty = difficulty
+        self.debug = False
+
         self.team1 = team1
-        self.team1.init(id=1, dir='L')  # direction is hardcoded, don't change
+        self.team1.init(id=1, dir='L', diff=self.difficulty)  # direction is hardcoded, don't change
 
         self.team2 = team2
-        self.team2.init(id=2, dir='R')
+        self.team2.init(id=2, dir='R', diff=self.difficulty)
 
         self.ball = Ball(pos=(W//2, H//2), sound=sound)
         self.stats = Stats()
 
-        self.sound = sound
-        self.debug = False
         self.end = False  # True when the game ends (never probably)
         self.pause = False
         self.state_prev = None

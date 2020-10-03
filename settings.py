@@ -42,12 +42,14 @@ LINE_WIDTH = 2
 ANIM_NUM = 7  # Number of images used for running animation
 WALK_DELAY = 3  # Change walking sprite after this many presses
 
-# Orginal AI related
-AI_FAR_RADIUS = 8*PLAYER_RADIUS  # Far radius to look for ball
-AI_NEAR_RADIUS = 3*PLAYER_RADIUS  # Near radius to ward off enemy players
-AI_MIN_PASS_DIST = 25  # Min perpendicular distance to consider for a successfull pass
+# Orginal AI related - Difficulty (between 0 and 1) - Easy (0.1) | Medium (0.4) | Hard (0.8)
+AI_FAR_RADIUS = lambda diff: round((2 + 11*diff)*PLAYER_RADIUS) # Far radius to look for ball
+AI_NEAR_RADIUS = lambda diff: round((2 + 2*diff)*PLAYER_RADIUS) # Near radius to ward off enemy players
 AI_SHOOT_RADIUS = W//4  # Dist from center of goal post within which AI starts shooting
+AI_MIN_PASS_DIST = 25  # Min perpendicular distance to consider for a successfull pass
 AI_PASS_PROB = 0.95  # Probability that AI moves instead of passing
+
+
 ######################################
 
 
@@ -63,7 +65,6 @@ FONT_MONO = os.path.join(ASSET_DIR, 'fonts', 'mono.ttf')
 
 MENU_BG = os.path.join(IMG_DIR, 'menu_bg.jpg')
 CONTROLS_IMG = os.path.join(IMG_DIR, 'controls.png')
-
 
 def GET_FORM_BG(team_id, formation_id): return os.path.join(
     IMG_DIR, 'formations', f'{team_id}-{formation_id}.jpg')  # Get correct formation img
