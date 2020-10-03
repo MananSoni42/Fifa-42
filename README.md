@@ -2,6 +2,14 @@
 An 11 v 11 football game where you play against the computer. Choose your own formations and get ready to play!  
 > To know more about the game, check out our [wiki](https://github.com/MananSoni42/Fifa-42/wiki).
 
+## Hacktoberfest 2020
+Only meaningful PRs will be accepted for hacktoberfest 2020. If you would like to contribute:
+* Help by contributing to any open issues
+* Make a **significant and/or non-trivial** improvement in the documentation
+* Go through the [wiki](https://github.com/MananSoni42/Fifa-42/wiki) to know more about the project
+* Please consider starring the repo if you found it useful :grin:
+
+
 ## Play
 ### [Windows](https://github.com/MananSoni42/Fifa-42/releases/download/v1.1.0/Fifa-42-win.zip) |  [Linux](https://github.com/MananSoni42/Fifa-42/releases/download/v1.1.0/Fifa-42-linux.zip)
 ```
