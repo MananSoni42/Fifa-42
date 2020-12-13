@@ -1,19 +1,19 @@
 loaders:
   - type: python
-    search_path: [../src, ../src/teams]
+    search_path: [./src, ./src/teams]
 
 renderer:
   type: mkdocs
   pages:
     - title: Home
       name: index
-      source: index.md
+      source: docs/index.md
     - title: About
       name: about
-      source: about.md
+      source: docs/about.md
     - title: Installing locally
       name: config
-      source: config.md
+      source: docs/config.md
     - title: API Documentation
       children:
       - title: Game
