@@ -23,9 +23,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install pydoc-markdown mkdocs mkdocs-bootstrap386
 
-    - name: Pull prev docs
-      run: git checkout -b gh-pages && git pull origin gh-pages
-
+    - uses: actions/checkout@v2
+      with:
+          tag: gh-deploy
     - name: Make docs
       shell: bash
       working-directory: ./docs
