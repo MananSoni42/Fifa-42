@@ -1,6 +1,5 @@
 # Fifa-42  <br/>![version](https://img.shields.io/badge/version-1.1.0-green.svg) ![os](https://img.shields.io/badge/Platform-windows%20%7C%20linux-lightgrey) 	![size](https://img.shields.io/badge/Size-75mb-yellow) ![lic](https://img.shields.io/badge/License-MIT-blue) ![milestones](https://img.shields.io/github/milestones/all/MananSoni42/Fifa-42)
 An 11 v 11 football game where you play against the computer. Choose your own formations and get ready to play!  
-> To know more about the game, check out our [wiki](https://github.com/MananSoni42/Fifa-42/wiki).
 
 ## Play
 ### [Windows](https://github.com/MananSoni42/Fifa-42/releases/download/v1.1.0/Fifa-42-win.zip) |  [Linux](https://github.com/MananSoni42/Fifa-42/releases/download/v1.1.0/Fifa-42-linux.zip)
@@ -10,7 +9,7 @@ Instructions:
 * Play the game by clicking the on `Fifa-42`
 ```
 ### Basics
-* This is an 11v11 football game where you (Team 1) play against the computer (Team 2)
+* This is an 11 v 11 football game where you (Team 1) play against the computer (Team 2)
 * You control a single player (marked by a red dot on top)
 * Running into opponent players causes both of you to be thrown back and lose possession of the ball
 
