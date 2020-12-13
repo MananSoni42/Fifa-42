@@ -1,0 +1,15 @@
+docs_dir: content
+nav:
+- Home: index.md
+- About: about.md
+- Installing locally: config.md
+- API Documentation:
+  - Game: api-documentation/game.md
+  - Ball: api-documentation/ball.md
+  - Stats: api-documentation/stats.md
+  - Point: api-documentation/point.md
+  - Agent: api-documentation/agent.md
+  - Team: api-documentation/team.md
+  - Custom teams (and their agents): api-documentation/custom-teams-(and-their-agents).md
+site_name: Fifa-42
+theme: readthedocs

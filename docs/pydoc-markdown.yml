@@ -1,0 +1,46 @@
+loaders:
+  - type: python
+    search_path: [../src, ../src/teams]
+
+renderer:
+  type: mkdocs
+  pages:
+    - title: Home
+      name: index
+      source: index.md
+    - title: About
+      name: about
+      source: about.md
+    - title: Installing locally
+      name: config
+      source: config.md
+    - title: API Documentation
+      children:
+      - title: Game
+        contents:
+        - 'game.Game.*'
+      - title: Ball
+        contents:
+        - 'ball.Ball.*'
+      - title: Stats
+        contents:
+        - 'stats.Stats.*'
+      - title: Point
+        contents:
+        - 'point.Point.*'
+      - title: Agent
+        contents:
+        - 'agent.Agent.*'
+      - title: Team
+        contents:
+        - 'team.Team.*'
+      - title: Custom teams (and their agents)
+        contents:
+        - 'random.*'
+        - 'human.*'
+        - 'original_ai.*'
+  mkdocs_config:
+    site_name: Fifa-42
+    theme: readthedocs
+    #theme:
+     # name: bootstrap386
