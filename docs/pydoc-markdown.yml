@@ -27,7 +27,7 @@ renderer:
         - 'stats.Stats.*'
       - title: Point
         contents:
-        - 'point.Point.*'
+        - 'point.P.*'
       - title: Agent
         contents:
         - 'agent.Agent.*'
@@ -41,6 +41,6 @@ renderer:
         - 'original_ai.*'
   mkdocs_config:
     site_name: Fifa-42
-    theme: readthedocs
-    #theme:
-     # name: bootstrap386
+    #theme: readthedocs
+    theme:
+      name: bootstrap386

@@ -12,4 +12,5 @@ nav:
   - Team: api-documentation/team.md
   - Custom teams (and their agents): api-documentation/custom-teams-(and-their-agents).md
 site_name: Fifa-42
-theme: readthedocs
+theme:
+  name: bootstrap386
