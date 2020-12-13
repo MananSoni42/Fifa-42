@@ -1,27 +1,29 @@
-name: deply-docs
+name: Python package
 
-on:
-  push:
-    branches: [ mkdocs ]
+on: [push]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
+
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7]
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
-      # Runs a set of commands using the runners shell
-      - name: Make docs
-        shell: bash
-        working-directory: ./docs
-        run: ./mkdocs.sh
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
 
-      - name: Host on gh-pages using mkdocs
-        shell: bash
-        working-directory: ./docs/build/docs
-        run: mkdocs --gh-deploy
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pydoc-markdown mkdocs mkdocs-bootstrap386
+
+  - name: Make docs
+    shell: bash
+    working-directory: ./docs
+    run: ./mkdocs.sh
