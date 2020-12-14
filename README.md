@@ -1,4 +1,4 @@
-# Fifa-42  <br/>![version](https://img.shields.io/badge/version-1.1.0-green.svg) ![os](https://img.shields.io/badge/Platform-windows%20%7C%20linux-lightgrey) 	![size](https://img.shields.io/badge/Size-75mb-yellow) ![lic](https://img.shields.io/badge/License-MIT-blue) ![milestones](https://img.shields.io/github/milestones/all/MananSoni42/Fifa-42)
+# Fifa-42  <br/>![version](https://img.shields.io/badge/version-1.1.0-green.svg) ![os](https://img.shields.io/badge/Platform-windows%20%7C%20linux-lightgrey) 	![size](https://img.shields.io/badge/Size-75mb-yellow) ![lic](https://img.shields.io/badge/License-MIT-blue) ![issues](https://img.shields.io/github/issues/MananSoni42/Fifa-42)
 An 11 v 11 football game where you play against the computer. Choose your own formations and get ready to play!  
 > Automatically generated Docs are know available [here](https://manansoni42.github.io/Fifa-42/)!
 
