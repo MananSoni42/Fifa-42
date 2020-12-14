@@ -1,3 +1,9 @@
+"""
+Contains the central game class
+
+Manages interactions with the players and the ball 
+"""
+
 from settings import *
 from const import ACT
 from ball import Ball
@@ -5,9 +11,6 @@ from stats import Stats
 from pygame import mixer
 import time
 
-"""
-Contains the central game class
-"""
 
 mixer.init(44100, -16, 2, 2048)
 applause = mixer.Sound(APPLAUSE)

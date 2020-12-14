@@ -1,9 +1,18 @@
+"""
+Defines a 2d Point along
+
+Supports:
+- addition
+- subtaction
+- multiplication
+- distance calculation
+"""
+
 import math
 
 class P:
     """
     Implementation of a 2-D point
-
     """
 
     def __init__(self, x,y=None):

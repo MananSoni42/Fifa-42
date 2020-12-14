@@ -1,3 +1,7 @@
+"""
+Create a random team i.e. team where each agent takes a random action (used for testing)
+"""
+
 from settings import *
 from const import ACT
 from teams.agent import Agent

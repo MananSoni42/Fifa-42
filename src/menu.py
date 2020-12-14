@@ -1,3 +1,7 @@
+"""
+Defines the game menu (written using pygame-menu)
+"""
+
 from pygame import mixer
 import pygame_menu
 from settings import *

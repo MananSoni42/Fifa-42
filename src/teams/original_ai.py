@@ -1,3 +1,7 @@
+"""
+Create a hardcoded AI team i.e. actions are determined using simple geometry
+"""
+
 from settings import *
 from const import ACT, FORM
 from teams.agent import Agent

@@ -1,3 +1,11 @@
+"""
+Global game settings
+
+Defines image / sound paths and all constants used in the game
+
+Can be freely changed
+"""
+
 from point import P
 from screeninfo import get_monitors
 import pygame

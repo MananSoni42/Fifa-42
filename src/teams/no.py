@@ -1,3 +1,7 @@
+"""
+Create a team with no players (deprecated - Use the ```ids``` arguement in the ```set_players``` method instead)
+"""
+
 from settings import *
 from const import ACT
 from teams.agent import Agent

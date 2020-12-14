@@ -1,3 +1,10 @@
+"""
+Defines how a team is created, drawn and updated
+
+Override the ```set_players``` and ```move``` method to create a valid custom team
+(You can use a custom agent in your custom team)
+"""
+
 from settings import *
 from const import recolor
 from abc import ABC, abstractmethod
@@ -36,6 +43,7 @@ class Team(ABC):
         Attributes:
             id (int): The team's id (must be either 1 or 2)
             dir (str): The team's direction (must be either 'L' or 'R')
+            diff (float): The game difficult (between 0-1)
 
         Calls ```set_players()``` and ```set_color()```
         """

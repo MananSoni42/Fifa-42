@@ -1,3 +1,7 @@
+"""
+Define the football used in the game
+"""
+
 from settings import *
 from const import ACT
 from pygame import mixer

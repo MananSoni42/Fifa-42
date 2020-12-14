@@ -1,3 +1,13 @@
+"""
+Manage game statistics
+
+Currently tracks:
+- Possession
+- Number of goals scored
+- Pass accuracy
+- Shot accuracy
+"""
+
 class Stats(object):
     """
     Keep track of game statistics

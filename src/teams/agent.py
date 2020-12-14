@@ -1,3 +1,9 @@
+"""
+Defines how an agent is created, drawn and updated
+
+Override the ```move``` method to create a valid custom agent
+"""
+
 from settings import *
 from const import ACT
 from abc import ABC, abstractmethod

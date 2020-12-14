@@ -1,3 +1,9 @@
+"""
+Driver program
+
+Use this to play the game 
+"""
+
 import time
 from settings import *
 from pygame import mixer
@@ -7,9 +13,6 @@ from teams.no import NoTeam
 from teams.human import HumanTeam
 from teams.original_ai import OriginalAITeam
 from menu import Menu
-"""
-Driver program to test the game
-"""
 
 pygame.init()
 win = pygame.display.set_mode((W, H), pygame.FULLSCREEN)

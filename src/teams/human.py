@@ -1,3 +1,7 @@
+"""
+Create a Human team i.e. controlled by the keyboard
+"""
+
 from settings import *
 from const import ACT, FORM
 from teams.agent import Agent

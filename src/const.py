@@ -1,10 +1,18 @@
+"""
+Game specific functions and constants
+
+Includes:
+- the actions that a player can take
+- possible formations
+- recolor a player sprite
+
+Do not change these constants directly as other parts of the game rely on their correct format
+"""
+
 from pygame import Color
 from point import P
 from settings import *
 
-"""
-Important constants used in the game
-"""
 ############## Custom types ##############
 
 # actions that can be performed by a plyer at any given time
