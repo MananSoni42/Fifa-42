@@ -2,6 +2,7 @@
 Defines how a team is created, drawn and updated
 
 Override the ```set_players``` and ```move``` method to create a valid custom team
+
 (You can use a custom agent in your custom team)
 """
 

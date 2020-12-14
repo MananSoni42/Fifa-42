@@ -19,6 +19,9 @@ renderer:
       - title: Game
         contents:
         - 'game.Game.*'
+      - title: Game menu
+        contents:
+        - 'menu.Menu.*'
       - title: Ball
         contents:
         - 'ball.Ball.*'

@@ -1,7 +1,8 @@
 """
-Defines a 2d Point along
+Defines a 2d Point
 
 Supports:
+
 - addition
 - subtaction
 - multiplication

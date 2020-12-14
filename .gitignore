@@ -1,5 +1,6 @@
 .direnv
 __pycache__
+docs/build
 dist/Fifa-42.exe
 build/Fifa-42/xref-Fifa-42.html
 build/Fifa-42/warn-Fifa-42.txt

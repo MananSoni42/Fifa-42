@@ -2,10 +2,11 @@
 Manage game statistics
 
 Currently tracks:
+
 - Possession
 - Number of goals scored
 - Pass accuracy
-- Shot accuracy
+- Shot accuracy  
 """
 
 class Stats(object):

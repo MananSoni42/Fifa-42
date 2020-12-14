@@ -2,6 +2,7 @@
 Game specific functions and constants
 
 Includes:
+
 - the actions that a player can take
 - possible formations
 - recolor a player sprite

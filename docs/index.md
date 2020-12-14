@@ -14,13 +14,13 @@ Instructions:
 * Running into opponent players causes both of you to be thrown back and lose possession of the ball
 
 ### Controls
-  Key                  | Action                    
-  -------------------- | --------------------------
-  Arrow keys           | Move the (selected) player
-  Q,W,E - A,D - Z,X,C  | Shoot the ball
-  ESC                  | Bring up / Collapse Pause menu
-  SPACE                | Toggle if teams maintain formation
-  BACKSPACE            | Quit and return to main menu
+  | Key                  | Action                             |
+  | -------------------- | ---------------------------------- |
+  | Arrow keys           | Move the (selected) player         |
+  | Q,W,E - A,D - Z,X,C  | Shoot the ball                     |
+  | ESC                  | Bring up / Collapse Pause menu     |
+  | SPACE                | Toggle if teams maintain formation |
+  | BACKSPACE            | Quit and return to main menu       |
 
 ## Contributing
 Feel free to contribute features / point out errors. Fork this repository and make a pull request.  
