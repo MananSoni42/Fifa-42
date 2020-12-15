@@ -3,7 +3,8 @@ An 11 v 11 football game where you play against the computer. Choose your own fo
 > Automatically generated Docs are know available [here](https://manansoni42.github.io/Fifa-42/)!
 
 ## Play
-### [Windows](https://github.com/MananSoni42/Fifa-42/releases/download/v1.1.0/Fifa-42-win.zip) |  [Linux](https://github.com/MananSoni42/Fifa-42/releases/download/v1.1.0/Fifa-42-linux.zip)
+### [Windows](https://github.com/MananSoni42/Fifa-42/releases/latest/download/Fifa-42-win.zip) |  [Linux](https://github.com/MananSoni42/Fifa-42/releases/latest/download/Fifa-42-linux.zip)
+
 ```
 Instructions:
 * Download the ZIP file given below and extract it.
