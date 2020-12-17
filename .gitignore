@@ -1,4 +1,5 @@
 .direnv
+.venv
 __pycache__
 docs/build
 dist/Fifa-42.exe

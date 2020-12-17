@@ -1,135 +1,31 @@
-"""
-Contains the central game class
-
-Manages interactions with the players and the ball
-"""
-
 from settings import *
-from const import ACT
+from const import ACT, GOALS
 from ball import Ball
-from stats import Stats
-from pygame import mixer
-import time
-
-
-mixer.init(44100, -16, 2, 2048)
-applause = mixer.Sound(APPLAUSE)
-kick = mixer.Sound(KICK)
-single_short_whistle = mixer.Sound(SINGLE_SHORT_WHISTLE)
-single_long_whistle = mixer.Sound(SINGLE_LONG_WHISLTE)
-three_whistles = mixer.Sound(THREE_WHISTLES)
-applause = mixer.Sound(APPLAUSE)
-
+from math import sin,cos,pi
 
 class Game:
     """ Class that controls the entire game """
+    def __init__(self, team_human, team_ai):
+        self.team_human = team_human
+        self.team_ai = team_ai
+        self.ball = Ball(pos=(W/2, H/2))
+        self.end = False # True when the game ends (never probably)
 
-    def __init__(self, team1, team2, sound=True, difficulty=0.6):
-        """
-        Initializes the game
-
-        Attributes:
-            team1 (Team): Right-facing team
-            team2 (Team): Left-facing team
-            sound (bool): Enable / Disable in-game sounds
-            difficulty (float): Game difficulty (0-1)
-        """
-        self.sound = sound
-        self.difficulty = difficulty
-        self.debug = False
-
-        self.team1 = team1
-        self.team1.init(id=1, dir='L', diff=self.difficulty)  # direction is hardcoded, don't change
-
-        self.team2 = team2
-        self.team2.init(id=2, dir='R', diff=self.difficulty)
-
-        self.ball = Ball(pos=(W//2, H//2), sound=sound)
-        self.stats = Stats()
-
-        self.end = False  # True when the game ends (never probably)
-        self.pause = False
-        self.state_prev = None
-        # game state to be passed to agents (see get_state() function)
-        self.state = None
-        self.rewards = None
-
-        if self.sound:
-            single_short_whistle.play()
-            applause.play(-1)
-
-    def check_interruptions(self):
-        """
-        Check for special keyboard buttons
-
-        Sets internal flags to pause, quit the game or run it in debug mode
-        """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # Quit
-                mixer.pause()
-                if self.sound:
-                    three_whistles.play()
-                self.end = True
-                pygame.quit()
-
-            if event.type == pygame.KEYDOWN:
-
-                if event.key == pygame.K_ESCAPE:  # Pause menu
-                    self.pause = not self.pause
-                    if self.pause:
-                        mixer.pause()
-                        if self.sound:
-                            single_long_whistle.play()
-                    else:
-                        if self.sound:
-                            single_short_whistle.play()
-                            applause.play(-1)
-
-                if event.key == pygame.K_BACKSPACE:  # Return to main menu
-                    mixer.stop()
-                    self.end = True
-
-                if event.key == pygame.K_SPACE:  # Toggle whether to maintain formation
-                    self.team1.maintain_formation = not self.team1.maintain_formation
-
-                if event.key == pygame.K_d:  # Debug mode
-                    mods = pygame.key.get_mods()
-                    if mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT and mods & pygame.KMOD_ALT:
-                        self.debug = not self.debug
-
-    def same_team_collision(self, team, free):
-        """
-        Check if current player collides with any other players of the same team
-        """
-        min_dist = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
+    def same_team_collision(self, team, actions, free):
+        """ Check if current player collides with any other players (same team) """
+        min_dist  = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
         if not free:
             min_dist.x += BALL_RADIUS
 
         for player1 in team.players:
             for player2 in team.players:
                 if player1.id != player2.id and abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
-                    xincr = 1 + PLAYER_RADIUS - \
-                        abs(player1.pos.x-player2.pos.x)//2
-                    xdir = (1, -1)
-                    yincr = 1 + PLAYER_RADIUS - \
-                        abs(player1.pos.y-player2.pos.y)//2
-                    ydir = (1, -1)
-
-                    if player1.pos.x < player2.pos.x:
-                        xdir = (-1, 1)
-                    if player1.pos.y < player2.pos.y:
-                        ydir = (-1, 1)
-
-                    player1.pos.x += xdir[0]*xincr
-                    player2.pos.x += xdir[1]*xincr
-                    player1.pos.y += ydir[0]*yincr
-                    player2.pos.y += ydir[1]*yincr
+                    player1.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player1.id]])
+                    player2.pos -= P(PLAYER_SPEED, PLAYER_SPEED)*P(ACT[actions[player2.id]])
 
     def diff_team_collision(self, team1, team2, free):
-        """
-        Check if current player collides with any other players of the opposite team
-        """
-        min_dist = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
+        """ Check if current player collides with any other players (different teams) """
+        min_dist  = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
         if not free:
             min_dist.x += BALL_RADIUS
 
@@ -138,392 +34,129 @@ class Game:
                 if abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
                     if not free:
                         self.ball.reset(self.ball.pos)
-                    xincr = 1 + 2*PLAYER_RADIUS - \
-                        abs(player1.pos.x-player2.pos.x)//2
-                    xdir = (1, -1)
-                    yincr = 1 + 2*PLAYER_RADIUS - \
-                        abs(player1.pos.y-player2.pos.y)//2
-                    ydir = (1, -1)
+                    xincr = 1 + 2*PLAYER_RADIUS - abs(player1.pos.x-player2.pos.x)/2
+                    xdir = (1,-1)
+                    yincr = 1 + 2*PLAYER_RADIUS - abs(player1.pos.y-player2.pos.y)/2
+                    ydir = (1,-1)
 
                     if player1.pos.x < player2.pos.x:
-                        xdir = (-1, 1)
+                        xdir = (-1,1)
                     if player1.pos.y < player2.pos.y:
-                        ydir = (-1, 1)
+                        ydir = (-1,1)
 
                     player1.pos.x += xdir[0]*xincr
                     player2.pos.x += xdir[1]*xincr
                     player1.pos.y += ydir[0]*yincr
                     player2.pos.y += ydir[1]*yincr
 
-    def collision(self, team1, team2, ball):
-        """
-        Handle collisions between all in-game players.
-        """
-        self.same_team_collision(team1, self.ball.free)
-        self.same_team_collision(team2, self.ball.free)
+    def collision(self, team1, act1, team2, act2, ball):
+        # Special case when ball is not free
+        self.same_team_collision(team1, act1, self.ball.free)
+        self.same_team_collision(team2, act2, self.ball.free)
         self.diff_team_collision(team1, team2, self.ball.free)
 
-    def text_draw(self, win, text, rect, align='center'):
-        """
-        Utility to draw text
-
-        Attributes:
-            win (pygame.display): window for rendering
-            text (pygame.font (rendered)): The text object
-            rect (tuple): Rectangle specified as (x, y, width, height)
-            align (string): text alignment can be one of 'left', 'right', 'center' (defaults to 'center')
-        """
+    def text_draw(self, win, text, rect):
+        center_x = rect[0] + rect[2]/2
+        center_y = rect[1] + rect[3]/2
         width = text.get_width()
         height = text.get_height()
-        center_x = round(rect[0] + rect[2]/2)
-        center_y = round(rect[1] + rect[3]/2)
+        win.blit(text, (center_x - width/2, center_y - height/2))
 
-        if align == 'left':
-            final_rect = (round(rect[0]), round(center_y - height/2))
-        elif align == 'right':
-            final_rect = (round(rect[0] + rect[2] - width), round(center_y - height/2))
-        else:  # Center
-            final_rect = (round(center_x - width/2), round(center_y - height/2))
-        win.blit(text, final_rect)
-
-    def goal_draw(self, win):
-        """
-        Display the current score (goals for each side)
-        """
-        #""" Show game score """
-        goal1_rect = (W//2 - GOAL_DISP_SIZE - 2*LINE_WIDTH,
-                      0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
-        goal2_rect = (W//2 + 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
-        goal_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
+    def goal_draw(self,win):
+        """ Show game score """
+        goal1_rect = (W/2 - GOAL_DISP_SIZE - 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
+        goal2_rect = (W/2 + 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
+        goal_font = pygame.font.Font(FONT_PATH, FONT_SIZE)
 
         pygame.draw.rect(win, (255, 255, 255), goal1_rect)
         pygame.draw.rect(win, (255, 255, 255), goal2_rect)
-        text = goal_font.render(str(self.stats.goals[1]), True, (0, 0, 0))
+        text = goal_font.render(str(GOALS[1]), True, (0,0,0))
         self.text_draw(win, text, goal1_rect)
-        text = goal_font.render(str(self.stats.goals[2]), True, (0, 0, 0))
+        text = goal_font.render(str(GOALS[2]), True, (0,0,0))
         self.text_draw(win, text, goal2_rect)
 
-    def field_draw(self, win, hints):
-        """
-        Draw the football pitch
+    def line_draw(self, p1, p2):
+        glBegin(GL_LINES)
+        glVertex3f(p1.x/SCALE, GY + .1, p1.y/SCALE)
+        glVertex3f(p2.x/SCALE, GY + .1, p2.y/SCALE)
+        glEnd();
 
-        Attributes:
-            win (pygame.display): window for rendering
-            hints (bool): If (movement-based) hints are to be shown
-        """
-        win.fill((14, 156, 23))  # constant green
-
-        pygame.draw.rect(win, (255, 255, 255), (0, 0, W -
-                                                LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH)  # border
-
-        pygame.draw.rect(win, (255, 255, 255),
-                         (W//2 - LINE_WIDTH//2, 0, LINE_WIDTH, H))  # mid line
-        pygame.draw.circle(win, (255, 255, 255), (W//2, H//2),
-                           H//5, LINE_WIDTH)  # mid circle
-
-        pygame.draw.rect(win, (255, 255, 255), (4*0.2*W-LINE_WIDTH //
-                                                2, 0.1*H, 0.2*W, 0.8*H), LINE_WIDTH)  # right D
-        pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2,
-                                                0.1*H, 0.2*W, 0.8*H), LINE_WIDTH)  # left D
-
-        pygame.draw.rect(win, (255, 255, 255), (19*0.05*W-LINE_WIDTH//2,
-                                                GOAL_POS[0]*H, 0.05*W, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH)  # right penalty
-        pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2,
-                                                GOAL_POS[0]*H, 0.05*W, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH)  # left penalty
-
-        pygame.draw.rect(win, self.team2.color, (W - 3*LINE_WIDTH,
-                                                 GOAL_POS[0]*H, 3*LINE_WIDTH, (GOAL_POS[1]-GOAL_POS[0])*H))  # right goal
-        pygame.draw.rect(win, self.team1.color, (0,
-                                                 GOAL_POS[0]*H, 3*LINE_WIDTH, (GOAL_POS[1]-GOAL_POS[0])*H))  # left goal
-
-        if hints:
-            field_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2)
-            text_esc = field_font.render('Esc: pause', True, (0, 100, 0))
-            text_back = field_font.render(
-                'Backspace: return to menu', True, (0, 100, 0))
-            text_space = field_font.render(
-                'Space: Toggle formation', True, (0, 100, 0))
-            text_team1_form = field_font.render(
-                f'Maintain formation: {"ON" if self.team1.maintain_formation else "OFF"}', True, (0, 100, 0))
-
-            self.text_draw(win, text_esc, (W - 2*0.1*W - 3*LINE_WIDTH,
-                                           3*LINE_WIDTH, 2*0.1*W, 0.05*H), align='right')
-            self.text_draw(win, text_space, (W - 3*0.1*W - 3*LINE_WIDTH,
-                                             3*LINE_WIDTH, 2*0.1*W, 0.05*H), align='left')
-            self.text_draw(win, text_back, (W - 0.2*W - 3*LINE_WIDTH,
-                                            3*LINE_WIDTH + 0.05*H, 0.2*W, 0.05*H), align='left')
-            self.text_draw(win, text_team1_form, (3*LINE_WIDTH,
-                                                  3*LINE_WIDTH, 0.2*W, 0.05*H), align='left')
-
-            if self.debug:
-                pygame.draw.circle(win, (0, 200, 100), (0, H//2),
-                                   AI_SHOOT_RADIUS, LINE_WIDTH)  # AI Shoot radius
-                pygame.draw.circle(win, (0, 200, 100), (W, H//2),
-                                   AI_SHOOT_RADIUS, LINE_WIDTH)  # AI shoot radius
-                text_debug = field_font.render(
-                    f'Developer mode: ON', True, (0, 100, 0))
-                self.text_draw(win, text_debug, (3*LINE_WIDTH, 3*LINE_WIDTH +
-                                                 0.05*H, 0.2*W, 0.05*H), align='left')  # Developer model
-
-    def draw(self, win, hints=True):
-        """
-        Draw the entire game
-
-        Calls ```field_draw()``` along with the ```draw()``` methods for each team and the ball
-        """
-        self.field_draw(win, hints=hints)
-        if hints:
-            self.goal_draw(win)
-        self.team1.draw(win, debug=self.debug)
-        self.team2.draw(win, debug=self.debug)
-        self.ball.draw(win, debug=self.debug)
-
-    def practice_instr_draw(self, win):
-        """
-        Draw the practice game instructions (shows extra hints and keyboard controls)
-        """
-        title_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
-        title_text = title_font.render('PRACTICE', True, (0, 100, 0))
-        self.text_draw(win, title_text, (0, 0, W, 0.01*H))
-
-        field_font = pygame.font.Font(FONT_MONO, FONT_SIZE//2)
-        text_shoot1 = field_font.render('       Q W E', True, (0, 100, 0))
-        text_shoot2 = field_font.render('Shoot: A   D', True, (0, 100, 0))
-        text_shoot3 = field_font.render('       Z X C', True, (0, 100, 0))
-        text_move = field_font.render(f'Move: Arrow keys', True, (0, 100, 0))
-
-        self.text_draw(win, text_move, (3*LINE_WIDTH,
-                                        3*LINE_WIDTH, 0.2*W, 0.05*H))
-        self.text_draw(win, text_shoot1, (3*LINE_WIDTH + 0.2*W, 3 *
-                                          LINE_WIDTH, 2*0.1*W + 2*LINE_WIDTH, 0.05*H), align='left')
-        self.text_draw(win, text_shoot2, (3*LINE_WIDTH + 0.2*W, 3 *
-                                          LINE_WIDTH + 0.05*H, 2*0.1*W + 2*LINE_WIDTH, 0.05*H), align='left')
-        self.text_draw(win, text_shoot3, (3*LINE_WIDTH + 0.2*W, 3*LINE_WIDTH +
-                                          2*0.05*H, 2*0.1*W + 2*LINE_WIDTH, 0.05*H), align='left')
-
-    def bar_draw(self, win, dim, w0, h0, w, h, col, val, debug_text, invert=False):
-        """
-        Draw a bar in the pause menu (for statistics)
-
-        Attributes:
-            win: Main window used for all drawing
-            dim ([int]): extra dimensions for the pause menu
-            w0 (int): x coordinate of the bar's top left point
-            h0 (int): y coordinate of the bar's top left point
-            w (int): width of the bar
-            h (int): height of the bar
-            col ([int]): color of the bar (RGB tuple)
-            val (float): % of the bar to fill (between 0 and 1)
-            debug_text (str): Text to display in debug mode
-            invert (bool): Flip the bar left to right
-        """
-
-        W_, H_, W0, H0, pad, min_len = dim
-        inv_col = (255-col[0], 255-col[1], 255-col[2])
-
-        if self.debug:
-            text = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//3).render(
-                debug_text, True, inv_col)
+    def rect_draw(self, p, len, h, fill=False):
+        x,y,z = p.x/SCALE, GY + h/SCALE/2 + 2 ,p.y/SCALE
+        tx,ty,tz = (len.x/SCALE/2, h/SCALE, len.y/SCALE/2)
+        cubeVertices = ((x+tx,y+ty,z+tz),(x+tx,y+ty,z-tz),(x+tx,y-ty,z-tz),(x+tx,y-ty,z+tz),(x-tx,y+ty,z+tz),(x-tx,y-ty,z-tz),(x-tx,y-ty,z+tz),(x-tx,y+ty,z-tz))
+        cubeEdges = ((0,1),(0,3),(0,4),(1,2),(1,7),(2,5),(2,3),(3,6),(4,6),(4,7),(5,6),(5,7))
+        cubeQuads = ((0,3,6,4),(2,5,6,3),(1,2,5,7),(1,0,4,7),(7,4,6,5),(2,3,0,1))
+        if fill:
+            glBegin(GL_QUADS)
         else:
-            text = pygame.font.Font(
-                FONT_ROBOTO, FONT_SIZE//3).render(
-                f'{round(100*val)}%', True, inv_col)
+            glBegin(GL_LINES)
+        for cubeEdge in cubeEdges:
+            for cubeVertex in cubeEdge:
+                glVertex3fv(cubeVertices[cubeVertex])
+        glEnd()
 
-        if int(val*w) > min_len:
-            if invert:
-                pygame.draw.rect(win, col, (round(w0 + w*(1-val)), round(h0),
-                                    round(val*w), round(h)))
-                self.text_draw(win, text, (round(w0 + w*(1-val)), round(h0),
-                                    round(val*w), round(h)))
+    def circle_draw(self, p, radius):
+        sides = 100
+        radius = radius/SCALE
+        glBegin(GL_LINE_LOOP)
+        for i in range(sides):
+            cosine = radius * cos(i*2*pi/sides) + p.x/SCALE
+            sine   = radius * sin(i*2*pi/sides) + p.y/SCALE
+            glVertex3f(cosine, GY+.1, sine)
+        glEnd()
 
-            else:
-                pygame.draw.rect(win, col, (round(w0), round(h0),
-                                    round(val*w), round(h)))
-                self.text_draw(win, text, (round(w0), round(h0),
-                                    round(val*w), round(h)))
+    def field_draw(self,win):
+        # Draw the football pitch
+        #win.blit(BACKGROUND_IMG, (0, 0)) # grass
+        #win.fill((14, 156, 23)) # constant green
+        self.ground_draw(win)
 
-        pygame.draw.rect(win, (0, 0, 0), (round(w0), round(h0),
-                                round(w), round(h)), LINE_WIDTH)
+        glColor3fv((1,1,1))
+        self.line_draw(P(W/2,H), P(W/2,0)) # mid-line
+        self.circle_draw(P(W/2,H/2), W/8) # mid-circle
+        #self.circle_draw(P(W/2,H/2), BALL_RADIUS) # mid-line
 
-    def bar_label_draw(self, win, dim, w0, h0, w, h, text):
+        self.rect_draw(P(W/20, (GOAL_POS[0]+GOAL_POS[1])*H/2), P(W/10, (GOAL_POS[1]-GOAL_POS[0])*H), h=10) # goal-1
+        self.rect_draw(P(19*W/20, (GOAL_POS[0]+GOAL_POS[1])*H/2), P(W/10, (GOAL_POS[1]-GOAL_POS[0])*H), h=10) # goal-2
+
+        self.rect_draw(P(3*W/20, H/2), P(3*W/10, 3*H/4), h=0) # D-1
+        self.rect_draw(P(17*W/20, H/2), P(3*W/10, 3*H/4), h=0) # D-2
+
+        # Borders
+        glColor3fv((0.5,0.5,0.5))
+        self.rect_draw(P(W/2, -0.05), P(W, .1), h=50, fill=True)
+        self.rect_draw(P(-0.05, H/2), P(.1, H), h=50, fill=True)
+        self.rect_draw(P(W+0.05, H/2), P(.1, H), h=50, fill=True)
+
+    def ground_draw(self,win):
+        ground_surfaces = (0,1,2,3)
+        ground_vertices = ((0,GY,GZ), (GX,GY,GZ), (GX,GY,0), (0,GY,0))
+
+        glBegin(GL_QUADS)
+        glColor3fv((0,1,0))
+        for vertex in ground_vertices:
+            glVertex3fv(vertex)
+        glEnd()
+
+    def draw(self, win, debug=False):
+        """ Draw everything """
+        #self.ground_draw(win)
+        self.field_draw(win)
+        #self.goal_draw(win)
+        self.team_human.draw(win, debug=debug)
+        self.team_ai.draw(win, debug=debug)
+        self.ball.draw(win, debug=debug)
+
+    def next(self, a_h,a_ai):
         """
-        Draw the label of a bar in the pause menu (for statistics)
-
-        Attributes:
-            win: Main window used for all drawing
-            dim ([int]): extra dimensions for the pause menu
-            w0 (int): x coordinate of the bar's top left point
-            h0 (int): y coordinate of the bar's top left point
-            w (int): width of the bar
-            h (int): height of the bar
-            text (str): Text to display in the label
+        Next loop that is the heart of the game
+         - a (list): Actions of each player in the team
         """
-
-        W_, H_, W0, H0, pad, min_len = dim
-
-        text_pos = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2).render(text, True, (255, 255, 255))
-        self.text_draw(win, text_pos, (w0, h0, w, h))
-
-    def pause_box_draw(self, win, dim):
-        """
-        Draw the skeleton of the pause menu (bg, title, exit button)
-
-        Attributes:
-            win: Main window used for all drawing
-            dim ([int]): extra dimensions for the pause menu
-        """
-
-        W_, H_, W0, H0, pad, min_len = dim
-
-        # background and border
-        pygame.draw.rect(win, (42, 42, 42), (W0, H0, W_ -
-                                             LINE_WIDTH, H_ - LINE_WIDTH))  # border
-        # Title
-        text_title = pygame.font.Font(FONT_ROBOTO, FONT_SIZE).render(
-            "Pause Menu", True, (255, 255, 255))
-        self.text_draw(win, text_title, (W0 + pad, H0 +
-                                         0.05*H_, W_ - pad, 0.04*H_))
-
-        # Exit button
-        text_close1 = pygame.font.Font(
-            FONT_ROBOTO, FONT_SIZE).render("x", True, (255, 0, 0))
-        text_close2 = pygame.font.Font(
-            FONT_ROBOTO, FONT_SIZE//5).render("(ESCAPE)", True, (255, 0, 0))
-        self.text_draw(win, text_close1, (W0 + 9*0.1*W_ - pad,
-                                          H0 + 0.03*H_, 0.1*W_, 0.05*H))
-        self.text_draw(win, text_close2, (W0 + 9*0.1*W_ - pad,
-                                          H0 + 0.08*H_, 0.1*W_, 0.05*H))
-
-    def pause_draw(self, win):
-        """
-        Draw the pause menu
-
-        Displays statistics for possession, pass accuracy and shot accuracy
-        """
-        W_, H_ = int(0.8*W), int(0.8*H)
-        W0, H0 = int(0.1*W), int(0.1*H)
-
-        pad = W_*0.02
-        min_len = W_*0.01
-
-        dim = [W_, H_, W0, H0, pad, min_len] # extra dimensions for the pause menu
-
-        self.pause_box_draw(win, dim)
-
-        # Possession
-        pos = self.stats.get_possession()
-
-        self.bar_label_draw(win, dim,
-            W0, H0 + 0.15*H_, W_, 0.1*H_,
-            "POSSESSION")
-
-        self.bar_draw(win, dim, # team 1
-            W0 + pad, H0 + 0.25*H_, (W_ - 2*pad)/2, 0.05*H_,
-            col=self.team1.color, val=pos[0],
-            debug_text=f'{int(round(100*pos[0],0))} ({self.stats.pos[1]})')
-
-        self.bar_draw(win, dim, # team 2
-            W0 + W_/2, H0 + 0.25*H_, (W_ - 2*pad)/2, 0.05*H_,
-            col=self.team2.color, val=pos[1], invert=True,
-            debug_text=f'{int(round(100*pos[1],0))} ({self.stats.pos[2]})')
-
-        # Pass accuracy
-        pa = self.stats.get_pass_acc()
-
-        self.bar_label_draw(win, dim,
-            W0, H0 + 0.35*H_, W_, 0.1*H_,
-            "PASS ACCURACY")
-
-        self.bar_draw(win, dim, # team 1
-            W0 + pad, H0 + 0.45*H_, (W_ - 2*pad)/2, 0.05*H_,
-            col=self.team1.color, val=pa[0],
-            debug_text=f'{int(round(100*pa[0],0))} ({self.stats.pass_acc[1]["succ"]}/{self.stats.pass_acc[1]["succ"]+self.stats.pass_acc[1]["fail"]})')
-
-        self.bar_draw(win, dim, # team 2
-            W0 + W_/2, H0 + 0.45*H_, (W_ - 2*pad)/2, 0.05*H_,
-            col=self.team2.color, val=pa[1], invert=True,
-            debug_text=f'{int(round(100*pa[1],0))} ({self.stats.pass_acc[2]["succ"]}/{self.stats.pass_acc[2]["succ"]+self.stats.pass_acc[2]["fail"]})')
-
-        # Shot accuracy
-        sa = self.stats.get_shot_acc()
-
-        self.bar_label_draw(win, dim,
-            W0, H0 + 0.55*H_, W_, 0.1*H_,
-            "SHOT ACCURACY")
-
-        self.bar_draw(win, dim, # team 1
-            W0 + pad, H0 + 0.65*H_, (W_ - 2*pad)/2, 0.05*H_,
-            col=self.team1.color, val=sa[0],
-            debug_text=f'{int(round(100*sa[1],0))} ({self.stats.shot_acc[2]["succ"]}/{self.stats.shot_acc[2]["succ"]+self.stats.shot_acc[2]["fail"]})')
-
-        self.bar_draw(win, dim, # team 2
-            W0 + W_/2, H0 + 0.65*H_, (W_ - 2*pad)/2, 0.05*H_,
-            col=self.team2.color, val=sa[1], invert=True,
-            debug_text=f'{int(round(100*sa[1],0))} ({self.stats.shot_acc[2]["succ"]}/{self.stats.shot_acc[2]["succ"]+self.stats.shot_acc[2]["fail"]})')
-
-    def get_state(self):
-        """
-        Create a state object that summarizes the entire game
-
-        ```
-        state = {
-            'team1': {
-                'players' # list of the team player's coordinates
-                'goal_x' # The x-coordinate of their goal post
-            },
-            'team2': {
-                'players' # list of the team player's coordinates
-                'goal_x' # The x-coordinate of their goal post
-            },
-            'ball' # Position of the ball
-        }
-        ```
-        """
-        pos1 = [player.pos for player in self.team1.players]
-        pos2 = [player.pos for player in self.team2.players]
-        return {
-            'team1': {
-                'players': self.team1.players,
-                'goal_x': self.team1.goal_x,
-            },
-            'team2': {
-                'players': self.team2.players,
-                'goal_x': self.team2.goal_x,
-            },
-            'ball': self.ball,
-        }
-
-    def next(self):
-        """
-        Move the game forward by 1 frame
-
-        Passes state objects to the teams and pass their actions to ```move_next()```
-        """
-        a1 = self.team1.move(self.state_prev, self.state, self.rewards)
-        a2 = self.team2.move(self.state_prev, self.state, self.rewards)
-        self.state_prev, self.state, self.rewards = self.move_next(a1, a2)
-
-    def move_next(self, a1, a2):
-        """
-        Update the players' and ball's internal state based on the teams' actions
-
-        Attributes:
-            a1 (list): list of actions (1 for each player) in team 1
-            a2 (list): list of actions (1 for each player) in team 2
-
-        Each action must be a key in the ```ACT``` dictionary found in ```const.py```
-        """
-
-        state_prev = self.get_state()
-
-        self.team1.update(a1, self.ball)  # Update team's state
-        self.team2.update(a2, self.ball)
-
-        # Check for collision between players
-        self.collision(self.team1, self.team2, self.ball)
-
-        self.ball.update(self.team1, self.team2, a1, a2,
-                         self.stats)  # Update ball's state
-
-        state = self.get_state()
-        return state_prev, state, 0
+        self.team_human.update(a_h) # Update team's state
+        self.team_ai.update(a_ai) # Update team's state
+        self.collision(self.team_human, a_h, self.team_ai, a_ai, self.ball)
+        self.ball.update(self.team_human, self.team_ai, a_h, a_ai) # Update ball's state
+        self.ball.goal_check() # Check if a goal is scoread
+        self.team_human.set_nearest(self.ball) # select nearest human player
+        return 0,0
