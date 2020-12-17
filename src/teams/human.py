@@ -3,10 +3,10 @@ Create a Human team i.e. controlled by the keyboard
 """
 
 from settings import *
+from math import sin,cos,pi
 from const import ACT, FORM
 from teams.agent import Agent
 from teams.team import Team
-
 
 class HumanAgent(Agent):
     """
@@ -15,11 +15,16 @@ class HumanAgent(Agent):
 
     def draw(self, win, team_id, selected=False, debug=False):
         """
-        Draw the human agent. Also draws a red circle on top of the selected player
+        Draw the human agent. Also draws a red triangle on top of the selected player
         """
         if selected:
-            pygame.draw.circle(win, (255, 0, 0), (self.pos -
-                                                  P(0, 1.5)*P(0, PLAYER_RADIUS)).val, 5)  # mid circle
+            pt = self.pos - P(0, 1.5)*P(0, PLAYER_RADIUS)
+            R = P(PLAYER_SELECT_RADIUS, PLAYER_SELECT_RADIUS)
+            pygame.draw.polygon(win, (255, 0, 0),
+                [(pt + R*P(cos(-1*pi/6), sin(-1*pi/6))).val,
+                 (pt + R*P(cos(-5*pi/6), sin(-5*pi/6))).val,
+                 (pt + R*P(cos(-9*pi/6), sin(-9*pi/6))).val],
+            ) # Triangle
         super().draw(win, team_id, debug=debug)
 
     def move(self, state_prev, state, reward):

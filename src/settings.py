@@ -35,6 +35,7 @@ W = get_monitors()[0].width  # Width
 H = get_monitors()[0].height  # Height
 FPS = 42
 
+PLAYER_SELECT_RADIUS = 5
 PLAYER_SPEED = 3
 PLAYER_RADIUS = 20
 PLAYER_CENTER = P(PLAYER_RADIUS, PLAYER_RADIUS)
