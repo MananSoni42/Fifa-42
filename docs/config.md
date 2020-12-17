@@ -25,6 +25,6 @@ pip install -r requirements.txt
 - Play the game with Python
 > Ensure that you are inside the Fifa-42/src directory
 ```
-python3 driver.py
+python3 play.py
 ```
 Done! Now you can make your own changes to the game.

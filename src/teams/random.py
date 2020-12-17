@@ -3,7 +3,7 @@ Create a random team i.e. team where each agent takes a random action (used for 
 """
 
 from settings import *
-from const import ACT
+from const import ACT,FORM
 from teams.agent import Agent
 from teams.team import Team
 
@@ -28,7 +28,7 @@ class RandomTeam(Team):
     A team of random agents
     """
 
-    def set_players(self, ids=list(range(NUM_TEAM))):
+    def set_players(self, ids):
         self.players = []
         for i in range(NUM_TEAM):
             if i in ids:

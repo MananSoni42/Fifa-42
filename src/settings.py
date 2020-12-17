@@ -6,14 +6,14 @@ Defines image / sound paths and all constants used in the game
 Can be freely changed
 """
 
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from point import P
 from screeninfo import get_monitors
 import pygame
 import random
 import math
-import os
 import sys
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 """
 Settings and paths
@@ -50,7 +50,7 @@ LINE_WIDTH = 2
 ANIM_NUM = 7  # Number of images used for running animation
 WALK_DELAY = 3  # Change walking sprite after this many presses
 
-# Orginal AI related - Difficulty (between 0 and 1) - Easy (0.1) | Medium (0.4) | Hard (0.8)
+# Orginal AI related - Difficulty (between 0 and 1) - Easy (0.1) | Medium (0.5) | Hard (0.8)
 AI_FAR_RADIUS = lambda diff: round((2 + 11*diff)*PLAYER_RADIUS) # Far radius to look for ball
 AI_NEAR_RADIUS = lambda diff: round((2 + 2*diff)*PLAYER_RADIUS) # Near radius to ward off enemy players
 AI_SHOOT_RADIUS = W//4  # Dist from center of goal post within which AI starts shooting

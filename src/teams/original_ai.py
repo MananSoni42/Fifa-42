@@ -401,7 +401,7 @@ class OriginalAITeam(Team):
     The AI team used in the original (C++) version
     """
 
-    def set_players(self, ids=list(range(NUM_TEAM))):
+    def set_players(self, ids):
         self.players = []
         for i in range(NUM_TEAM):
             if i in ids:

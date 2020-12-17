@@ -47,12 +47,12 @@ class Menu:
     The game menu. Configure the game the way you want to
     """
 
-    def __init__(self, win, team1, team2):
+    def __init__(self, win, team1, team2, sound, diff):
         self.win = win
         self.team1 = team1
         self.team2 = team2
-        self.sound = True
-        self.difficulty = 0.6
+        self.sound = sound
+        self.difficulty = diff
 
     def create_about_menu(self):
         about_menu = pygame_menu.Menu(H, W, ' About',
@@ -160,7 +160,7 @@ class Menu:
             'Difficulty', [(f'{i}%', i) for i in range(10,100+10,10)], default=5, onchange=set_difficulty)
 
         sett_menu.add_selector(
-            'Sound', [('ON', True), ('OFF', False)], default=0, onchange=self.set_menu_sound)
+            'Sound', [('ON', True), ('OFF', False)], default=int(self.sound), onchange=self.set_menu_sound)
         sett_menu.add_vertical_margin(V_PAD)
 
         sett_menu.add_button('Back', pygame_menu.events.BACK)
@@ -212,7 +212,7 @@ class Menu:
         # Apply on menu and all sub-menus
         main_menu.set_sound(engine, recursive=True)
 
-        main_menu.add_button('Play', lambda: play(sound=self.sound, difficulty=self.difficulty))
+        main_menu.add_button('Play', lambda: play(self.win, self.team1, self.team2, sound=self.sound, difficulty=self.difficulty))
         main_menu.add_button('Practice', practice)
         main_menu.add_button('Instructions', self.create_instr_menu())
         main_menu.add_button('Choose formation', self.create_form_menu())
@@ -254,3 +254,8 @@ class Menu:
             mixer.stop()
             menu_music.play(-1)
         self.main_menu.mainloop(self.win, bgfun=self.draw_bg)  # Show the menu
+
+def play_menu(win, team1, team2, play, practice, sound, difficulty):
+    game_menu = Menu(win, team1, team2, sound=sound, diff=difficulty/100)
+    game_menu.create_main_menu(play, practice)
+    game_menu.start()

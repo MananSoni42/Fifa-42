@@ -1,7 +1,7 @@
 """
 Driver program
 
-Use this to play the game 
+Use this to play the game
 """
 
 import time
@@ -9,10 +9,13 @@ from settings import *
 from pygame import mixer
 import pygame_menu
 from game import Game
-from teams.no import NoTeam
 from teams.human import HumanTeam
 from teams.original_ai import OriginalAITeam
-from menu import Menu
+from teams.random import RandomTeam
+from menu import Menu, play_menu
+from args import get_args
+
+args = get_args()
 
 pygame.init()
 win = pygame.display.set_mode((W, H), pygame.FULLSCREEN)
@@ -24,14 +27,16 @@ mixer.init(44100, -16, 2, 2048)
 menu_music = mixer.Sound(MENU_MUSIC)
 
 # Define teams (Team 1 faces right by default)
-team1 = HumanTeam(formation='default', color=(0, 32, 255))
-team2 = OriginalAITeam(formation='balanced-1', color=(255, 128, 0))
-no_team = NoTeam()
+team1 = HumanTeam(formation=args.team1_form, color=(0, 32, 255))
+if args.opponent == 'AI':
+    team2 = OriginalAITeam(formation=args.team2_form, color=(255, 128, 0))
+else:
+    team2 = RandomTeam(formation=args.team2_form, color=(255, 128, 0))
 
+no_team = RandomTeam(ids=[])
 
-def play(sound, difficulty):  # Play the entire game
+def play(win, team1, team2, sound, difficulty):  # Play the entire game
     mixer.stop()
-
     game = Game(team1, team2, sound, difficulty)  # initialize the game
     """ Game loop """
     while not game.end:  # Game loop
@@ -48,8 +53,8 @@ def play(sound, difficulty):  # Play the entire game
 
         pygame.display.update()  # refresh screen
 
-    game_menu.start()  # Return to main menu
-
+    if not args.menu_off:
+        game_menu.start()  # Return to main menu
 
 def practice():
     mixer.stop()
@@ -69,8 +74,9 @@ def practice():
 
     game_menu.start()  # Return to main menu
 
-
-# The menu
-game_menu = Menu(win, team1, team2)
-game_menu.create_main_menu(play, practice)
-game_menu.start()
+# Run the game
+if args.menu_off:
+    play(win, team1, team2, sound=not args.sound_off, difficulty=args.difficulty/100)
+else:
+    play_menu(win, team1, team2, play, practice,
+            sound=not args.sound_off, difficulty=42)

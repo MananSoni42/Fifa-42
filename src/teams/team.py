@@ -18,17 +18,19 @@ class Team(ABC):
     Implement the move and set_players methods to instantiate
     """
 
-    def __init__(self, color=(0, 0, 0), formation='default'):
+    def __init__(self, color=(0, 0, 0), formation='default', ids=list(range(NUM_TEAM))):
         """
         Initialize the teams (not completely, some paramters are set using the ```init()``` method)
 
         Attributes:
             color (tuple): The RGB value of the team
             formation (string): The team's formation of the team. Must be a key of ```FORM``` from ```const.py```
+            ids ([int]): Players to include in the team (identified by their ids)
         """
         self.color = color
         self.formation = formation
         self.maintain_formation = True
+        self.ids = ids
 
     def __str__(self):
         s = f'Team {self.id}:'
@@ -57,7 +59,7 @@ class Team(ABC):
         else:
             self.goal_x = W
 
-        self.set_players()
+        self.set_players(self.ids)
         self.set_color()
 
     def set_color(self):
