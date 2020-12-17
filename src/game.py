@@ -31,6 +31,8 @@ class Game:
         Attributes:
             team1 (Team): Right-facing team
             team2 (Team): Left-facing team
+            sound (bool): Enable / Disable in-game sounds
+            difficulty (float): Game difficulty (0-1)
         """
         self.sound = sound
         self.difficulty = difficulty
@@ -277,6 +279,9 @@ class Game:
         self.ball.draw(win, debug=self.debug)
 
     def practice_instr_draw(self, win):
+        """
+        Draw the practice game instructions (shows extra hints and keyboard controls)
+        """
         title_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
         title_text = title_font.render('PRACTICE', True, (0, 100, 0))
         self.text_draw(win, title_text, (0, 0, W, 0.01*H))
@@ -297,6 +302,21 @@ class Game:
                                           2*0.05*H, 2*0.1*W + 2*LINE_WIDTH, 0.05*H), align='left')
 
     def bar_draw(self, win, dim, w0, h0, w, h, col, val, debug_text, invert=False):
+        """
+        Draw a bar in the pause menu (for statistics)
+
+        Attributes:
+            win: Main window used for all drawing
+            dim ([int]): extra dimensions for the pause menu
+            w0 (int): x coordinate of the bar's top left point
+            h0 (int): y coordinate of the bar's top left point
+            w (int): width of the bar
+            h (int): height of the bar
+            col ([int]): color of the bar (RGB tuple)
+            val (float): % of the bar to fill (between 0 and 1)
+            debug_text (str): Text to display in debug mode
+            invert (bool): Flip the bar left to right
+        """
 
         W_, H_, W0, H0, pad, min_len = dim
         inv_col = (255-col[0], 255-col[1], 255-col[2])
@@ -326,12 +346,33 @@ class Game:
                                 round(w), round(h)), LINE_WIDTH)
 
     def bar_label_draw(self, win, dim, w0, h0, w, h, text):
+        """
+        Draw the label of a bar in the pause menu (for statistics)
+
+        Attributes:
+            win: Main window used for all drawing
+            dim ([int]): extra dimensions for the pause menu
+            w0 (int): x coordinate of the bar's top left point
+            h0 (int): y coordinate of the bar's top left point
+            w (int): width of the bar
+            h (int): height of the bar
+            text (str): Text to display in the label
+        """
+
         W_, H_, W0, H0, pad, min_len = dim
 
         text_pos = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2).render(text, True, (255, 255, 255))
         self.text_draw(win, text_pos, (w0, h0, w, h))
 
     def pause_box_draw(self, win, dim):
+        """
+        Draw the skeleton of the pause menu (bg, title, exit button)
+
+        Attributes:
+            win: Main window used for all drawing
+            dim ([int]): extra dimensions for the pause menu
+        """
+
         W_, H_, W0, H0, pad, min_len = dim
 
         # background and border
@@ -355,7 +396,7 @@ class Game:
 
     def pause_draw(self, win):
         """
-        Draw the pause
+        Draw the pause menu
 
         Displays statistics for possession, pass accuracy and shot accuracy
         """
@@ -422,7 +463,7 @@ class Game:
 
     def get_state(self):
         """
-        Create a state object that summarized the entire game
+        Create a state object that summarizes the entire game
 
         ```
         state = {
