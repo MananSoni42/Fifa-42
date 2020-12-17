@@ -255,7 +255,7 @@ class Menu:
             menu_music.play(-1)
         self.main_menu.mainloop(self.win, bgfun=self.draw_bg)  # Show the menu
 
-def play_menu(win, team1, team2, play, practice, sound, difficulty):
+def play_with_menu(win, team1, team2, play, practice, sound, difficulty):
     game_menu = Menu(win, team1, team2, sound=sound, diff=difficulty/100)
     game_menu.create_main_menu(play, practice)
     game_menu.start()

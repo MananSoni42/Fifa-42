@@ -12,7 +12,7 @@ from game import Game
 from teams.human import HumanTeam
 from teams.original_ai import OriginalAITeam
 from teams.random import RandomTeam
-from menu import Menu, play_menu
+from menu import play_with_menu
 from args import get_args
 
 args = get_args()
@@ -40,7 +40,7 @@ def play(win, team1, team2, sound, difficulty):  # Play the entire game
     game = Game(team1, team2, sound, difficulty)  # initialize the game
     """ Game loop """
     while not game.end:  # Game loop
-        clock.tick(FPS)  # FPS
+        clock.tick(args.fps)  # FPS
 
         game.check_interruptions()  # Check for special keys (quit, pause, etc)
 
@@ -62,7 +62,7 @@ def practice():
     game = Game(team1, no_team, sound=False)  # initialize the game
     """ Game loop """
     while not game.end:  # Game loop
-        clock.tick(FPS)  # FPS
+        clock.tick(args.fps)  # FPS
 
         game.check_interruptions()  # Check for special keys (quit, pause, etc)
 
@@ -78,5 +78,5 @@ def practice():
 if args.menu_off:
     play(win, team1, team2, sound=not args.sound_off, difficulty=args.difficulty/100)
 else:
-    play_menu(win, team1, team2, play, practice,
+    play_with_menu(win, team1, team2, play, practice,
             sound=not args.sound_off, difficulty=42)

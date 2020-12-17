@@ -33,7 +33,6 @@ NUM_TEAM = 11  # Number of players in a team
 FONT_SIZE = 45
 W = get_monitors()[0].width  # Width
 H = get_monitors()[0].height  # Height
-FPS = 42
 
 PLAYER_SELECT_RADIUS = 5
 PLAYER_SPEED = 3

@@ -12,6 +12,9 @@ def get_args():
     parser.add_argument('--menu_off', action='store_true', default=False,
                         help='Play the game without displaying the menu')
 
+    parser.add_argument('--fps', type=int, default=42,
+                        help='Play the game without displaying the menu')
+
     parser.add_argument('--difficulty', type=int, choices=range(0,101),
                        metavar="[0-100]", default=42,
                        help='Game difficulty (0-100): Easy (0-10) | Medium (11-50) | Hard (51-80)')
