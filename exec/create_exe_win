@@ -6,4 +6,4 @@ python3 -OO -m PyInstaller
     --add-data "../src/assets/img/*;assets/img" ^
     --add-data "../src/assets/img/running/*;assets/img/running" ^
     --add-data "../src/assets/sounds*;assets/sounds" ^
-    ../src/driver.py
+    ../src/play.py

@@ -53,6 +53,7 @@ def play(win, team1, team2, sound, difficulty):  # Play the entire game
 
         pygame.display.update()  # refresh screen
 
+    global game_menu
     if not args.menu_off:
         game_menu.start()  # Return to main menu
 
@@ -72,11 +73,13 @@ def practice():
 
         pygame.display.update()  # refresh screen
 
+    global game_menu
     game_menu.start()  # Return to main menu
 
 # Run the game
 if args.menu_off:
     play(win, team1, team2, sound=not args.sound_off, difficulty=args.difficulty/100)
 else:
-    play_with_menu(win, team1, team2, play, practice,
+    game_menu = play_with_menu(win, team1, team2, play, practice,
             sound=not args.sound_off, difficulty=42)
+    game_menu.start()

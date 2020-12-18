@@ -258,4 +258,4 @@ class Menu:
 def play_with_menu(win, team1, team2, play, practice, sound, difficulty):
     game_menu = Menu(win, team1, team2, sound=sound, diff=difficulty/100)
     game_menu.create_main_menu(play, practice)
-    game_menu.start()
+    return game_menu
