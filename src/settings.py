@@ -57,7 +57,11 @@ AI_SHOOT_RADIUS = W//4  # Dist from center of goal post within which AI starts s
 AI_MIN_PASS_DIST = 25  # Min perpendicular distance to consider for a successfull pass
 AI_PASS_PROB = 0.95  # Probability that AI moves instead of passing
 
-
+# Camera related
+DEF_FACTOR = 5
+ZOOM_FACTOR = 7
+CAM_DEF = P(W//DEF_FACTOR, H//DEF_FACTOR) # default cameras range
+CAM_ZOOM = P(W//ZOOM_FACTOR, H//ZOOM_FACTOR) # zoomed cameras range
 ######################################
 
 
@@ -81,6 +85,7 @@ def GET_FORM_BG(team_id, formation_id): return os.path.join(
 # BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'field.png')), (W, H)) # Background (not used currently)
 FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(
     os.path.join(IMG_DIR, 'football.png')), (2*BALL_RADIUS, 2*BALL_RADIUS))
+    
 RUN = {  # Sprites that animate the running player
     1: {
         'L': {i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7)},
