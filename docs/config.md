@@ -28,3 +28,8 @@ pip install -r requirements.txt
 python3 play.py
 ```
 Done! Now you can make your own changes to the game.
+
+- Various command line arguements are available, see them using
+```
+python3 play.py --help
+```
