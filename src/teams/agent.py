@@ -36,7 +36,7 @@ class Agent(ABC):
     def __str__(self):
         return f'\nAgent {self.id} - {self.pos}'
 
-    def draw(self, win, team_id, debug=False):
+    def draw(self, win, cam, team_id, debug=False):
         """
         Draw the player as an animated sprite
 
@@ -45,12 +45,20 @@ class Agent(ABC):
             team_id (int): Required to get the correct sprite
             debug (bool): Show additional info including the player's ID and the square used to approximaate the player
         """
-        win.blit(RUN[team_id][self.walk_dir][self.walk_count //
-                                             WALK_DELAY], (self.pos - PLAYER_CENTER).val)
         if debug:
+            cam.rect(win, (255,255,255,100), (self.pos.x-PLAYER_CENTER.x, self.pos.y-PLAYER_CENTER.y, 2*PLAYER_RADIUS, 2*PLAYER_RADIUS))
             pl_font = pygame.font.Font(FONT_NEVIS, FONT_SIZE//3)
             text = pl_font.render(str(self.id), True, (0, 0, 0))
-            win.blit(text, (self.pos-PLAYER_CENTER).val)
+            text = {
+                'full': text,
+                'default': text,
+                'zoom': text,
+            }
+            cam.blit(win, text, (self.pos).val, P(FONT_SIZE//3,FONT_SIZE//3))
+
+        cam.blit(win, RUN[team_id][self.walk_dir][self.walk_count //
+                                             WALK_DELAY], (self.pos).val,
+                size=P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS).val)
 
     def update(self, action, players):
         """

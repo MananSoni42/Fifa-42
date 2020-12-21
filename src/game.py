@@ -8,6 +8,7 @@ from settings import *
 from const import ACT
 from ball import Ball
 from stats import Stats
+from camera import Camera
 from pygame import mixer
 import time
 
@@ -24,7 +25,7 @@ applause = mixer.Sound(APPLAUSE)
 class Game:
     """ Class that controls the entire game """
 
-    def __init__(self, team1, team2, sound=True, difficulty=0.6):
+    def __init__(self, team1, team2, sound=True, difficulty=0.6, cam='default'):
         """
         Initializes the game
 
@@ -46,6 +47,8 @@ class Game:
 
         self.ball = Ball(pos=(W//2, H//2), sound=sound)
         self.stats = Stats()
+
+        self.cam = Camera(self.ball.pos.x, self.ball.pos.y, mode=cam)
 
         self.end = False  # True when the game ends (never probably)
         self.pause = False
@@ -203,6 +206,31 @@ class Game:
         text = goal_font.render(str(self.stats.goals[2]), True, (0, 0, 0))
         self.text_draw(win, text, goal2_rect)
 
+    def overlay_draw(self, win):
+        scale_rect = lambda x,y,w,h: (OVER_TOP_LEFT.x + x*OVER_SIZE.x//W, OVER_TOP_LEFT.y + y*OVER_SIZE.y//H, w*OVER_SIZE.x//W, h*OVER_SIZE.y//H)
+        scale_pt = lambda x,y: (OVER_TOP_LEFT.x + x*OVER_SIZE.x//W, OVER_TOP_LEFT.y + y*OVER_SIZE.y//H)
+
+        pygame.draw.rect(win, (0, 136, 3, 100), scale_rect(0,0,W,H))
+        pygame.draw.rect(win, (255,255,255), scale_rect(0,0,W,H), LINE_WIDTH)
+        pygame.draw.rect(win, (255,255,255),
+            scale_rect(self.cam.c.x - self.cam.params['pt'].x//2, self.cam.c.y - self.cam.params['pt'].y//2,
+            self.cam.params['pt'].x, self.cam.params['pt'].y), LINE_WIDTH)
+
+        pygame.draw.rect(win, (255, 255, 255),
+                         scale_rect(W//2 - LINE_WIDTH//2, 0, LINE_WIDTH, H))  # mid line
+
+
+        for player in self.team1.players:
+            pygame.draw.circle(win, self.team1.color, scale_pt(*player.pos.val),
+                               PLAYER_RADIUS//3)
+
+        for player in self.team2.players:
+            pygame.draw.circle(win, self.team2.color, scale_pt(*player.pos.val),
+                               PLAYER_RADIUS//3)
+
+            pygame.draw.circle(win, (42,42,42), scale_pt(*(self.ball.pos + PLAYER_CENTER).val),
+                               BALL_RADIUS)
+
     def field_draw(self, win, hints):
         """
         Draw the football pitch
@@ -211,30 +239,34 @@ class Game:
             win (pygame.display): window for rendering
             hints (bool): If (movement-based) hints are to be shown
         """
-        win.fill((14, 156, 23))  # constant green
+        win.fill((0,0,0))  # constant black
+        self.cam.rect(win, (14, 156, 23), (0,0,W,H))  # green ground
 
-        pygame.draw.rect(win, (255, 255, 255), (0, 0, W -
+        self.cam.rect(win, (255, 255, 255), (0, 0, W -
                                                 LINE_WIDTH, H - LINE_WIDTH), LINE_WIDTH)  # border
 
-        pygame.draw.rect(win, (255, 255, 255),
+        self.cam.rect(win, (255, 255, 255),
                          (W//2 - LINE_WIDTH//2, 0, LINE_WIDTH, H))  # mid line
-        pygame.draw.circle(win, (255, 255, 255), (W//2, H//2),
-                           H//5, LINE_WIDTH)  # mid circle
+        self.cam.circle(win, (255, 255, 255), (W//2, H//2),
+                           H//10, LINE_WIDTH)  # mid circle
 
-        pygame.draw.rect(win, (255, 255, 255), (4*0.2*W-LINE_WIDTH //
-                                                2, 0.1*H, 0.2*W, 0.8*H), LINE_WIDTH)  # right D
-        pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2,
-                                                0.1*H, 0.2*W, 0.8*H), LINE_WIDTH)  # left D
+        self.cam.rect(win, (255, 255, 255), (0.9*W - LINE_WIDTH //
+                                                2, 0.2*H, 0.1*W, 0.6*H), LINE_WIDTH)  # right D
+        self.cam.rect(win, (255, 255, 255), (LINE_WIDTH//2,
+                                                0.2*H, 0.1*W, 0.6*H), LINE_WIDTH)  # left D
 
-        pygame.draw.rect(win, (255, 255, 255), (19*0.05*W-LINE_WIDTH//2,
+        self.cam.rect(win, (255, 255, 255), (0.95*W-LINE_WIDTH//2,
                                                 GOAL_POS[0]*H, 0.05*W, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH)  # right penalty
-        pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2,
+        self.cam.rect(win, (255, 255, 255), (LINE_WIDTH//2,
                                                 GOAL_POS[0]*H, 0.05*W, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH)  # left penalty
 
-        pygame.draw.rect(win, self.team2.color, (W - 3*LINE_WIDTH,
+        self.cam.rect(win, self.team2.color, (W - 3*LINE_WIDTH,
                                                  GOAL_POS[0]*H, 3*LINE_WIDTH, (GOAL_POS[1]-GOAL_POS[0])*H))  # right goal
-        pygame.draw.rect(win, self.team1.color, (0,
+        self.cam.rect(win, self.team1.color, (0,
                                                  GOAL_POS[0]*H, 3*LINE_WIDTH, (GOAL_POS[1]-GOAL_POS[0])*H))  # left goal
+
+        if self.cam.mode != 'full':
+            self.overlay_draw(win)
 
         if hints:
             field_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE//2)
@@ -256,9 +288,9 @@ class Game:
                                                   3*LINE_WIDTH, 0.2*W, 0.05*H), align='left')
 
             if self.debug:
-                pygame.draw.circle(win, (0, 200, 100), (0, H//2),
+                self.cam.circle(win, (0, 200, 100), (0, H//2),
                                    AI_SHOOT_RADIUS, LINE_WIDTH)  # AI Shoot radius
-                pygame.draw.circle(win, (0, 200, 100), (W, H//2),
+                self.cam.circle(win, (0, 200, 100), (W, H//2),
                                    AI_SHOOT_RADIUS, LINE_WIDTH)  # AI shoot radius
                 text_debug = field_font.render(
                     f'Developer mode: ON', True, (0, 100, 0))
@@ -274,9 +306,9 @@ class Game:
         self.field_draw(win, hints=hints)
         if hints:
             self.goal_draw(win)
-        self.team1.draw(win, debug=self.debug)
-        self.team2.draw(win, debug=self.debug)
-        self.ball.draw(win, debug=self.debug)
+        self.team1.draw(win, self.cam, debug=self.debug)
+        self.team2.draw(win, self.cam, debug=self.debug)
+        self.ball.draw(win, self.cam, debug=self.debug)
 
     def practice_instr_draw(self, win):
         """
@@ -524,6 +556,8 @@ class Game:
 
         self.ball.update(self.team1, self.team2, a1, a2,
                          self.stats)  # Update ball's state
+
+        self.cam.move(self.ball.pos.x, self.ball.pos.y)
 
         state = self.get_state()
         return state_prev, state, 0

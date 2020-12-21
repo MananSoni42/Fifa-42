@@ -35,9 +35,9 @@ else:
 
 no_team = RandomTeam(ids=[])
 
-def play(win, team1, team2, sound, difficulty):  # Play the entire game
+def play(win, team1, team2, sound, difficulty, cam):  # Play the entire game
     mixer.stop()
-    game = Game(team1, team2, sound, difficulty)  # initialize the game
+    game = Game(team1, team2, sound, difficulty, cam)  # initialize the game
     """ Game loop """
     while not game.end:  # Game loop
         clock.tick(args.fps)  # FPS
@@ -78,8 +78,8 @@ def practice():
 
 # Run the game
 if args.menu_off:
-    play(win, team1, team2, sound=not args.sound_off, difficulty=args.difficulty/100)
+    play(win, team1, team2, sound=not args.sound_off, difficulty=args.difficulty/100, cam=args.camera)
 else:
     game_menu = play_with_menu(win, team1, team2, play, practice,
-            sound=not args.sound_off, difficulty=42)
+            sound=not args.sound_off, difficulty=args.difficulty/100, cam=args.camera)
     game_menu.start()

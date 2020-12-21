@@ -67,8 +67,9 @@ class Team(ABC):
         Recolor the sprites using this team's color
         """
         for k in RUN[self.id]['L'].keys():
-            recolor(RUN[self.id]['L'][k], color=self.color)
-            recolor(RUN[self.id]['R'][k], color=self.color)
+            for key in RUN[self.id]['L'][k].keys():
+                recolor(RUN[self.id]['L'][k][key], color=self.color)
+                recolor(RUN[self.id]['R'][k][key], color=self.color)
 
     def set_formation(self, formation):
         """
@@ -82,14 +83,14 @@ class Team(ABC):
         """
         self.maintain_formation = not self.maintain_formation
 
-    def draw(self, win, debug=False):
+    def draw(self, win, cam, debug=False):
         """
         Draw the team
 
         Basically calls each players' ```draw()``` method
         """
         for player in self.players:
-            player.draw(win, team_id=self.id, debug=debug)
+            player.draw(win, cam, team_id=self.id, debug=debug)
 
     def update(self, action, ball):
         """

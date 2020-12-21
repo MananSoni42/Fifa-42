@@ -12,8 +12,9 @@ def get_args():
     parser.add_argument('--menu_off', action='store_true', default=False,
                         help='Play the game without displaying the menu')
 
-    parser.add_argument('--fps', type=int, default=42,
-                        help='Play the game without displaying the menu')
+    parser.add_argument('--camera', choices={'default', 'full', 'zoomed'},
+                        default='default',
+                        help='Camera angle')
 
     parser.add_argument('--difficulty', type=int, choices=range(0,101),
                        metavar="[0-100]", default=42,
@@ -22,6 +23,9 @@ def get_args():
     parser.add_argument('--opponent', choices={'random', 'AI'},
                         default='AI',
                         help='Choose your opponent')
+
+    parser.add_argument('--fps', type=int, default=42,
+                        help='Play the game without displaying the menu')
 
     forms = set(FORM.keys())
     parser.add_argument('--team1_form', choices=forms,
