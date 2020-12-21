@@ -12,8 +12,7 @@ Instructions:
 ```
 ### Basics
 * This is an 11v11 football game where you (Team 1) play against the computer (Team 2)
-* You control a single player (marked by a red dot on top)
-* Running into opponent players causes both of you to be thrown back and lose possession of the ball
+* You control a single player
 
 ### Controls
   Key                  | Action                    

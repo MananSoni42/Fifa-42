@@ -247,6 +247,6 @@ def draw_form(win, curr_form):
     pygame.draw.rect(win, (255, 255, 255), (LINE_WIDTH//2,
                                             GOAL_POS[0]*H, W//20, (GOAL_POS[1]-GOAL_POS[0])*H), LINE_WIDTH)  # right goal
     for pos in FORM[curr_form]['L']:
-        win.blit(RUN[1]['L'][0], (pos - PLAYER_CENTER).val)
+        win.blit(RUN[1]['L'][0]['full'], (pos - PLAYER_CENTER).val)
 
 ######################################

@@ -18,19 +18,19 @@ class OriginalAIAgent(Agent):
         super().__init__(id, team_id, pos, dir)
         self.difficulty = diff
 
-    def draw(self, win, team_id, debug=False):
+    def draw(self, win, cam, team_id, debug=False):
         """
         Draw an AI agent
 
         Also displays circles with ```AI_FAR_RADIUS``` and ```AI_NEAR_RADIUS``` when debug is True
         """
         if debug:
-            pygame.draw.circle(
+            cam.circle(
                 win, (0, 100, 0), (self.pos-PLAYER_CENTER).val, AI_NEAR_RADIUS(self.difficulty), LINE_WIDTH)
-            pygame.draw.circle(
+            cam.circle(
                 win, (0, 200, 0), (self.pos-PLAYER_CENTER).val, AI_FAR_RADIUS(self.difficulty), LINE_WIDTH)
 
-        super().draw(win, team_id, debug=debug)
+        super().draw(win, cam, team_id, debug=debug)
 
     def dist_to_line(self, line, pt):
         """
@@ -401,7 +401,7 @@ class OriginalAITeam(Team):
     The AI team used in the original (C++) version
     """
 
-    def set_players(self, ids=list(range(NUM_TEAM))):
+    def set_players(self, ids):
         self.players = []
         for i in range(NUM_TEAM):
             if i in ids:

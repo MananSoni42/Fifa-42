@@ -6,14 +6,14 @@ Defines image / sound paths and all constants used in the game
 Can be freely changed
 """
 
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 from point import P
 from screeninfo import get_monitors
 import pygame
 import random
 import math
-import os
 import sys
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 """
 Settings and paths
@@ -33,14 +33,15 @@ NUM_TEAM = 11  # Number of players in a team
 FONT_SIZE = 45
 W = get_monitors()[0].width  # Width
 H = get_monitors()[0].height  # Height
-FPS = 42
 
-PLAYER_SPEED = 3
-PLAYER_RADIUS = 20
+PLAYER_SELECT_RADIUS = 2
+PLAYER_SELECT_OFFSET = P(0,1.5)
+PLAYER_SPEED = 2
+PLAYER_RADIUS = 10
 PLAYER_CENTER = P(PLAYER_RADIUS, PLAYER_RADIUS)
 
-BALL_SPEED = 7
-BALL_RADIUS = 7
+BALL_SPEED = 5
+BALL_RADIUS = 3
 BALL_CENTER = P(BALL_RADIUS, BALL_RADIUS)
 BALL_OFFSET = P(2, 1.5)
 
@@ -50,14 +51,20 @@ LINE_WIDTH = 2
 ANIM_NUM = 7  # Number of images used for running animation
 WALK_DELAY = 3  # Change walking sprite after this many presses
 
-# Orginal AI related - Difficulty (between 0 and 1) - Easy (0.1) | Medium (0.4) | Hard (0.8)
+# Orginal AI related - Difficulty (between 0 and 1) - Easy (0.1) | Medium (0.5) | Hard (0.8)
 AI_FAR_RADIUS = lambda diff: round((2 + 11*diff)*PLAYER_RADIUS) # Far radius to look for ball
 AI_NEAR_RADIUS = lambda diff: round((2 + 2*diff)*PLAYER_RADIUS) # Near radius to ward off enemy players
 AI_SHOOT_RADIUS = W//4  # Dist from center of goal post within which AI starts shooting
 AI_MIN_PASS_DIST = 25  # Min perpendicular distance to consider for a successfull pass
 AI_PASS_PROB = 0.95  # Probability that AI moves instead of passing
 
-
+# Camera related
+DEF_FACTOR = 3
+ZOOM_FACTOR = 5
+CAM_DEF = P(W//DEF_FACTOR, H//DEF_FACTOR) # default cameras range
+CAM_ZOOM = P(W//ZOOM_FACTOR, H//ZOOM_FACTOR) # zoomed cameras range
+OVER_SIZE = P(250,150)
+OVER_TOP_LEFT = P(W//2-OVER_SIZE.x//2, H-50-OVER_SIZE.y)
 ######################################
 
 
@@ -77,18 +84,45 @@ CONTROLS_IMG = os.path.join(IMG_DIR, 'controls.png')
 def GET_FORM_BG(team_id, formation_id): return os.path.join(
     IMG_DIR, 'formations', f'{team_id}-{formation_id}.jpg')  # Get correct formation img
 
+bsize = P(2*BALL_RADIUS, 2*BALL_RADIUS)
+FOOTBALL_IMG = {
+    'full': pygame.transform.scale(pygame.image.load(
+        os.path.join(IMG_DIR, 'football.png')), bsize.val),
+    'default': pygame.transform.scale(pygame.image.load(
+        os.path.join(IMG_DIR, 'football.png')), (P(DEF_FACTOR, DEF_FACTOR)*bsize).val),
+    'zoomed': pygame.transform.scale(pygame.image.load(
+        os.path.join(IMG_DIR, 'football.png')), (P(ZOOM_FACTOR, ZOOM_FACTOR)*bsize).val),
+}
 
-# BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'field.png')), (W, H)) # Background (not used currently)
-FOOTBALL_IMG = pygame.transform.scale(pygame.image.load(
-    os.path.join(IMG_DIR, 'football.png')), (2*BALL_RADIUS, 2*BALL_RADIUS))
+psize = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
 RUN = {  # Sprites that animate the running player
     1: {
-        'L': {i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7)},
-        'R': {i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7)},
+        'L': {i: {
+                'full': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), psize.val),
+                'default': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')),(P(DEF_FACTOR, DEF_FACTOR)*psize).val),
+                'zoomed': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), (P(ZOOM_FACTOR, ZOOM_FACTOR)*psize).val),
+            } for i in range(7)
+        },
+        'R': {i: {
+                'full': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), psize.val),
+                'default': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')),( P(DEF_FACTOR, DEF_FACTOR)*psize).val),
+                'zoomed': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), (P(ZOOM_FACTOR, ZOOM_FACTOR)*psize).val),
+            } for i in range(7)
+        },
     },
     2: {
-        'L': {i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7)},
-        'R': {i: pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), (2*PLAYER_RADIUS, 2*PLAYER_RADIUS)) for i in range(7)},
+        'L': {i: {
+                'full': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), psize.val),
+                'default': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')),( P(DEF_FACTOR, DEF_FACTOR)*psize).val),
+                'zoomed': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'l{i}.png')), (P(ZOOM_FACTOR, ZOOM_FACTOR)*psize).val),
+            } for i in range(7)
+        },
+        'R': {i: {
+                'full': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), psize.val),
+                'default': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')),( P(DEF_FACTOR, DEF_FACTOR)*psize).val),
+                'zoomed': pygame.transform.scale(pygame.image.load(os.path.join(IMG_DIR, 'running', f'r{i}.png')), (P(ZOOM_FACTOR, ZOOM_FACTOR)*psize).val),
+            } for i in range(7)
+        },
     },
 }
 

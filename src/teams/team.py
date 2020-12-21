@@ -18,17 +18,19 @@ class Team(ABC):
     Implement the move and set_players methods to instantiate
     """
 
-    def __init__(self, color=(0, 0, 0), formation='default'):
+    def __init__(self, color=(0, 0, 0), formation='default', ids=list(range(NUM_TEAM))):
         """
         Initialize the teams (not completely, some paramters are set using the ```init()``` method)
 
         Attributes:
             color (tuple): The RGB value of the team
             formation (string): The team's formation of the team. Must be a key of ```FORM``` from ```const.py```
+            ids ([int]): Players to include in the team (identified by their ids)
         """
         self.color = color
         self.formation = formation
         self.maintain_formation = True
+        self.ids = ids
 
     def __str__(self):
         s = f'Team {self.id}:'
@@ -57,7 +59,7 @@ class Team(ABC):
         else:
             self.goal_x = W
 
-        self.set_players()
+        self.set_players(self.ids)
         self.set_color()
 
     def set_color(self):
@@ -65,8 +67,9 @@ class Team(ABC):
         Recolor the sprites using this team's color
         """
         for k in RUN[self.id]['L'].keys():
-            recolor(RUN[self.id]['L'][k], color=self.color)
-            recolor(RUN[self.id]['R'][k], color=self.color)
+            for key in RUN[self.id]['L'][k].keys():
+                recolor(RUN[self.id]['L'][k][key], color=self.color)
+                recolor(RUN[self.id]['R'][k][key], color=self.color)
 
     def set_formation(self, formation):
         """
@@ -80,14 +83,14 @@ class Team(ABC):
         """
         self.maintain_formation = not self.maintain_formation
 
-    def draw(self, win, debug=False):
+    def draw(self, win, cam, debug=False):
         """
         Draw the team
 
         Basically calls each players' ```draw()``` method
         """
         for player in self.players:
-            player.draw(win, team_id=self.id, debug=debug)
+            player.draw(win, cam, team_id=self.id, debug=debug)
 
     def update(self, action, ball):
         """
