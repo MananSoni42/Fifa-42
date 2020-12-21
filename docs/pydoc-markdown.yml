@@ -28,6 +28,9 @@ renderer:
       - title: Stats
         contents:
         - 'stats.Stats.*'
+      - title: Camera
+        contents:
+        - 'camera.Camera.*'
       - title: Point
         contents:
         - 'point.P.*'

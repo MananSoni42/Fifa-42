@@ -1,3 +1,7 @@
+'''
+Implementation of the game's camera
+'''
+
 from point import P
 from settings import *
 
@@ -40,15 +44,25 @@ class Camera:
 
         self.mode = mode
 
-    def move(self, bx, by):
-        self.c.x = min(max(bx, self.params['pt'].x//4), W - self.params['pt'].x//4)
-        self.c.y = min(max(by, self.params['pt'].y//4), H - self.params['pt'].y//4)
+    def move(self, bx, by, alpha=P(0.9,0.9)):
+        '''
+        Move the camera to the given coordinates (Camera can't go over the field boundary)
+
+        Uses exponential smoothing to minimize jittering
+        '''
+        new_c = P(0,0)
+        new_c.x = min(max(bx, self.params['pt'].x//4), W - self.params['pt'].x//4)
+        new_c.y = min(max(by, self.params['pt'].y//4), H - self.params['pt'].y//4)
+
+        self.c = alpha*self.c + (P(1,1)-alpha)*new_c
 
     def pt(self, p):
+        ''' Transform any 2-D point with respect to the camera'''
         p = P(p)
         return p if self.mode == 'full' else P(W/2,H/2) + P(self.params['fact'],self.params['fact'])*(p-self.c)
 
     def rect_in_view(self, r1):
+        ''' Check if given rectangle is within the camera's view '''
         r2 = (0,0,W,H)
         if self.mode != 'full':
             r2 = (self.c.x - self.params['pt'].x//2, self.c.y - self.params['pt'].y//2,
@@ -61,8 +75,8 @@ class Camera:
 
         return True if lx < rx and ty < by else False
 
-
     def circle_in_view(self, x, y, rad):
+        ''' Check if given circle is within the camera's view '''
         r = (0,0,W,H)
         if self.mode != 'full':
             r = (self.c.x - self.params['pt'].x//2, self.c.y - self.params['pt'].y//2,
@@ -82,6 +96,7 @@ class Camera:
         return cornerDistance_sq <= rad**2
 
     def rect(self, win, col, coords, width=0):
+        ''' Draw a rectangle according to the cameras mode (attributes are same as ```pygame.draw.rect```)'''
         if self.mode == 'full':
             pygame.draw.rect(win, col, coords, width)
         elif self.rect_in_view(coords):
@@ -90,6 +105,7 @@ class Camera:
             pygame.draw.rect(win, col, (new_pt.x, new_pt.y, w*self.params['fact'], h*self.params['fact']), width)
 
     def circle(self, win, col, p, r, width=0):
+        ''' Draw a circle according to the cameras mode (attributes are same as ```pygame.draw.cirlce```)'''
         if self.mode == 'full':
             pygame.draw.circle(win, col, p, r, width)
         #elif self.circle_in_view(p[0], p[1], r):
@@ -98,6 +114,7 @@ class Camera:
             pygame.draw.circle(win, col, new_pt.val, r*self.params['fact'], width)
 
     def polygon(self, win, col, pts):
+        ''' Draw a polygon according to the cameras mode (attributes are same as ```pygame.draw.polygon```)'''
         if self.mode == 'full':
             pygame.draw.polygon(win, col, pts)
         else:
@@ -107,6 +124,15 @@ class Camera:
             pygame.draw.polygon(win, col, new_pts)
 
     def blit(self, win, path, pt, size):
+        '''
+        Blit a given sprite to the surface according to the cameras mode
+
+        Attributes:
+            win (pygame.Window): window for drawing
+            path (pygame.Image): path to the sprite
+            pt (P): center of the sprite
+            size (P): size of the sprite
+        '''
         x,y = pt
         size = P(self.params['fact'],self.params['fact'])*P(size)
 

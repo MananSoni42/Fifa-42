@@ -18,7 +18,7 @@ def get_args():
 
     parser.add_argument('--difficulty', type=int, choices=range(0,101),
                        metavar="[0-100]", default=42,
-                       help='Game difficulty (0-100): Easy (0-10) | Medium (11-50) | Hard (51-80)')
+                       help='Game difficulty (0-100)')
 
     parser.add_argument('--opponent', choices={'random', 'AI'},
                         default='AI',

@@ -46,14 +46,14 @@ BALL_CENTER = P(BALL_RADIUS, BALL_RADIUS)
 BALL_OFFSET = P(2, 1.5)
 
 GOAL_DISP_SIZE = 60
-GOAL_POS = [0.3, 0.7]  # goalpost positions in percentage of H
+GOAL_POS = [0.35, 0.65]  # goalpost positions in percentage of H
 LINE_WIDTH = 2
 ANIM_NUM = 7  # Number of images used for running animation
 WALK_DELAY = 3  # Change walking sprite after this many presses
 
 # Orginal AI related - Difficulty (between 0 and 1) - Easy (0.1) | Medium (0.5) | Hard (0.8)
-AI_FAR_RADIUS = lambda diff: round((2 + 11*diff)*PLAYER_RADIUS) # Far radius to look for ball
-AI_NEAR_RADIUS = lambda diff: round((2 + 2*diff)*PLAYER_RADIUS) # Near radius to ward off enemy players
+AI_FAR_RADIUS = lambda diff: round((2 + 15*diff)*PLAYER_RADIUS) # Far radius to look for ball
+AI_NEAR_RADIUS = lambda diff: round((2 + 4*diff)*PLAYER_RADIUS) # Near radius to ward off enemy players
 AI_SHOOT_RADIUS = W//4  # Dist from center of goal post within which AI starts shooting
 AI_MIN_PASS_DIST = 25  # Min perpendicular distance to consider for a successfull pass
 AI_PASS_PROB = 0.95  # Probability that AI moves instead of passing
