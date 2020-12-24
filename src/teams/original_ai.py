@@ -268,8 +268,12 @@ class OriginalAIAgent(Agent):
             if abs(self.pos.x - goal_x) > BALL_RADIUS + PLAYER_RADIUS:
                 if ball.pos.y == self.pos.y:  # Do nothing if ball is directly in your path
                     return 'NOTHING'
-                elif PLAYER_RADIUS and GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
-                    if ball.pos.y - self.pos.y >= 0:
+                elif GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
+                    if ball.vel.x == 0:
+                        ball_intercept = ball.pos.y
+                    else:
+                        ball_intercept = ball.pos.y + (goal_x-ball.pos.x)*(ball.vel.y/ball.vel.x)
+                    if ball_intercept - self.pos.y >= 0:
                         return 'MOVE_D'
                     else:
                         return 'MOVE_U'
