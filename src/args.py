@@ -25,15 +25,15 @@ def get_args():
                         help='Choose your opponent')
 
     parser.add_argument('--fps', type=int, default=42,
-                        help='Play the game without displaying the menu')
+                        help='Define the number of frames rendered per second')
 
     forms = set(FORM.keys())
-    parser.add_argument('--team1_form', choices=forms,
+    parser.add_argument('--team1_formation', choices=forms,
                         metavar="{'default', 'balanced-1/2' , 'attacking-1/2/3', 'defensive-1/2/3'}",
                         default='default',
                         help='Team 1\'s formation')
 
-    parser.add_argument('--team2_form', choices=forms,
+    parser.add_argument('--team2_formation', choices=forms,
                         metavar="{'default', 'balanced-1/2' , 'attacking-1/2/3', 'defensive-1/2/3'}",
                         default='default',
                         help='Team 2\'s formation')

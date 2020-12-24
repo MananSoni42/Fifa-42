@@ -237,11 +237,11 @@ class Game:
 
         for player in self.team1.players:
             pygame.draw.circle(win, self.team1.color, scale_pt(*player.pos.val),
-                               PLAYER_RADIUS//3)
+                               PLAYER_RADIUS//4)
 
         for player in self.team2.players:
             pygame.draw.circle(win, self.team2.color, scale_pt(*player.pos.val),
-                               PLAYER_RADIUS//3)
+                               PLAYER_RADIUS//4)
 
             pygame.draw.circle(win, (42,42,42), scale_pt(*(self.ball.pos + PLAYER_CENTER).val),
                                BALL_RADIUS)

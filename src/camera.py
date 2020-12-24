@@ -111,7 +111,7 @@ class Camera:
         #elif self.circle_in_view(p[0], p[1], r):
         else:
             new_pt = self.pt(p)
-            pygame.draw.circle(win, col, new_pt.val, r*self.params['fact'], width)
+            pygame.draw.circle(win, col, new_pt.val, round(r*self.params['fact']), width)
 
     def polygon(self, win, col, pts):
         ''' Draw a polygon according to the cameras mode (attributes are same as ```pygame.draw.polygon```)'''

@@ -62,10 +62,10 @@ class Menu:
                                       mouse_visible=True)
 
         about_menu.add_label('Written by:', max_char=MAX_CHAR)
-        about_menu.add_label('* Manan Soni')
-        about_menu.add_label('* Ashutosh Jani')
-        about_menu.add_label(
-            'To know more visit: github.com/MananSoni42/Fifa-42 ', max_char=MAX_CHAR)
+        about_menu.add_label('Manan Soni')
+        about_menu.add_vertical_margin(V_PAD)
+        about_menu.add_label('More info at:', max_char=MAX_CHAR)
+        about_menu.add_label('github.com/MananSoni42/Fifa-42 ', max_char=MAX_CHAR)
         about_menu.add_vertical_margin(V_PAD)
         about_menu.add_button('Back', pygame_menu.events.BACK)
         return about_menu
@@ -252,7 +252,7 @@ class Menu:
 
     def draw_bg(self):
         if self.main_menu.get_current().get_title() == 'Formation':
-            dummy_game = Game(self.team1, self.team2, sound=False)
+            dummy_game = Game(self.team1, self.team2, sound=False, cam='full')
             dummy_game.draw(self.win, hints=False)
 
     def start(self):
