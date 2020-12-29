@@ -37,7 +37,7 @@ H = get_monitors()[0].height  # Height
 PLAYER_SELECT_RADIUS = 2
 PLAYER_SELECT_OFFSET = P(0,1.5)
 PLAYER_SPEED = 2
-PLAYER_RADIUS = 10
+PLAYER_RADIUS = 15
 PLAYER_CENTER = P(PLAYER_RADIUS, PLAYER_RADIUS)
 
 BALL_SPEED = 5
@@ -46,7 +46,7 @@ BALL_CENTER = P(BALL_RADIUS, BALL_RADIUS)
 BALL_OFFSET = P(2, 1.5)
 
 GOAL_DISP_SIZE = 60
-GOAL_POS = [0.35, 0.65]  # goalpost positions in percentage of H
+GOAL_POS = [0.5 - 0.14, 0.5 + 0.14]  # goalpost positions in percentage of H
 LINE_WIDTH = 2
 ANIM_NUM = 7  # Number of images used for running animation
 WALK_DELAY = 3  # Change walking sprite after this many presses
@@ -59,8 +59,8 @@ AI_MIN_PASS_DIST = 25  # Min perpendicular distance to consider for a successful
 AI_PASS_PROB = 0.95  # Probability that AI moves instead of passing
 
 # Camera related
-DEF_FACTOR = 3
-ZOOM_FACTOR = 5
+DEF_FACTOR = 2.5
+ZOOM_FACTOR = 4
 CAM_DEF = P(W//DEF_FACTOR, H//DEF_FACTOR) # default cameras range
 CAM_ZOOM = P(W//ZOOM_FACTOR, H//ZOOM_FACTOR) # zoomed cameras range
 OVER_SIZE = P(250,150)

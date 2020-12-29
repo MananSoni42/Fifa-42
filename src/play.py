@@ -27,11 +27,21 @@ mixer.init(44100, -16, 2, 2048)
 menu_music = mixer.Sound(MENU_MUSIC)
 
 # Define teams (Team 1 faces right by default)
-team1 = HumanTeam(formation=args.team1_form, color=(0, 32, 255))
-if args.opponent == 'AI':
-    team2 = OriginalAITeam(formation=args.team2_form, color=(255, 128, 0))
+if args.team1.lower() == 'random':
+    team1 = RandomTeam(formation=args.team1_formation, color=(0, 32, 255))
+elif args.team1.lower() == 'ai':
+    team1 = OriginalAITeam(formation=args.team1_formation, color=(0, 32, 255))
+elif args.team1.lower() == 'human':
+    team1 = HumanTeam(formation=args.team1_formation, color=(0, 32, 255))
 else:
-    team2 = RandomTeam(formation=args.team2_form, color=(255, 128, 0))
+    raise Exception(f'No team named `{args.team1}`')
+
+if args.team2.lower() == 'ai':
+    team2 = OriginalAITeam(formation=args.team2_formation, color=(255, 128, 0))
+elif args.team2.lower() == 'random':
+    team2 = RandomTeam(formation=args.team2_formation, color=(255, 128, 0))
+else:
+    raise Exception(f'No team named `{args.team2}`')
 
 no_team = RandomTeam(ids=[])
 

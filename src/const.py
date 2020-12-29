@@ -27,14 +27,15 @@ ACT = {'NOTHING': P(0, 0), None: P(0, 0),
 Team formations
     - Must start with the keeper
     - Must contain positions for both left and right sides
-    - Recommended to specify completley in terms of W and H (and PLAYER_RADIUS if reqd)
+    - Recommended to specify completley in terms of W and H (and PLAYER_RADIUS / BALL_RADIUS if reqd)
+
 """
 FORM = {
     'default': {
         'name': 'Default (4-4-2)',  # name
         'img-num': 0,  # number corresponding to image in assets/formations directory
         'L': [
-                {'coord': P(2*PLAYER_RADIUS + BALL_RADIUS, H//2), 'pos': 'GK'},\
+                {'coord': P(2*PLAYER_RADIUS + BALL_RADIUS, H//2), 'pos': 'GK'},
 
                 {'coord': P(W//4, H//2 - H//10), 'pos': 'DEF'}, {
                     'coord': P(W//4, H//2 + H//10), 'pos': 'DEF'},
