@@ -61,45 +61,6 @@ class Game:
             single_short_whistle.play()
             applause.play(-1)
 
-    def check_interruptions(self):
-        """
-        Check for special keyboard buttons
-
-        Sets internal flags to pause, quit the game or run it in debug mode
-        """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # Quit
-                mixer.pause()
-                if self.sound:
-                    three_whistles.play()
-                self.end = True
-                pygame.quit()
-
-            if event.type == pygame.KEYDOWN:
-
-                if event.key == pygame.K_ESCAPE:  # Pause menu
-                    self.pause = not self.pause
-                    if self.pause:
-                        mixer.pause()
-                        if self.sound:
-                            single_long_whistle.play()
-                    else:
-                        if self.sound:
-                            single_short_whistle.play()
-                            applause.play(-1)
-
-                if event.key == pygame.K_BACKSPACE:  # Return to main menu
-                    mixer.stop()
-                    self.end = True
-
-                if event.key == pygame.K_SPACE:  # Toggle whether to maintain formation
-                    self.team1.maintain_formation = not self.team1.maintain_formation
-
-                if event.key == pygame.K_d:  # Debug mode
-                    mods = pygame.key.get_mods()
-                    if mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT and mods & pygame.KMOD_ALT:
-                        self.debug = not self.debug
-
     def same_team_collision(self, team, free):
         """
         Check if current player collides with any other players of the same team
@@ -545,9 +506,44 @@ class Game:
         Move the game forward by 1 frame
 
         Passes state objects to the teams and pass their actions to ```move_next()```
+
+        Also checks for special keyboard buttons and sets internal flags to pause, quit
+        the game or run it in debug mode
         """
         a1 = self.team1.move(self.state_prev, self.state, self.rewards)
         a2 = self.team2.move(self.state_prev, self.state, self.rewards)
+
+        pause_flag = any([a == 'PAUSE' for a in a1])
+        quit_flag  = any([a == 'QUIT' for a in a1])
+        form_flag  = any([a == 'TOGGLE_FORM' for a in a1])
+        debug_flag = any([a == 'TOGGLE_DEBUG' for a in a1])
+
+        if quit_flag:
+            mixer.pause()
+            if self.sound:
+                three_whistles.play()
+            self.end = True
+            #pygame.quit()
+
+        if pause_flag:
+            self.pause = not self.pause
+            if self.pause:
+                mixer.pause()
+                if self.sound:
+                    single_long_whistle.play()
+            else:
+                if self.sound:
+                    single_short_whistle.play()
+                    applause.play(-1)
+
+        if form_flag:
+            self.team1.maintain_formation = not self.team1.maintain_formation
+
+        if debug_flag:
+            mods = pygame.key.get_mods()
+            if mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT and mods & pygame.KMOD_ALT:
+                self.debug = not self.debug
+
         self.state_prev, self.state, self.rewards = self.move_next(a1, a2)
 
     def move_next(self, a1, a2):
@@ -558,7 +554,7 @@ class Game:
             a1 (list): list of actions (1 for each player) in team 1
             a2 (list): list of actions (1 for each player) in team 2
 
-        Each action must be a key in the ```ACT``` dictionary found in ```const.py```
+        Each action must be a key in either the ```ACT``` or the ```META_ACT``` dictionary found in ```const.py```
         """
 
         state_prev = self.get_state()

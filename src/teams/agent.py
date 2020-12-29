@@ -91,6 +91,7 @@ class Agent(ABC):
             self.pos = P(min(max(PLAYER_RADIUS, self.pos.x), W - PLAYER_RADIUS), min(
                 max(PLAYER_RADIUS, self.pos.y), H - PLAYER_RADIUS))  # account for overflow
 
+
     @abstractmethod
     def move(self, state_prev, state, reward):
         """

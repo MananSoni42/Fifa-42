@@ -31,10 +31,36 @@ class HumanAgent(Agent):
             ) # Triangle
         super().draw(win, cam, team_id, debug=debug)
 
+    def check_interruptions(self):
+        # Check for meta keys (pause, end game, etc)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # Quit\
+                return 'QUIT'
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:  # Pause menu
+                    return 'PAUSE'
+
+                if event.key == pygame.K_BACKSPACE:  # Return to main menu
+                    return 'QUIT'
+
+                if event.key == pygame.K_SPACE:  # Toggle whether to maintain formation
+                    return 'TOGGLE_FORM'
+
+                if event.key == pygame.K_d:  # Debug mode
+                    return 'TOGGLE_DEBUG'
+        return False
+
     def move(self, state_prev, state, reward):
         """
         Move the human agent based on the keyboard
         """
+
+        interrupt = self.check_interruptions()
+        if interrupt:
+            return interrupt
+
+        # Check for regular key presses
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:

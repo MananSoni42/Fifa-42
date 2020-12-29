@@ -266,10 +266,8 @@ class OriginalAIAgent(Agent):
         if ball.pos.dist(P(goal_x, H//2)) < AI_SHOOT_RADIUS:
             # Goal keeper does not go into the goal himself
             if abs(self.pos.x - goal_x) > BALL_RADIUS + PLAYER_RADIUS:
-                if ball.pos.y == self.pos.y:  # Do nothing if ball is directly in your path
-                    return 'NOTHING'
-                elif GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
-                    if ball.vel.x == 0:
+                if GOAL_POS[0]*H < self.pos.y < GOAL_POS[1]*H:
+                    if ball.vel.x == 0 or ball.pos.dist(P(goal_x,H/2)) < AI_SHOOT_RADIUS/3:
                         ball_intercept = ball.pos.y
                     else:
                         ball_intercept = ball.pos.y + (goal_x-ball.pos.x)*(ball.vel.y/ball.vel.x)

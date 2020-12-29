@@ -52,14 +52,12 @@ def play(win, team1, team2, sound, difficulty, cam):  # Play the entire game
     while not game.end:  # Game loop
         clock.tick(args.fps)  # FPS
 
-        game.check_interruptions()  # Check for special keys (quit, pause, etc)
-
         if game.pause:  # game is paused - display pause menu
             game.draw(win)
             game.pause_draw(win)  # Draws on-top of the (frozen) game
         else:  # Continue with the game
             game.draw(win)
-            game.next()
+        game.next()
 
         pygame.display.update()  # refresh screen
 
@@ -74,8 +72,6 @@ def practice():
     """ Game loop """
     while not game.end:  # Game loop
         clock.tick(args.fps)  # FPS
-
-        game.check_interruptions()  # Check for special keys (quit, pause, etc)
 
         game.draw(win, hints=False)
         game.practice_instr_draw(win)

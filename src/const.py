@@ -23,6 +23,8 @@ ACT = {'NOTHING': P(0, 0), None: P(0, 0),
        'SHOOT_D': P(1, 0), 'SHOOT_Z': P(-0.707, 0.707), 'SHOOT_X': P(0, 1), 'SHOOT_C': P(0.707, 0.707)}
 # 0.717 = 1/sqrt(2)
 
+META_ACT = {'QUIT', 'PAUSE', 'TOGGLE_FORM', 'TOGGLE_DEBUG'}
+
 """
 Team formations
     - Must start with the keeper
