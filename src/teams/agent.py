@@ -91,9 +91,40 @@ class Agent(ABC):
             self.pos = P(min(max(PLAYER_RADIUS, self.pos.x), W - PLAYER_RADIUS), min(
                 max(PLAYER_RADIUS, self.pos.y), H - PLAYER_RADIUS))  # account for overflow
 
+    def check_interruptions(self):
+        # Check for meta keys (pause, end game, etc)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:  # Quit\
+                return 'QUIT'
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:  # Pause menu
+                    return 'PAUSE'
+
+                if event.key == pygame.K_BACKSPACE:  # Return to main menu
+                    return 'QUIT'
+
+                if event.key == pygame.K_SPACE:  # Toggle whether to maintain formation
+                    return 'TOGGLE_FORM'
+
+                if event.key == pygame.K_d:  # Debug mode
+                    return 'TOGGLE_DEBUG'
+        return False
+
+    def check_move(self, state_prev, state, reward, selected=None):
+        """
+        Method that actually moves the player, use this method in the team implementation
+
+        Checks for interruptions and calls the ```move()``` method if there are no interruptions
+
+        Returns either an ACT key or a META_ACT key
+        """
+        interrupt = self.check_interruptions()
+
+        return interrupt if interrupt else self.move(state_prev, state, reward, selected)
 
     @abstractmethod
-    def move(self, state_prev, state, reward):
+    def move(self, state_prev, state, reward, selected):
         """
         Implement this method for a valid agent
 
@@ -101,6 +132,7 @@ class Agent(ABC):
             state_prev (dict): The lsat to last game state
             state (dict): The last game state
             reward (list): Reward returned from this state (Not implemented)
+            selected (bool): Flag to indicate if this player is currently selected (for AI agents)
 
         Should return a valid action
         """

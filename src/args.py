@@ -12,6 +12,9 @@ def get_args():
     parser.add_argument('--menu_off', action='store_true', default=False,
                         help='Play the game without displaying the menu')
 
+    parser.add_argument('--windowed', action='store_true', default=False,
+                        help='Run the game in a window')
+
     parser.add_argument('--camera', choices={'default', 'full', 'zoomed'},
                         default='default',
                         help='Camera angle')
@@ -20,11 +23,11 @@ def get_args():
                        metavar="[0-100]", default=42,
                        help='Game difficulty (0-100)')
 
-    parser.add_argument('--team1', choices={'random', 'AI', 'human'},
+    parser.add_argument('--team1', choices={'random', 'ai', 'human'},
                         default='human',
                         help='Choose your opponent')
 
-    parser.add_argument('--team2', choices={'random', 'AI'},
+    parser.add_argument('--team2', choices={'random', 'ai'},
                         default='AI',
                         help='Choose your opponent')
 

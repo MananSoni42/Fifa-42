@@ -7,7 +7,7 @@ Override the ```set_players``` and ```move``` method to create a valid custom te
 """
 
 from settings import *
-from const import recolor
+from const import recolor, ACT, FORM
 from abc import ABC, abstractmethod
 
 
@@ -101,6 +101,44 @@ class Team(ABC):
 
         for i, player in enumerate(self.players):
             player.update(action[i], self.players)
+
+    def formation_dir(self, id):
+        """
+        Send player (with the given ID) to his designated place in the formation
+
+        **Working**:
+
+        - If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
+        - Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
+        """
+        player = self.players[id]
+        min_dist = 2
+
+        if abs(player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) <= min_dist and abs(player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) <= min_dist:
+            player.walk_count = 0
+            return 'NOTHING'
+        elif abs(player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) <= min_dist:
+            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
+                return 'MOVE_U'
+            else:
+                return 'MOVE_D'
+        elif abs(player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) <= min_dist:
+            if (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) > min_dist:
+                return 'MOVE_L'
+            else:
+                return 'MOVE_R'
+        elif (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) > min_dist:
+            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
+                return random.choices(['MOVE_L', 'MOVE_U'])[0]
+            else:
+                return random.choices(['MOVE_L', 'MOVE_D'])[0]
+        elif (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) < - min_dist:
+            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
+                return random.choices(['MOVE_R', 'MOVE_U'])[0]
+            else:
+                return random.choices(['MOVE_R', 'MOVE_D'])[0]
+        else:
+            return 'NOTHING'
 
     @abstractmethod
     def set_players(self, ids=list(range(NUM_TEAM))):
