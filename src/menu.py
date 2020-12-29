@@ -169,7 +169,7 @@ class Menu:
             'Difficulty', [(f'{i}%', i) for i in range(10,100+10,10)], default=5, onchange=set_difficulty)
 
         sett_menu.add_selector(
-            'Sound', [('ON', True), ('OFF', False)], default=int(self.sound), onchange=self.set_menu_sound)
+            'Sound', [('OFF', False), ('ON', True)], default=int(self.sound), onchange=self.set_menu_sound)
         sett_menu.add_vertical_margin(V_PAD)
 
         sett_menu.add_button('Back', pygame_menu.events.BACK)

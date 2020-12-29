@@ -13,7 +13,7 @@ class RandomAgent(Agent):
     Agents that move randomly
     """
 
-    def move(self, state_prev, state, reward):
+    def move(self, state_prev, state, reward, selected):
         """
         Move the agent randomly
         """
@@ -41,5 +41,5 @@ class RandomTeam(Team):
         """
         actions = []
         for i, player in enumerate(self.players):
-            actions.append(player.move(state_prev, state, reward))
+            actions.append(player.check_move(state_prev, state, reward))
         return actions

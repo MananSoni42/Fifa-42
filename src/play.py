@@ -18,7 +18,7 @@ from args import get_args
 args = get_args()
 
 pygame.init()
-win = pygame.display.set_mode((W, H), pygame.FULLSCREEN)
+win = pygame.display.set_mode((W, H), 0 if args.windowed else pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 

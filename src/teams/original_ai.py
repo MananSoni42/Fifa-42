@@ -429,44 +429,6 @@ class OriginalAITeam(Team):
             # If the ball is within the D and is not very near to any other player, give control to the keeper
             self.selected = 0
 
-    def formation_dir(self, id):
-        """
-        Send player (with the given ID) to his designated place in the formation
-
-        **Working**:
-
-        - If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)
-        - Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)
-        """
-        player = self.players[id]
-        min_dist = 2
-
-        if abs(player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) <= min_dist and abs(player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) <= min_dist:
-            player.walk_count = 0
-            return 'NOTHING'
-        elif abs(player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) <= min_dist:
-            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
-                return 'MOVE_U'
-            else:
-                return 'MOVE_D'
-        elif abs(player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) <= min_dist:
-            if (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) > min_dist:
-                return 'MOVE_L'
-            else:
-                return 'MOVE_R'
-        elif (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) > min_dist:
-            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
-                return random.choices(['MOVE_L', 'MOVE_U'])[0]
-            else:
-                return random.choices(['MOVE_L', 'MOVE_D'])[0]
-        elif (player.pos.x - FORM[self.formation][self.dir][id]['coord'].x) < - min_dist:
-            if (player.pos.y - FORM[self.formation][self.dir][id]['coord'].y) > min_dist:
-                return random.choices(['MOVE_R', 'MOVE_U'])[0]
-            else:
-                return random.choices(['MOVE_R', 'MOVE_D'])[0]
-        else:
-            return 'NOTHING'
-
     def move(self, state_prev, state, reward):
         """
         Move each player in the team. Call this method to move the team
@@ -477,7 +439,7 @@ class OriginalAITeam(Team):
         else:
             self.selected = NUM_TEAM//2
         for i, player in enumerate(self.players):
-            move = player.move(state_prev, state, reward, self.selected)
+            move = player.check_move(state_prev, state, reward, self.selected)
             if move != 'FORM':
                 actions.append(move)
             else:
