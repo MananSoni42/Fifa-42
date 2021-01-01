@@ -1,9 +1,0 @@
-python3 -OO -m PyInstaller \
-    --name "Fifa-42" \
-    --icon "../src/assetes/icon.ico" \
-    --add-data "../src/teams/*":"teams" \
-    --add-data "../src/assets/fonts/*":"assets/fonts" \
-    --add-data "../src/assets/img/*":"assets/img" \
-    --add-data "../src/assets/img/running/*":"assets/img/running" \
-    --add-data "../src/assets/sounds*":"assets/sounds" \
-    ../src/play.py

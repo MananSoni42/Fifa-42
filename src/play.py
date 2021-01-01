@@ -22,6 +22,7 @@ win = pygame.display.set_mode((W, H), 0 if args.windowed else pygame.FULLSCREEN)
 clock = pygame.time.Clock()
 pygame.display.set_caption("FIFA-42")
 
+
 # Init music
 mixer.init(44100, -16, 2, 2048)
 menu_music = mixer.Sound(MENU_MUSIC)

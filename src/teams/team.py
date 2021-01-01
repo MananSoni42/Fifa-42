@@ -18,7 +18,7 @@ class Team(ABC):
     Implement the move and set_players methods to instantiate
     """
 
-    def __init__(self, color=(0, 0, 0), formation='default', ids=list(range(NUM_TEAM))):
+    def __init__(self, color=(0, 0, 0), formation='balanced-1', ids=list(range(NUM_TEAM))):
         """
         Initialize the teams (not completely, some paramters are set using the ```init()``` method)
 

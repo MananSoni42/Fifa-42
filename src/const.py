@@ -33,7 +33,7 @@ Team formations
 
 """
 FORM = {
-    'default': {
+    'balanced-1': {
         'name': 'Default (4-4-2)',  # name
         'img-num': 0,  # number corresponding to image in assets/formations directory
         'L': [
@@ -54,7 +54,7 @@ FORM = {
         ],
     },
 
-    'balanced-1': {
+    'balanced-2': {
         'name': 'Balanced (4-4-2 diamond)',  # name
         'img-num': 1,  # number corresponding to image in assets/formations directory
         'L': [
@@ -74,7 +74,7 @@ FORM = {
                     'coord': P(13*W//16, H//2 + H//5), 'pos': 'ATK'},
         ],
     },
-    'balanced-2': {
+    'balanced-3': {
         'name': 'Balanced (4-3-3)',  # name
         'img-num': 2,  # number corresponding to image in assets/formations directory
         'L': [

@@ -36,13 +36,13 @@ def get_args():
 
     forms = set(FORM.keys())
     parser.add_argument('--team1_formation', choices=forms,
-                        metavar="{'default', 'balanced-1/2' , 'attacking-1/2/3', 'defensive-1/2/3'}",
-                        default='default',
+                        metavar="{'balanced-1/2/3' , 'attacking-1/2/3', 'defensive-1/2/3'}",
+                        default='balanced-1',
                         help='Team 1\'s formation')
 
     parser.add_argument('--team2_formation', choices=forms,
-                        metavar="{'default', 'balanced-1/2' , 'attacking-1/2/3', 'defensive-1/2/3'}",
-                        default='default',
+                        metavar="{'balanced-1/2/3' , 'attacking-1/2/3', 'defensive-1/2/3'}",
+                        default='balanced-2',
                         help='Team 2\'s formation')
 
     args = parser.parse_args()

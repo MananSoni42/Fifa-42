@@ -19,13 +19,14 @@ import sys
 Settings and paths
 """
 
-# Required for pyinstaller
-if getattr(sys, 'frozen', False):  # PyInstaller adds this attribute
-    # Running in a bundle
-    CurrentPath = sys._MEIPASS
+if getattr(sys, "frozen", False): # required for cx_Freeze
+    current_path = os.path.dirname(sys.executable)
+    try:
+        import pygame._view
+    except:
+        pass
 else:
-    # Running in normal Python environment
-    CurrentPath = os.path.dirname(__file__)
+    current_path = os.path.dirname(__file__)
 
 
 ############## Settings ##############
@@ -69,7 +70,7 @@ OVER_TOP_LEFT = P(W//2-OVER_SIZE.x//2, H-50-OVER_SIZE.y)
 
 
 ############## Assets (images, fonts, sounds) ##############
-ASSET_DIR = os.path.join(CurrentPath, 'assets')  # Path to assets
+ASSET_DIR = os.path.join(current_path, 'assets')  # Path to assets
 IMG_DIR = os.path.join(ASSET_DIR, 'img')
 SOUND_DIR = os.path.join(ASSET_DIR, 'sounds')
 

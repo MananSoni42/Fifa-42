@@ -7,6 +7,7 @@ import pygame_menu
 from settings import *
 from const import FORM
 from game import Game
+from teams.random import RandomTeam
 
 MAX_CHAR = 50
 V_PAD = 20
@@ -185,14 +186,14 @@ class Menu:
                                      mouse_motion_selection=True,
                                      mouse_visible=True)
 
-        form_opts = [  # Get formation options from the settings (FORM)
+        form_opts = [  # Get formation options from const
             (v['name'], (k, v['img-num'])) for k, v in FORM.items()
         ]
 
         self.selected_team = 1
         self.selected_formation = {
-            1: ('default', 0),
-            2: ('balanced-1', 1),
+            1: ('balanced-1', 0),
+            2: ('balanced-2', 1),
         }
 
         form_menu.add_selector('Team 1 formation:  ', form_opts,
@@ -252,7 +253,9 @@ class Menu:
 
     def draw_bg(self):
         if self.main_menu.get_current().get_title() == 'Formation':
-            dummy_game = Game(self.team1, self.team2, sound=False, cam='full')
+            team1 = RandomTeam(formation=self.team1.formation, color=self.team1.color)
+            team2 = RandomTeam(formation=self.team2.formation, color=self.team2.color)
+            dummy_game = Game(team1, team2, sound=False, cam='full')
             dummy_game.draw(self.win, hints=False)
 
     def start(self):
