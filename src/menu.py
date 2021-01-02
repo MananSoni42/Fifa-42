@@ -51,9 +51,12 @@ class Menu:
         self.win = win
         self.team1 = team1
         self.team2 = team2
+        self.team1_form = self.team1.formation
+        self.team2_form = self.team2.formation
         self.sound = sound
         self.difficulty = diff
         self.cam = cam
+        self.cached_win = None
 
     def create_about_menu(self):
         about_menu = pygame_menu.Menu(H, W, ' About',
@@ -252,8 +255,16 @@ class Menu:
 
     def draw_bg(self):
         if self.main_menu.get_current().get_title() == 'Formation':
-            dummy_game = Game(self.team1, self.team2, sound=False, cam='full')
-            dummy_game.draw(self.win, hints=False)
+            if not self.cached_win or self.team1.formation != self.team1_form or self.team2.formation != self.team2_form:
+                self.team1_form = self.team1.formation
+                self.team2_form = self.team2.formation
+                team1 = RandomTeam(formation=self.team1.formation, color=self.team1.color)
+                team2 = RandomTeam(formation=self.team2.formation, color=self.team2.color)
+                dummy_game = Game(team1, team2, sound=False, cam='full')
+                dummy_game.draw(self.win, hints=False)
+                self.cached_win = pygame.image.tostring(self.win, 'RGB')
+            elif self.cached_win:
+                self.win.blit(pygame.image.fromstring(self.cached_win, (W,H), 'RGB'), (0,0))
 
     def start(self):
         """
