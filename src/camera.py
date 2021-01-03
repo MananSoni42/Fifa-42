@@ -6,7 +6,9 @@ from point import P
 from settings import *
 
 class Camera:
-    """ Class to draw different camera angles """
+    '''
+    Class to draw the game from different camera angles
+    '''
 
     def __init__(self, cx, cy, mode='default'):
         '''

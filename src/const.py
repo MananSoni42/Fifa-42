@@ -23,6 +23,12 @@ ACT = {'NOTHING': P(0, 0), None: P(0, 0),
        'SHOOT_D': P(1, 0), 'SHOOT_Z': P(-0.707, 0.707), 'SHOOT_X': P(0, 1), 'SHOOT_C': P(0.707, 0.707)}
 # 0.717 = 1/sqrt(2)
 
+"""
+Meta actions that a player can perform
+
+necessary for multiplayer modes  as these actions must be
+checked at the player / team level instead of the game level
+"""
 META_ACT = {'QUIT', 'PAUSE', 'TOGGLE_FORM', 'TOGGLE_DEBUG', 'FORM'}
 
 """

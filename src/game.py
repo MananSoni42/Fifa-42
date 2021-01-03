@@ -1,8 +1,8 @@
-"""
+'''
 Contains the central game class
 
 Manages interactions with the players and the ball
-"""
+'''
 
 from settings import *
 from const import ACT
@@ -23,10 +23,10 @@ applause = mixer.Sound(APPLAUSE)
 
 
 class Game:
-    """ Class that controls the entire game """
+    ''' Class that controls the entire game '''
 
     def __init__(self, team1, team2, sound=True, difficulty=0.6, cam='default'):
-        """
+        '''
         Initializes the game
 
         Attributes:
@@ -34,7 +34,7 @@ class Game:
             team2 (Team): Left-facing team
             sound (bool): Enable / Disable in-game sounds
             difficulty (float): Game difficulty (0-1)
-        """
+        '''
         self.sound = sound
         self.difficulty = difficulty
         self.debug = False
@@ -50,11 +50,13 @@ class Game:
 
         self.cam = Camera(self.ball.pos.x, self.ball.pos.y, mode=cam)
 
-        self.end = False  # True when the game ends (never probably)
+        self.end = False  # True when the game ends
         self.pause = False
         self.state_prev = None
+
         # game state to be passed to agents (see get_state() function)
         self.state = None
+
         self.rewards = None
 
         if self.sound:
@@ -62,9 +64,10 @@ class Game:
             applause.play(-1)
 
     def same_team_collision(self, team, free):
-        """
+        '''
         Check if current player collides with any other players of the same team
-        """
+        '''
+
         min_dist = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
         if not free:
             min_dist.x += BALL_RADIUS
@@ -90,9 +93,10 @@ class Game:
                     player2.pos.y += ydir[1]*yincr
 
     def diff_team_collision(self, team1, team2, free):
-        """
+        '''
         Check if current player collides with any other players of the opposite team
-        """
+        '''
+
         min_dist = P(2*PLAYER_RADIUS, 2*PLAYER_RADIUS)
         if not free:
             min_dist.x += BALL_RADIUS
@@ -120,15 +124,16 @@ class Game:
                     player2.pos.y += ydir[1]*yincr
 
     def collision(self, team1, team2, ball):
-        """
+        '''
         Handle collisions between all in-game players.
-        """
+        '''
+
         self.same_team_collision(team1, self.ball.free)
         self.same_team_collision(team2, self.ball.free)
         self.diff_team_collision(team1, team2, self.ball.free)
 
     def text_draw(self, win, text, rect, align='center'):
-        """
+        '''
         Utility to draw text
 
         Attributes:
@@ -136,7 +141,7 @@ class Game:
             text (pygame.font (rendered)): The text object
             rect (tuple): Rectangle specified as (x, y, width, height)
             align (string): text alignment can be one of 'left', 'right', 'center' (defaults to 'center')
-        """
+        '''
         width = text.get_width()
         height = text.get_height()
         center_x = round(rect[0] + rect[2]/2)
@@ -151,10 +156,10 @@ class Game:
         win.blit(text, final_rect)
 
     def goal_draw(self, win):
-        """
+        '''
         Display the current score (goals for each side)
-        """
-        #""" Show game score """
+        '''
+
         goal1_rect = (W//2 - GOAL_DISP_SIZE - 2*LINE_WIDTH,
                       0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
         goal2_rect = (W//2 + 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
@@ -168,6 +173,14 @@ class Game:
         self.text_draw(win, text, goal2_rect)
 
     def overlay_draw(self, win):
+        '''
+        Overlays a scaled version of the entire field on the actual field
+        (should be used when the camera mode is not `full`)
+
+        The position and size of the overlay is controlled by the `OVER_TOP_LEFT`
+        and `OVER_SIZE` variables defined in ```settings.py```
+        '''
+
         scale_rect = lambda x,y,w,h: (OVER_TOP_LEFT.x + x*OVER_SIZE.x//W, OVER_TOP_LEFT.y + y*OVER_SIZE.y//H, w*OVER_SIZE.x//W, h*OVER_SIZE.y//H)
         scale_pt = lambda x,y: (OVER_TOP_LEFT.x + x*OVER_SIZE.x//W, OVER_TOP_LEFT.y + y*OVER_SIZE.y//H)
 
@@ -208,13 +221,13 @@ class Game:
                                BALL_RADIUS)
 
     def field_draw(self, win, hints):
-        """
+        '''
         Draw the football pitch
 
         Attributes:
             win (pygame.display): window for rendering
             hints (bool): If (movement-based) hints are to be shown
-        """
+        '''
         win.fill((0,0,0))  # constant black
         self.cam.rect(win, (14, 156, 23), (0,0,W,H))  # green ground
 
@@ -274,11 +287,11 @@ class Game:
                                                  0.05*H, 0.2*W, 0.05*H), align='left')  # Developer model
 
     def draw(self, win, hints=True):
-        """
+        '''
         Draw the entire game
 
         Calls ```field_draw()``` along with the ```draw()``` methods for each team and the ball
-        """
+        '''
         self.field_draw(win, hints=hints)
         if hints:
             self.goal_draw(win)
@@ -287,9 +300,9 @@ class Game:
         self.ball.draw(win, self.cam, debug=self.debug)
 
     def practice_instr_draw(self, win):
-        """
+        '''
         Draw the practice game instructions (shows extra hints and keyboard controls)
-        """
+        '''
         title_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
         title_text = title_font.render('PRACTICE', True, (0, 100, 0))
         self.text_draw(win, title_text, (0, 0, W, 0.01*H))
@@ -310,7 +323,7 @@ class Game:
                                           2*0.05*H, 2*0.1*W + 2*LINE_WIDTH, 0.05*H), align='left')
 
     def bar_draw(self, win, dim, w0, h0, w, h, col, val, debug_text, invert=False):
-        """
+        '''
         Draw a bar in the pause menu (for statistics)
 
         Attributes:
@@ -324,7 +337,7 @@ class Game:
             val (float): % of the bar to fill (between 0 and 1)
             debug_text (str): Text to display in debug mode
             invert (bool): Flip the bar left to right
-        """
+        '''
 
         W_, H_, W0, H0, pad, min_len = dim
         inv_col = (255-col[0], 255-col[1], 255-col[2])
@@ -354,7 +367,7 @@ class Game:
                                 round(w), round(h)), LINE_WIDTH)
 
     def bar_label_draw(self, win, dim, w0, h0, w, h, text):
-        """
+        '''
         Draw the label of a bar in the pause menu (for statistics)
 
         Attributes:
@@ -365,7 +378,7 @@ class Game:
             w (int): width of the bar
             h (int): height of the bar
             text (str): Text to display in the label
-        """
+        '''
 
         W_, H_, W0, H0, pad, min_len = dim
 
@@ -373,13 +386,13 @@ class Game:
         self.text_draw(win, text_pos, (w0, h0, w, h))
 
     def pause_box_draw(self, win, dim):
-        """
+        '''
         Draw the skeleton of the pause menu (bg, title, exit button)
 
         Attributes:
             win: Main window used for all drawing
             dim ([int]): extra dimensions for the pause menu
-        """
+        '''
 
         W_, H_, W0, H0, pad, min_len = dim
 
@@ -403,11 +416,11 @@ class Game:
                                           H0 + 0.08*H_, 0.1*W_, 0.05*H))
 
     def pause_draw(self, win):
-        """
+        '''
         Draw the pause menu
 
         Displays statistics for possession, pass accuracy and shot accuracy
-        """
+        '''
         W_, H_ = int(0.8*W), int(0.8*H)
         W0, H0 = int(0.1*W), int(0.1*H)
 
@@ -470,7 +483,7 @@ class Game:
             debug_text=f'{int(round(100*sa[1],0))} ({self.stats.shot_acc[2]["succ"]}/{self.stats.shot_acc[2]["succ"]+self.stats.shot_acc[2]["fail"]})')
 
     def get_state(self):
-        """
+        '''
         Create a state object that summarizes the entire game
 
         ```
@@ -486,7 +499,7 @@ class Game:
             'ball' # Position of the ball
         }
         ```
-        """
+        '''
         pos1 = [player.pos for player in self.team1.players]
         pos2 = [player.pos for player in self.team2.players]
         return {
@@ -502,14 +515,14 @@ class Game:
         }
 
     def next(self):
-        """
+        '''
         Move the game forward by 1 frame
 
         Passes state objects to the teams and pass their actions to ```move_next()```
 
         Also checks for special keyboard buttons and sets internal flags to pause, quit
         the game or run it in debug mode
-        """
+        '''
         a1 = self.team1.move(self.state_prev, self.state, self.rewards)
         a2 = self.team2.move(self.state_prev, self.state, self.rewards)
 
@@ -548,7 +561,7 @@ class Game:
             self.state_prev, self.state, self.rewards = self.move_next(a1, a2)
 
     def move_next(self, a1, a2):
-        """
+        '''
         Update the players' and ball's internal state based on the teams' actions
 
         Attributes:
@@ -556,7 +569,7 @@ class Game:
             a2 (list): list of actions (1 for each player) in team 2
 
         Each action must be a key in either the ```ACT``` or the ```META_ACT``` dictionary found in ```const.py```
-        """
+        '''
 
         state_prev = self.get_state()
 

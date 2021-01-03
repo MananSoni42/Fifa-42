@@ -12,7 +12,7 @@ from game import Game
 from teams.human import HumanTeam
 from teams.original_ai import OriginalAITeam
 from teams.random import RandomTeam
-from menu import play_with_menu
+from menu import Menu
 from args import get_args
 
 args = get_args()
@@ -45,18 +45,20 @@ else:
 
 no_team = RandomTeam(ids=[])
 
-def play(win, team1, team2, sound, difficulty, cam):  # Play the entire game
+def play(win, team1, team2, sound, difficulty, cam):
+    '''
+    Play the game: This is the central function that runs the game
+    '''
+
     mixer.stop()
     game = Game(team1, team2, sound, difficulty, cam)  # initialize the game
-    """ Game loop """
+
     while not game.end:  # Game loop
         clock.tick(args.fps)  # FPS
 
-        if game.pause:  # game is paused - display pause menu
-            game.draw(win)
+        game.draw(win)
+        if game.pause:
             game.pause_draw(win)  # Draws on-top of the (frozen) game
-        else:  # Continue with the game
-            game.draw(win)
         game.next()
 
         pygame.display.update()  # refresh screen
@@ -66,10 +68,13 @@ def play(win, team1, team2, sound, difficulty, cam):  # Play the entire game
         game_menu.start()  # Return to main menu
 
 def practice():
-    mixer.stop()
+    '''
+    Play the game with only one team for practice
+    '''
 
+    mixer.stop()
     game = Game(team1, no_team, sound=False)  # initialize the game
-    """ Game loop """
+
     while not game.end:  # Game loop
         clock.tick(args.fps)  # FPS
 
@@ -81,6 +86,14 @@ def practice():
 
     global game_menu
     game_menu.start()  # Return to main menu
+
+def play_with_menu(win, team1, team2, play, practice, sound, difficulty, cam):
+    '''
+    Play the game starting from the main menu, uses ```play()``` internally
+    '''
+    game_menu = Menu(win, team1, team2, sound=sound, diff=difficulty/100, cam=cam)
+    game_menu.create_main_menu(play, practice)
+    return game_menu
 
 # Run the game
 if args.menu_off:

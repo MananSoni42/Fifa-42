@@ -1,4 +1,8 @@
-""" Command line arguments for the game """
+'''
+Command line arguments for the game
+
+Type ```python3 play.py --help``` for a descriptions of all the available options
+'''
 
 import argparse
 from const import FORM

@@ -117,7 +117,7 @@ class Agent(ABC):
 
         Checks for interruptions and calls the ```move()``` method if there are no interruptions
 
-        Returns either an ACT key or a META_ACT key
+        Returns an ACT / META_ACT key
         """
         interrupt = self.check_interruptions()
 

@@ -59,6 +59,8 @@ class Menu:
         self.cached_win = None
 
     def create_about_menu(self):
+        '''Create the about menu using pygame-menu'''
+
         about_menu = pygame_menu.Menu(H, W, ' About',
                                       theme=custom_theme,
                                       mouse_motion_selection=True,
@@ -74,6 +76,8 @@ class Menu:
         return about_menu
 
     def create_instr_menu(self):
+        '''Create the instructions menu using pygame-menu'''
+
         instr_menu = pygame_menu.Menu(H, W, ' Instructions',
                                       theme=custom_theme,
                                       mouse_motion_selection=True,
@@ -129,6 +133,8 @@ class Menu:
         return instr_menu
 
     def create_sett_menu(self):
+        '''Create the settings menu using pygame-menu'''
+
         sett_menu = pygame_menu.Menu(H, W, ' Settings',
                                      theme=custom_theme,
                                      mouse_motion_selection=True,
@@ -179,6 +185,14 @@ class Menu:
         return sett_menu
 
     def create_form_menu(self):
+        '''
+        Create the formation menu using pygame-menu
+
+        Note: The formation menu does not draw the entire game every frame as
+        this would be too slow and inefficient, instead the game is drawn once and
+        cached,whenever any one formation is changed the game is redrawn and
+        cached once again.
+        '''
         bc = custom_theme.background_color
         # Temporarily set the background to be transparent
         custom_theme.background_color = (42, 42, 42, 0)
@@ -210,6 +224,7 @@ class Menu:
         return form_menu
 
     def create_pract_menu(self):
+        '''Create the practice menu using pygame-menu'''
         practice_menu = pygame_menu.Menu(H, W, 'Formation',
                                          theme=custom_theme,
                                          mouse_motion_selection=True,
@@ -217,6 +232,8 @@ class Menu:
         return practice_menu
 
     def create_main_menu(self, play, practice):
+        '''Create the main menu using pygame-menu'''
+
         main_menu = pygame_menu.Menu(H, W, ' FIFA 42',
                                      theme=custom_theme,
                                      mouse_motion_selection=True,
@@ -234,12 +251,13 @@ class Menu:
             'Quit', pygame_menu.events.EXIT)  # Add exit button
         self.main_menu = main_menu
 
-    # Change color of widget and corresponding team
     def color_change(self, widget, col, team):
+        '''Change color of widget and corresponding team'''
         widget.set_background_color(col)
         team.color = col
 
-    def set_form(self, form, team_id):  # Change team 1's formation and widget's background
+    def set_form(self, form, team_id):
+        '''Change team 1's formation and widget's background'''
         self.selected_team = team_id
         self.selected_formation[self.selected_team] = form
 
@@ -254,6 +272,7 @@ class Menu:
         self.sound = val
 
     def draw_bg(self):
+        '''Draws the background required in the 'Formations' menu'''
         if self.main_menu.get_current().get_title() == 'Formation':
             if not self.cached_win or self.team1.formation != self.team1_form or self.team2.formation != self.team2_form:
                 self.team1_form = self.team1.formation
@@ -267,15 +286,10 @@ class Menu:
                 self.win.blit(pygame.image.fromstring(self.cached_win, (W,H), 'RGB'), (0,0))
 
     def start(self):
-        """
-        Display the game menu
-        """
+        '''
+        Central method that dislpays the main menu
+        '''
         if self.sound:
             mixer.stop()
             menu_music.play(-1)
         self.main_menu.mainloop(self.win, bgfun=self.draw_bg)  # Show the menu
-
-def play_with_menu(win, team1, team2, play, practice, sound, difficulty, cam):
-    game_menu = Menu(win, team1, team2, sound=sound, diff=difficulty/100, cam=cam)
-    game_menu.create_main_menu(play, practice)
-    return game_menu
