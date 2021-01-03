@@ -544,7 +544,8 @@ class Game:
             if mods & pygame.KMOD_CTRL and mods & pygame.KMOD_SHIFT and mods & pygame.KMOD_ALT:
                 self.debug = not self.debug
 
-        self.state_prev, self.state, self.rewards = self.move_next(a1, a2)
+        if not self.pause:
+            self.state_prev, self.state, self.rewards = self.move_next(a1, a2)
 
     def move_next(self, a1, a2):
         """
