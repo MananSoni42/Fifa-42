@@ -19,10 +19,11 @@ import sys
 Settings and paths
 """
 
-if getattr(sys, "frozen", False): # required for cx_Freeze
+# cx_Freeze sets this variable when making the binary
+if getattr(sys, "frozen", False):
     current_path = os.path.dirname(sys.executable)
     try:
-        import pygame._view
+        import pygame._view # weird issue with pygame and cx_Freeze
     except:
         pass
 else:

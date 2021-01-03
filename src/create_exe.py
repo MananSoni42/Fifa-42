@@ -1,3 +1,12 @@
+'''
+Script to compile this game into a binary
+
+You can only compile a binary for the operating system that you are currently using
+(You can't compile a windws binary from a linux machine)
+'''
+
+osname = 'linux' # linux / windows / mac
+
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
@@ -7,7 +16,6 @@ from pathlib import Path
 import pygame
 import pygame_menu
 
-osname = 'linux'
 
 includefiles = [("teams","teams"),
     ("assets/fonts","assets/fonts"),
