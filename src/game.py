@@ -34,6 +34,7 @@ class Game:
             team2 (Team): Left-facing team
             sound (bool): Enable / Disable in-game sounds
             difficulty (float): Game difficulty (0-1)
+            cam (str): Camera mode to play the game in
         '''
         self.sound = sound
         self.difficulty = difficulty
