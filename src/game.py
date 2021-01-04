@@ -25,7 +25,7 @@ applause = mixer.Sound(APPLAUSE)
 class Game:
     ''' Class that controls the entire game '''
 
-    def __init__(self, team1, team2, sound=True, difficulty=0.6, cam='default'):
+    def __init__(self, team1, team2, sound=True, difficulty=0.6, cam='default', train=False):
         '''
         Initializes the game
 
@@ -35,9 +35,11 @@ class Game:
             sound (bool): Enable / Disable in-game sounds
             difficulty (float): Game difficulty (0-1)
             cam (str): Camera mode to play the game in
+            train (bool): Run the game in training mode (episodic task)
         '''
         self.sound = sound
         self.difficulty = difficulty
+        self.train = train
         self.debug = False
 
         self.team1 = team1
@@ -57,8 +59,10 @@ class Game:
 
         # game state to be passed to agents (see get_state() function)
         self.state = None
-
-        self.rewards = None
+        self.rewards = {
+                1: {'global': 0, 'players': [0]*NUM_TEAM},
+                2: {'global': 0, 'players': [0]*NUM_TEAM},
+            }
 
         if self.sound:
             single_short_whistle.play()
@@ -561,6 +565,9 @@ class Game:
         if not self.pause:
             self.state_prev, self.state, self.rewards = self.move_next(a1, a2)
 
+        if self.train: # Game is episodic, end when a goal is scored
+            self.end = (self.stats.goals[1] + self.stats.goal[2] > 0)
+
     def move_next(self, a1, a2):
         '''
         Update the players' and ball's internal state based on the teams' actions
@@ -580,10 +587,9 @@ class Game:
         # Check for collision between players
         self.collision(self.team1, self.team2, self.ball)
 
-        self.ball.update(self.team1, self.team2, a1, a2,
-                         self.stats)  # Update ball's state
+        self.rewards = self.ball.update(self.team1, self.team2, a1, a2, self.stats)  # Update ball's state
 
         self.cam.move(self.ball.pos.x, self.ball.pos.y)
 
         state = self.get_state()
-        return state_prev, state, 0
+        return state_prev, state, self.rewards

@@ -69,17 +69,13 @@ OVER_TOP_LEFT = P(W//2-OVER_SIZE.x//2, H-50-OVER_SIZE.y)
 
 
 ############## RL hyper-parameters ##############
-NUM_CHECKPOINTS = 5 # Divide field into these many segments from half line to goal
-
 R = { # rewards (convention is +ve for team1 -ve for team 2)
     'goal': 1, # score a goal
-    'move_goal': 1/NUM_CHECKPOINTS, # move the ball toards the goal (quantized into NUM_CHECKPOINTS from half line to the goal)
     'pass_succ': 0.1, # A successfull pass
     'pass_fail': -0.2, # A failed pass
     'pass_recv_same': 0.1, # Receive pass from same team player
     'pass_recv_diff': 0.2, # Intercept pass
 }
-
 
 ############## Assets (images, fonts, sounds) ##############
 ASSET_DIR = os.path.join(CurrentPath, 'assets')  # Path to assets
