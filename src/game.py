@@ -5,7 +5,7 @@ Manages interactions with the players and the ball
 '''
 
 from settings import *
-from const import ACT
+from const import ACT, add_rewards
 from ball import Ball
 from stats import Stats
 from camera import Camera
@@ -592,15 +592,21 @@ class Game:
         self.collision(self.team1, self.team2, self.ball)
 
         self.rewards = self.ball.update(self.team1, self.team2, a1, a2, self.stats)  # Update ball's state
-        self.reward_hist.update(self.rewards)
+        self.reward_hist = add_rewards(self.reward_hist, self.rewards)
         self.cam.move(self.ball.pos.x, self.ball.pos.y)
 
         state = self.get_state()
         return state_prev, state, self.rewards
 
     def close(self):
-        for player in self.team1:
-            player.agent.close()
+        try:
+            for player in self.team1.players:
+                player.agent.close()
+        except:
+            pass
 
-        for player in self.team2:
-            player.agent.close()
+        try:
+            for player in self.team2.players:
+                player.agent.close()
+        except:
+            pass

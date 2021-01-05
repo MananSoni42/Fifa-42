@@ -45,5 +45,6 @@ for count in tqdm(range(MAX_EP_LEN)):  # Game loop
     game.next()
 
     pygame.display.update()  # refresh screen
+game.close()
 
 pprint(game.reward_hist)

@@ -3,7 +3,7 @@ Define the football used in the game
 """
 
 from settings import *
-from const import ACT
+from const import ACT, add_rewards
 from pygame import mixer
 
 # Init Sounds
@@ -141,12 +141,10 @@ class Ball:
                 if self.ball_stats['last_player'] != self.ball_stats['player'] :
                     stats.pos[self.ball_stats['team']] += 1
                     stats.pass_acc[self.ball_stats['team']]['succ'] += 1
-                    print(f'same team pass - {self.ball_stats["team"]}')
                     rewards[self.ball_stats['team']]['players'][self.ball_stats['player']] += R['pass_recv_same']
                     rewards[self.ball_stats['team']]['players'][self.ball_stats['last_player']] += R['pass_succ']
             else: # Different team pass
                 if self.ball_stats['last_team'] != -1:
-                    print(f'diff team pass - {self.ball_stats["team"]}')
                     rewards[self.ball_stats['team']]['players'][self.ball_stats['player']] += R['pass_recv_diff']
                     rewards[self.ball_stats['team']]['players'][self.ball_stats['last_player']] += R['pass_fail']
                     if self.ball_stats['player'] == 0: # GK of different team receives the ball
@@ -155,7 +153,6 @@ class Ball:
                         stats.pass_acc[self.ball_stats['last_team']]['fail'] += 1
 
         elif goal is not None: # Called when a goal is scored
-            print(f'Goal - {side} side')
             if side == self.ball_stats['team']:  # own goal
                 if goal:
                     rewards[side]['global'] -= R['goal']
@@ -190,7 +187,8 @@ class Ball:
                 self.vel = P(0,0)
                 self.free = False
                 self.dir = player.walk_dir
-                rewards.update(self.update_stats_rewards(stats, player=player))
+                player_reward = self.update_stats_rewards(stats, player=player)
+                rewards = add_rewards(rewards, player_reward)
 
         return rewards
 
@@ -221,8 +219,9 @@ class Ball:
                 self.pos = player.pos + BALL_OFFSET*BALL_CENTER
 
         else:
-            rewards.update(self.ball_player_collision(team1, stats))
-            rewards.update(self.ball_player_collision(team2, stats))
+            team1_rewards = self.ball_player_collision(team1, stats)
+            team2_rewards = self.ball_player_collision(team2, stats)
+            rewards = add_rewards(team1_rewards, team2_rewards)
 
         return rewards
 
@@ -262,7 +261,7 @@ class Ball:
         elif a in ['SHOOT_Q', 'SHOOT_W', 'SHOOT_E', 'SHOOT_A', 'SHOOT_D', 'SHOOT_Z', 'SHOOT_X', 'SHOOT_C']: # Player shoots
             self.vel = P(ACT[a])
             self.free = True
-            # Ball relearse mechanics (when player shoots)
+            # Ball release mechanics (when player shoots)
             const = PLAYER_RADIUS + BALL_RADIUS + 1
             if self.dir == 'R' and ACT[a].x >= 0:
                 self.pos.x += const - BALL_RADIUS*BALL_OFFSET.x
@@ -273,7 +272,7 @@ class Ball:
             elif self.dir == 'L' and ACT[a].x <= 0:
                 self.pos.x -= const - BALL_RADIUS*BALL_OFFSET.x
 
-        rewards = self.check_capture(team1, team2, stats)
-        rewards.update(self.goal_check(stats))
+        ball_rewards = self.check_capture(team1, team2, stats)
+        goal_rewards = self.goal_check(stats)
 
-        return rewards
+        return add_rewards(ball_rewards, goal_rewards)
