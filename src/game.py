@@ -5,7 +5,7 @@ Manages interactions with the players and the ball
 '''
 
 from settings import *
-from const import ACT, add_rewards
+from const import ACT, add_rewards, FORM
 from ball import Ball
 from stats import Stats
 from camera import Camera
@@ -25,7 +25,7 @@ applause = mixer.Sound(APPLAUSE)
 class Game:
     ''' Class that controls the entire game '''
 
-    def __init__(self, team1, team2, sound=True, difficulty=0.6, cam='default', train=False):
+    def __init__(self, team1, team2, sound=True, difficulty=0.6, cam='default'):
         '''
         Initializes the game
 
@@ -39,7 +39,6 @@ class Game:
         '''
         self.sound = sound
         self.difficulty = difficulty
-        self.train = train
         self.debug = False
 
         self.team1 = team1
@@ -58,7 +57,7 @@ class Game:
         self.state_prev = None
 
         # game state to be passed to agents (see get_state() function)
-        self.state = None
+        self.state = self.get_state()
         self.rewards = {
             1: {'global': 0, 'players': [0]*NUM_TEAM},
             2: {'global': 0, 'players': [0]*NUM_TEAM},
@@ -71,6 +70,26 @@ class Game:
         if self.sound:
             single_short_whistle.play()
             applause.play(-1)
+
+    def reset(self):
+        self.ball.reset((W//2, H//2))
+        self.state_prev, self.state = None, self.get_state()
+        self.rewards = { 1: {'global': 0, 'players': [0]*NUM_TEAM}, 2: {'global': 0, 'players': [0]*NUM_TEAM} }
+        self.reward_hist = { 1: {'global': 0, 'players': [0]*NUM_TEAM}, 2: {'global': 0, 'players': [0]*NUM_TEAM} }
+
+        for i,player in enumerate(self.team1.players):
+            player.pos = FORM[self.team1.formation][self.team1.dir][i]['coord']
+            try:
+                player.agent.reset()
+            except:
+                pass
+
+        for i,player in enumerate(self.team2.players):
+            player.pos = FORM[self.team2.formation][self.team2.dir][i]['coord']
+            try:
+                player.agent.reset()
+            except:
+                pass
 
     def same_team_collision(self, team, free):
         '''
@@ -568,9 +587,6 @@ class Game:
 
         if not self.pause:
             self.state_prev, self.state, self.rewards = self.move_next(a1, a2)
-
-        if self.train: # Game is episodic, end when a goal is scored
-            self.end = (self.stats.goals[1] + self.stats.goal[2] > 0)
 
     def move_next(self, a1, a2):
         '''

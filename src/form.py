@@ -1,7 +1,7 @@
 """
 Team formations
     - Must start with the keeper
-    - Must contain positions for both left and right sides
+    - Need to specify positions for only the LEFT side
     - Recommended to specify completley in terms of W and H (and PLAYER_RADIUS / BALL_RADIUS if reqd)
 
 """
@@ -191,3 +191,7 @@ FORM = {
         ],
     },
 }
+
+for key in FORM.keys():  # Fill in right side counterparts of all formations
+    FORM[key]['R'] = [
+        {'coord': P(W, H) - form['coord'], 'pos': form['pos']} for form in FORM[key]['L']]

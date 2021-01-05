@@ -20,7 +20,7 @@ class RLAgent(agent):
     def __init__(self, id, team_id, pos, dir='L', state_spec=None, action_spec=None):
         super().__init__(id, team_id, pos, dir='L')
         self.agent = rl_agent.create(agent='reinforce',
-                    states=state_spec, actions=action_spec, max_episode_timesteps=100000,
+                    states=state_spec, actions=action_spec, max_episode_timesteps=MAX_EP_LEN,
                     batch_size=1)
 
     def convert_state(self, state_prev, state):
@@ -35,10 +35,11 @@ class RLAgent(agent):
         """
         The agent observes the previous state's reward and acts on the current state
         """
-        if state_prev and state:
+        if state_prev:
             action = self.agent.act(states=self.convert_state(state_prev, state))[0]
             self.agent.observe(reward=reward)
             return ACTION_MAP[action]
+
         return 'NOTHING'
 
 

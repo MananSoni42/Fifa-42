@@ -1,12 +1,6 @@
 """
 Game specific functions and constants
 
-Includes:
-
-- the actions that a player can take
-- possible formations
-- recolor a player sprite
-
 Do not change these constants directly as other parts of the game rely on their correct format
 """
 
@@ -31,10 +25,6 @@ necessary for multiplayer modes  as these actions must be
 checked at the player / team level instead of the game level
 """
 META_ACT = {'QUIT', 'PAUSE', 'TOGGLE_FORM', 'TOGGLE_DEBUG', 'FORM'}
-
-for key in FORM.keys():  # Fill in right side counterparts of all formations
-    FORM[key]['R'] = [
-        {'coord': P(W, H) - form['coord'], 'pos': form['pos']} for form in FORM[key]['L']]
 
 ############## Functions ##############
 
