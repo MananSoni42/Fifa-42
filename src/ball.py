@@ -98,15 +98,14 @@ class Ball:
                 pos = P(W//2, H//2)
 
         if reset:
-            reawards = self.update_stats_rewards(stats, goal=goal, side=side)
+            rewards = self.update_stats_rewards(stats, goal=goal, side=side)
             self.reset(pos)
-        else:
-            rewards = {
-                1: {'global': 0, 'players': [0]*NUM_TEAM},
-                2: {'global': 0, 'players': [0]*NUM_TEAM},
-            }
-        return rewards
+            return rewards
 
+        return {
+            1: {'global': 0, 'players': [0]*NUM_TEAM},
+            2: {'global': 0, 'players': [0]*NUM_TEAM},
+        }
 
     def update_stats_rewards(self, stats, player=None, goal=None, side=None):
         """
@@ -142,10 +141,12 @@ class Ball:
                 if self.ball_stats['last_player'] != self.ball_stats['player'] :
                     stats.pos[self.ball_stats['team']] += 1
                     stats.pass_acc[self.ball_stats['team']]['succ'] += 1
+                    print(f'same team pass - {self.ball_stats["team"]}')
                     rewards[self.ball_stats['team']]['players'][self.ball_stats['player']] += R['pass_recv_same']
                     rewards[self.ball_stats['team']]['players'][self.ball_stats['last_player']] += R['pass_succ']
             else: # Different team pass
                 if self.ball_stats['last_team'] != -1:
+                    print(f'diff team pass - {self.ball_stats["team"]}')
                     rewards[self.ball_stats['team']]['players'][self.ball_stats['player']] += R['pass_recv_diff']
                     rewards[self.ball_stats['team']]['players'][self.ball_stats['last_player']] += R['pass_fail']
                     if self.ball_stats['player'] == 0: # GK of different team receives the ball
@@ -154,6 +155,7 @@ class Ball:
                         stats.pass_acc[self.ball_stats['last_team']]['fail'] += 1
 
         elif goal is not None: # Called when a goal is scored
+            print(f'Goal - {side} side')
             if side == self.ball_stats['team']:  # own goal
                 if goal:
                     rewards[side]['global'] -= R['goal']

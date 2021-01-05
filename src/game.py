@@ -60,9 +60,13 @@ class Game:
         # game state to be passed to agents (see get_state() function)
         self.state = None
         self.rewards = {
-                1: {'global': 0, 'players': [0]*NUM_TEAM},
-                2: {'global': 0, 'players': [0]*NUM_TEAM},
-            }
+            1: {'global': 0, 'players': [0]*NUM_TEAM},
+            2: {'global': 0, 'players': [0]*NUM_TEAM},
+        }
+        self.reward_hist = {
+            1: {'global': 0, 'players': [0]*NUM_TEAM},
+            2: {'global': 0, 'players': [0]*NUM_TEAM},
+        }
 
         if self.sound:
             single_short_whistle.play()
@@ -588,8 +592,15 @@ class Game:
         self.collision(self.team1, self.team2, self.ball)
 
         self.rewards = self.ball.update(self.team1, self.team2, a1, a2, self.stats)  # Update ball's state
-
+        self.reward_hist.update(self.rewards)
         self.cam.move(self.ball.pos.x, self.ball.pos.y)
 
         state = self.get_state()
         return state_prev, state, self.rewards
+
+    def close(self):
+        for player in self.team1:
+            player.agent.close()
+
+        for player in self.team2:
+            player.agent.close()

@@ -8,25 +8,16 @@ from teams.agent import Agent as agent
 from tensorforce.agents import Agent as rl_agent
 from teams.team import Team
 from tqdm import tqdm
-from pprint import pprint
-
-state_spec = dict(
-        ball = dict(type='float', shape=2, min_value=0, max_value=max(W,H)),
-        team1 = dict(type='float', shape=4, min_value=0, max_value=max(W,H)),
-        team2 = dict(type='float', shape=4, min_value=0, max_value=max(W,H)),
-    )
-
-action_spec = dict(type='int', shape=1, num_values=len(ACT))
 
 ACTION_MAP = list(ACT.keys())
 
 
 class RLAgent(agent):
     """
-    Agents that move randomly
+    RL team
     """
 
-    def __init__(self, id, team_id, pos, dir='L'):
+    def __init__(self, id, team_id, pos, dir='L', state_spec=None, action_spec=None):
         super().__init__(id, team_id, pos, dir='L')
         self.agent = rl_agent.create(agent='reinforce',
                     states=state_spec, actions=action_spec, max_episode_timesteps=100000,
@@ -58,10 +49,21 @@ class RLTeam(Team):
 
     def set_players(self, ids):
         self.players = []
-        for i in range(NUM_TEAM):
-            if i in tqdm(ids):
+
+        state_spec = dict(
+                ball = dict(type='float', shape=2, min_value=0, max_value=max(W,H)),
+                team1 = dict(type='float', shape=2*len(ids), min_value=0, max_value=max(W,H)),
+                team2 = dict(type='float', shape=2*len(ids), min_value=0, max_value=max(W,H)),
+            )
+
+        action_spec = dict(type='int', shape=1, num_values=len(ACT))
+
+        print(f'Initializing team {self.id}')
+        for i in tqdm(range(NUM_TEAM)):
+            if i in ids:
                 self.players.append(RLAgent(
-                    id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
+                    id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord'],
+                    state_spec=state_spec, action_spec=action_spec))
 
     def move(self, state_prev, state, reward):
         """
