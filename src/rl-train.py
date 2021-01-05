@@ -7,8 +7,7 @@ from settings import *
 from pygame import mixer
 from game import Game
 from teams.human import HumanTeam
-from teams.original_ai import OriginalAITeam
-from teams.random import RandomTeam
+from teams.rl import RLTeam
 from menu import Menu
 from args import get_args
 
@@ -24,8 +23,8 @@ mixer.init(44100, -16, 2, 2048)
 menu_music = mixer.Sound(MENU_MUSIC)
 
 # Define teams (Team 1 faces right by default)
-team1 = HumanTeam(formation=args.team1_formation, color=(0, 32, 255))
-team2 = OriginalAITeam(formation=args.team2_formation, color=(255, 128, 0))
+team1 = HumanTeam(formation=args.team1_formation, color=(0, 32, 255), ids=[0,5])
+team2 = RLTeam(formation=args.team2_formation, color=(255, 128, 0), ids=[0,5])
 
 def play(win, team1, team2, sound, difficulty, cam):
     '''
@@ -35,7 +34,7 @@ def play(win, team1, team2, sound, difficulty, cam):
     mixer.stop()
     game = Game(team1, team2, sound, difficulty, cam)  # initialize the game
     game.debug = True
-    
+
     while not game.end:  # Game loop
         clock.tick(args.fps)  # FPS
 
