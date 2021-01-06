@@ -12,7 +12,6 @@ from camera import Camera
 from pygame import mixer
 import time
 
-
 mixer.init(44100, -16, 2, 2048)
 applause = mixer.Sound(APPLAUSE)
 kick = mixer.Sound(KICK)
@@ -76,22 +75,18 @@ class Game:
         self.state_prev, self.state = None, self.get_state()
         self.rewards = { 1: {'global': 0, 'players': [0]*NUM_TEAM}, 2: {'global': 0, 'players': [0]*NUM_TEAM} }
         self.reward_hist = { 1: {'global': 0, 'players': [0]*NUM_TEAM}, 2: {'global': 0, 'players': [0]*NUM_TEAM} }
+        self.stats = Stats()
 
-        for i,player in enumerate(self.team1.players):
-            if i in self.team1.ids:
-                player.pos = FORM[self.team1.formation][self.team1.dir][i]['coord']
-                try:
-                    player.agent.reset()
-                except:
-                    pass
-
-        for i,player in enumerate(self.team2.players):
-            if i in self.team2.ids:
-                player.pos = FORM[self.team2.formation][self.team2.dir][i]['coord']
-                try:
-                    player.agent.reset()
-                except:
-                    pass
+        for id,team in enumerate([self.team1, self.team2]):
+            for i,player in enumerate(team.players):
+                if i in self.team1.ids:
+                    player.pos = FORM[self.team1.formation][self.team1.dir][i]['coord']
+            try:
+                for i,player in enumerate(team.players):
+                    if i in self.team1.ids:
+                        player.agent.reset()
+            except:
+                pass
 
     def same_team_collision(self, team, free):
         '''
@@ -140,7 +135,7 @@ class Game:
                 if  player1 and player2 and \
                     abs(player1.pos.x - player2.pos.x) <= min_dist.x and \
                     abs(player1.pos.y - player2.pos.y) <= min_dist.y:
-                    
+
                     if not free:
                         self.ball.reset(self.ball.pos)
                     xincr = 1 + 2*PLAYER_RADIUS - \
@@ -623,15 +618,22 @@ class Game:
         state = self.get_state()
         return state_prev, state, self.rewards
 
-    def close(self):
+    def close(self, dir, save):
+        '''
+        Close the RL agents used in the game (only required for RL training)
+        '''
         try:
-            for player in self.team1.players:
-                player.agent.close()
+            if save:
+                self.team1.save(dir)
+            for agent in self.team1.meta_agents:
+                agent.close()
         except:
             pass
 
         try:
-            for player in self.team2.players:
-                player.agent.close()
+            if save:
+                self.team2.save(dir)
+            for agent in self.team2.meta_agents:
+                agent.close()
         except:
             pass

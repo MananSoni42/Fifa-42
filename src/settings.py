@@ -69,8 +69,8 @@ OVER_TOP_LEFT = P(W//2-OVER_SIZE.x//2, H-50-OVER_SIZE.y)
 
 
 ############## RL hyper-parameters ##############
-NUM_EP = 10
 MAX_EP_LEN = int(1e3)
+BATCH_SIZE = 1
 
 R = { # rewards (convention is +ve for team1 -ve for team 2)
     'goal': 1, # score a goal
