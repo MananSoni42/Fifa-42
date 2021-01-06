@@ -43,13 +43,13 @@ game = Game(team1, team2, sound=False, difficulty=args.difficulty/100, cam='full
 game.team2.load(args.agent_dir)
 
 total_reward = {
-    1: {'global': 0, 'players': [0]*NUM_TEAM},
-    2: {'global': 0, 'players': [0]*NUM_TEAM},
+    1: [0]*NUM_TEAM,
+    2: [0]*NUM_TEAM,
 }
 
 for ep in range(1,args.ep+1):
     game.reset()
-    print(f'\nRunning episode {ep} ...')
+    print(f'\nEp {ep}')
     for count in tqdm(range(MAX_EP_LEN)):  # Game loop
 
         #clock.tick(args.fps)  # FPS
@@ -65,10 +65,10 @@ for ep in range(1,args.ep+1):
 
     approx = lambda l: [round(i,3) for i in l]
     total_reward = add_rewards(total_reward, game.reward_hist)
-    print(f'''\n ------------- Episode {ep} -------------
-    Team 1: {total_reward[1]['global']} | {approx(total_reward[1]['players'])}
-    Team 2: {total_reward[2]['global']} | {approx(total_reward[2]['players'])}
-    \t-------------------------
-    ''')
+    if count%args.summary_freq == 0:
+        print(f'''\n ----------- Summary till Ep {ep} -----------
+        Team 1: {sum(total_reward[1])/11/ep} | {approx(total_reward[1])}
+        Team 2: {sum(total_reward[2])/11/ep} | {approx(total_reward[2])}
+        -------------------------''')
 
 game.close(args.agent_dir, save=not args.nosave)

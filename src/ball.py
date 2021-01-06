@@ -67,7 +67,7 @@ class Ball:
         self.ball_stats['player'] = -1
         self.ball_stats['team'] = -1
 
-    def goal_check(self, stats):
+    def goal_check(self, stats, team1, team2):
         """
         Check if a goal is scored
 
@@ -98,16 +98,16 @@ class Ball:
                 pos = P(W//2, H//2)
 
         if reset:
-            rewards = self.update_stats_rewards(stats, goal=goal, side=side)
+            rewards = self.update_stats_rewards(stats, team1, team2, goal=goal, side=side)
             self.reset(pos)
             return rewards
 
         return {
-            1: {'global': 0, 'players': [0]*NUM_TEAM},
-            2: {'global': 0, 'players': [0]*NUM_TEAM},
+            1: [0]*NUM_TEAM,
+            2: [0]*NUM_TEAM,
         }
 
-    def update_stats_rewards(self, stats, player=None, goal=None, side=None):
+    def update_stats_rewards(self, stats, team1, team2, player=None, goal=None, side=None):
         """
         Sync ball statistics with the global variables, returns rewards
 
@@ -127,8 +127,8 @@ class Ball:
                     Does not apply if player shoots towards his own goal
         """
         rewards = {
-            1: {'global': 0, 'players': [0]*NUM_TEAM},
-            2: {'global': 0, 'players': [0]*NUM_TEAM},
+            1: [0]*NUM_TEAM,
+            2: [0]*NUM_TEAM,
         }
 
         if player is not None: # Player receives the ball
@@ -137,30 +137,55 @@ class Ball:
             self.ball_stats['player'] = player.id
             self.ball_stats['team'] = player.team_id
 
+            if self.ball_stats['team'] == 1:
+                player = team1.players[self.ball_stats['player']]
+            else:
+                player = team2.players[self.ball_stats['player']]
+
+            if self.ball_stats['last_team'] == 1:
+                last_player = team1.players[self.ball_stats['last_player']]
+            else:
+                last_player = team2.players[self.ball_stats['last_player']]
+
+
             if self.ball_stats['last_team'] == self.ball_stats['team']: # Same team pass
                 if self.ball_stats['last_player'] != self.ball_stats['player'] :
                     stats.pos[self.ball_stats['team']] += 1
                     stats.pass_acc[self.ball_stats['team']]['succ'] += 1
-                    rewards[self.ball_stats['team']]['players'][self.ball_stats['player']] += R['pass_recv_same']
-                    rewards[self.ball_stats['team']]['players'][self.ball_stats['last_player']] += R['pass_succ']
+
+                    rewards[self.ball_stats['team']][self.ball_stats['player']] += player.R['pass_recv_same']
+                    rewards[self.ball_stats['team']][self.ball_stats['last_player']] += last_player.R['pass_succ']
+
             else: # Different team pass
                 if self.ball_stats['last_team'] != -1:
-                    rewards[self.ball_stats['team']]['players'][self.ball_stats['player']] += R['pass_recv_diff']
-                    rewards[self.ball_stats['team']]['players'][self.ball_stats['last_player']] += R['pass_fail']
+                    rewards[self.ball_stats['team']][self.ball_stats['player']] += player.R['pass_recv_diff']
+                    rewards[self.ball_stats['team']][self.ball_stats['last_player']] += last_player.R['pass_fail']
+
                     if self.ball_stats['player'] == 0: # GK of different team receives the ball
                         stats.shot_acc[self.ball_stats['last_team']]['fail'] += 1
                     else:
                         stats.pass_acc[self.ball_stats['last_team']]['fail'] += 1
 
         elif goal is not None: # Called when a goal is scored
+            team_side = { 1: team1, 2: team2 }
+            other_side = 3-side
             if side == self.ball_stats['team']:  # own goal
                 if goal:
-                    rewards[side]['global'] -= R['goal']
-                    rewards[3-side]['global'] += R['goal']
+                    for player in team_side[side].players:
+                        if player:
+                            rewards[side][player.id] += player.R['goal_recv']
+                    for player in team_side[other_side].players:
+                        if player:
+                            rewards[other_side][player.id] += player.R['goal']
             else:
                 if goal:
-                    rewards[side]['global'] += R['goal']
-                    rewards[3-side]['global'] -= R['goal']
+                    for player in team_side[side].players:
+                        if player:
+                            rewards[side][player.id] += player.R['goal']
+                    for player in team_side[other_side].players:
+                        if player:
+                            rewards[other_side][player.id] += player.R['goal_recv']
+
                     stats.shot_acc[self.ball_stats['team']]['succ'] += 1
                 else:
                     stats.shot_acc[self.ball_stats['team']]['fail'] += 1
@@ -169,7 +194,7 @@ class Ball:
 
         return rewards
 
-    def ball_player_collision(self, team, stats):
+    def ball_player_collision(self, team, stats, team1, team2):
         """
         Check if the ball has been captured by a player
 
@@ -178,8 +203,8 @@ class Ball:
             stats (Stats):  Keep track of game statistics for the pause menu
         """
         rewards = {
-            1: {'global': 0, 'players': [0]*NUM_TEAM},
-            2: {'global': 0, 'players': [0]*NUM_TEAM},
+            1: [0]*NUM_TEAM,
+            2: [0]*NUM_TEAM,
         }
 
         for player in team.players:
@@ -187,7 +212,7 @@ class Ball:
                 self.vel = P(0,0)
                 self.free = False
                 self.dir = player.walk_dir
-                player_reward = self.update_stats_rewards(stats, player=player)
+                player_reward = self.update_stats_rewards(stats, team1, team2, player=player)
                 rewards = add_rewards(rewards, player_reward)
 
         return rewards
@@ -202,8 +227,8 @@ class Ball:
             stats (Stats):  Keep track of game statistics for the pause menu
         """
         rewards = {
-            1: {'global': 0, 'players': [0]*NUM_TEAM},
-            2: {'global': 0, 'players': [0]*NUM_TEAM},
+            1: [0]*NUM_TEAM,
+            2: [0]*NUM_TEAM,
         }
 
         if self.ball_stats['team'] == 1:
@@ -219,8 +244,8 @@ class Ball:
                 self.pos = player.pos + BALL_OFFSET*BALL_CENTER
 
         else:
-            team1_rewards = self.ball_player_collision(team1, stats)
-            team2_rewards = self.ball_player_collision(team2, stats)
+            team1_rewards = self.ball_player_collision(team1, stats, team1, team2)
+            team2_rewards = self.ball_player_collision(team2, stats, team1, team2)
             rewards = add_rewards(team1_rewards, team2_rewards)
 
         return rewards
@@ -273,6 +298,6 @@ class Ball:
                 self.pos.x -= const - BALL_RADIUS*BALL_OFFSET.x
 
         ball_rewards = self.check_capture(team1, team2, stats)
-        goal_rewards = self.goal_check(stats)
+        goal_rewards = self.goal_check(stats, team1, team2)
 
         return add_rewards(ball_rewards, goal_rewards)

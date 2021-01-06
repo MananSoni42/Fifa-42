@@ -57,13 +57,15 @@ class Game:
 
         # game state to be passed to agents (see get_state() function)
         self.state = self.get_state()
-        self.rewards = {
-            1: {'global': 0, 'players': [0]*NUM_TEAM},
-            2: {'global': 0, 'players': [0]*NUM_TEAM},
+
+        self.rewards = { # rewards for the current time step
+            1: [0]*NUM_TEAM,
+            2: [0]*NUM_TEAM,
         }
-        self.reward_hist = {
-            1: {'global': 0, 'players': [0]*NUM_TEAM},
-            2: {'global': 0, 'players': [0]*NUM_TEAM},
+
+        self.reward_hist = { # total rewards for the entire episode
+            1: [0]*NUM_TEAM,
+            2: [0]*NUM_TEAM,
         }
 
         if self.sound:
@@ -73,17 +75,18 @@ class Game:
     def reset(self):
         self.ball.reset((W//2, H//2))
         self.state_prev, self.state = None, self.get_state()
-        self.rewards = { 1: {'global': 0, 'players': [0]*NUM_TEAM}, 2: {'global': 0, 'players': [0]*NUM_TEAM} }
-        self.reward_hist = { 1: {'global': 0, 'players': [0]*NUM_TEAM}, 2: {'global': 0, 'players': [0]*NUM_TEAM} }
+
+        self.rewards = { 1: [0]*NUM_TEAM, 2: [0]*NUM_TEAM }
+        self.reward_hist = { 1: [0]*NUM_TEAM, 2: [0]*NUM_TEAM }
         self.stats = Stats()
 
-        for id,team in enumerate([self.team1, self.team2]):
+        for team in [self.team1, self.team2]:
             for i,player in enumerate(team.players):
-                if i in self.team1.ids:
-                    player.pos = FORM[self.team1.formation][self.team1.dir][i]['coord']
+                if i in team.ids:
+                    player.pos = FORM[team.formation][team.dir][i]['coord']
             try:
                 for i,player in enumerate(team.players):
-                    if i in self.team1.ids:
+                    if i in team.ids:
                         player.agent.reset()
             except:
                 pass

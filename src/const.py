@@ -30,10 +30,8 @@ META_ACT = {'QUIT', 'PAUSE', 'TOGGLE_FORM', 'TOGGLE_DEBUG', 'FORM'}
 
 def add_rewards(d1, d2):
     return {
-        1: {'global': d1[1]['global'] + d2[1]['global'],
-            'players': [d1[1]['players'][i] + d2[1]['players'][i]for i in range(NUM_TEAM)] },
-        2: {'global': d1[2]['global'] + d2[2]['global'],
-            'players': [d1[2]['players'][i] + d2[2]['players'][i]for i in range(NUM_TEAM)] },
+        1: [d1[1][i] + d2[1][i]for i in range(NUM_TEAM)],
+        2: [d1[2][i] + d2[2][i]for i in range(NUM_TEAM)],
     }
 
 def recolor(surface, color=(255, 108, 0)):

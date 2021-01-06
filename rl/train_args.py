@@ -18,6 +18,9 @@ def get_args():
     parser.add_argument('--display', action='store_true', default=False,
                         help='Show the game while training')
 
+    parser.add_argument('--summary_freq', type=int, default=10,
+                       help='Frequency at which to show episode summaries')
+
     parser.add_argument('--nosave', action='store_true', default=False,
                         help='Don\'t save the agents after training')
 

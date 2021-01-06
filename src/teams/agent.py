@@ -32,6 +32,7 @@ class Agent(ABC):
         self.walk_dir = dir  # options are R (right), L (left)
         self.walk_count = 0  # For running animation
         self.rnd = 0.01*random.random() # random number used to break ties
+        self.R = REW['MID']
 
     def __str__(self):
         return f'\nAgent {self.id} - {self.pos}'

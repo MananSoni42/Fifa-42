@@ -16,9 +16,10 @@ class RLAgent(agent):
     RL team
     """
 
-    def __init__(self, id, team_id, pos, meta_agent, dir='L'):
-        super().__init__(id, team_id, pos, dir='L')
+    def __init__(self, id, team_id, pos, meta_agent, reward, dir='L'):
+        super().__init__(id, team_id, pos, dir)
         self.agent = meta_agent
+        self.R = reward
 
     def convert_state(self, state_prev, state):
         return {
@@ -76,19 +77,20 @@ class RLTeam(Team):
             if i in ids:
                 self.players.append(RLAgent(
                     id=i, team_id=self.id, pos=form[i]['coord'],
-                    meta_agent=self.meta_agent[form[i]['pos']]))
+                    meta_agent=self.meta_agent[form[i]['pos']],
+                    reward=REW[form[i]['pos']]))
             else:
                 self.players.append(None)
 
     def move(self, state_prev, state, reward):
         """
-        Move each player randomly
+        Move the RL team by moving each RL agent
         """
         actions = []
-        global_reward = reward[self.id]['global']
+
         for i, player in enumerate(self.players):
             if player:
-                actions.append(player.check_move(state_prev, state, reward[self.id]['players'][i]))
+                actions.append(player.check_move(state_prev, state, reward[self.id][i]))
             else:
                 actions.append('NOTHING')
         return actions
