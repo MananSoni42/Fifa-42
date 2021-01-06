@@ -90,7 +90,8 @@ class Team(ABC):
         Basically calls each players' ```draw()``` method
         """
         for player in self.players:
-            player.draw(win, cam, team_id=self.id, debug=debug)
+            if player:
+                player.draw(win, cam, team_id=self.id, debug=debug)
 
     def update(self, action, ball):
         """
@@ -100,7 +101,8 @@ class Team(ABC):
         """
 
         for i, player in enumerate(self.players):
-            player.update(action[i], self.players)
+            if player:
+                player.update(action[i], self.players)
 
     def formation_dir(self, id):
         """

@@ -78,18 +78,20 @@ class Game:
         self.reward_hist = { 1: {'global': 0, 'players': [0]*NUM_TEAM}, 2: {'global': 0, 'players': [0]*NUM_TEAM} }
 
         for i,player in enumerate(self.team1.players):
-            player.pos = FORM[self.team1.formation][self.team1.dir][i]['coord']
-            try:
-                player.agent.reset()
-            except:
-                pass
+            if i in self.team1.ids:
+                player.pos = FORM[self.team1.formation][self.team1.dir][i]['coord']
+                try:
+                    player.agent.reset()
+                except:
+                    pass
 
         for i,player in enumerate(self.team2.players):
-            player.pos = FORM[self.team2.formation][self.team2.dir][i]['coord']
-            try:
-                player.agent.reset()
-            except:
-                pass
+            if i in self.team2.ids:
+                player.pos = FORM[self.team2.formation][self.team2.dir][i]['coord']
+                try:
+                    player.agent.reset()
+                except:
+                    pass
 
     def same_team_collision(self, team, free):
         '''
@@ -102,7 +104,11 @@ class Game:
 
         for player1 in team.players:
             for player2 in team.players:
-                if player1.id != player2.id and abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
+                if  player1 and player2 and \
+                    player1.id != player2.id and \
+                    abs(player1.pos.x - player2.pos.x) <= min_dist.x and \
+                    abs(player1.pos.y - player2.pos.y) <= min_dist.y:
+
                     xincr = 1 + PLAYER_RADIUS - \
                         abs(player1.pos.x-player2.pos.x)//2
                     xdir = (1, -1)
@@ -131,7 +137,10 @@ class Game:
 
         for player1 in team1.players:
             for player2 in team2.players:
-                if abs(player1.pos.x - player2.pos.x) <= min_dist.x and abs(player1.pos.y - player2.pos.y) <= min_dist.y:
+                if  player1 and player2 and \
+                    abs(player1.pos.x - player2.pos.x) <= min_dist.x and \
+                    abs(player1.pos.y - player2.pos.y) <= min_dist.y:
+                    
                     if not free:
                         self.ball.reset(self.ball.pos)
                     xincr = 1 + 2*PLAYER_RADIUS - \
@@ -528,8 +537,8 @@ class Game:
         }
         ```
         '''
-        pos1 = [player.pos for player in self.team1.players]
-        pos2 = [player.pos for player in self.team2.players]
+        pos1 = [player.pos for player in self.team1.players if player]
+        pos2 = [player.pos for player in self.team2.players if player]
         return {
             'team1': {
                 'players': self.team1.players,

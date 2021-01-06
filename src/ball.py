@@ -183,7 +183,7 @@ class Ball:
         }
 
         for player in team.players:
-            if self.pos.dist(player.pos) < PLAYER_RADIUS + BALL_RADIUS:
+            if player and self.pos.dist(player.pos) < PLAYER_RADIUS + BALL_RADIUS:
                 self.vel = P(0,0)
                 self.free = False
                 self.dir = player.walk_dir

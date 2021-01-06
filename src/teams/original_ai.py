@@ -62,7 +62,7 @@ class OriginalAIAgent(Agent):
 
         player_vec = P(0, 0)  # Direction vector to move due to opposite team
         for player in enemy_players:
-            if self.pos.dist(player.pos) < AI_NEAR_RADIUS(self.difficulty):
+            if player and self.pos.dist(player.pos) < AI_NEAR_RADIUS(self.difficulty):
                 dir = player.pos - self.pos
                 # magnitude of vector is proportional to inverse of distance
                 mag = (AI_NEAR_RADIUS(self.difficulty)*PLAYER_RADIUS/dir.mag)**2
@@ -132,9 +132,9 @@ class OriginalAIAgent(Agent):
 
         # Invert coordinates
         team_pos = {player.id: P(player.pos.x, H-player.pos.y)
-                    for player in team_players}
+                    for player in team_players if player}
         enemy_team_pos = {player.id: P(player.pos.x, H-player.pos.y)
-                          for player in enemy_team_players}
+                    for player in enemy_team_players if player}
         self_pos = P(self.pos.x, H-self.pos.y)
 
         prefs = {  # directions are wrt origin at bottom-right
@@ -158,7 +158,7 @@ class OriginalAIAgent(Agent):
                 math.sin(v['angle']),  # constant
             ]
             for player in team_players:
-                if player.id != self.id:
+                if player and player.id != self.id:
                     team_dist = self.dist_to_line(line, team_pos[player.id])
                     if (team_dist < AI_MIN_PASS_DIST and  # player is near enough to receive the ball
                         # In correct x-direction (not behind the line)
@@ -169,7 +169,7 @@ class OriginalAIAgent(Agent):
                         enemy_dist = math.inf
                         enemy_min_pos = P(0, 0)
                         for enemy_player in enemy_team_players:  # Check for all enemies
-                            if self.dist_to_line(line, enemy_team_pos[enemy_player.id]) < enemy_dist:
+                            if enemy_player and self.dist_to_line(line, enemy_team_pos[enemy_player.id]) < enemy_dist:
                                 enemy_dist = self.dist_to_line(
                                     line, enemy_team_pos[enemy_player.id])
                                 enemy_min_pos = enemy_team_pos[enemy_player.id]
@@ -309,7 +309,7 @@ class OriginalAIAgent(Agent):
         }
 
         self_pos = P(self.pos.x, H-self.pos.y)
-        near_enemy_players = [player for player in enemy_players if player.pos.dist(
+        near_enemy_players = [player for player in enemy_players if player and player.pos.dist(
             P(goal_x, H//2)) <= AI_SHOOT_RADIUS]
         near_enemy_pos = [P(player.pos.x, H - player.pos.y)
                           for player in near_enemy_players]
@@ -409,6 +409,8 @@ class OriginalAITeam(Team):
             if i in ids:
                 self.players.append(OriginalAIAgent(
                     id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord'], diff=self.difficulty))
+            else:
+                self.players.append(None)
 
     def select_player(self, ball):
         """
@@ -421,7 +423,8 @@ class OriginalAITeam(Team):
         """
 
         dists = [player.pos.dist(ball.pos) +
-                 player.rnd for player in self.players]
+                 player.rnd if player else float('inf') for player in self.players ]
+
         # Default - Ball goes to nearest player
         self.selected = dists.index(min(dists))
 
@@ -439,9 +442,12 @@ class OriginalAITeam(Team):
         else:
             self.selected = NUM_TEAM//2
         for i, player in enumerate(self.players):
-            move = player.check_move(state_prev, state, reward, self.selected)
-            if move != 'FORM':
-                actions.append(move)
+            if player:
+                move = player.check_move(state_prev, state, reward, self.selected)
+                if move != 'FORM':
+                    actions.append(move)
+                else:
+                    actions.append(self.formation_dir(i))
             else:
-                actions.append(self.formation_dir(i))
+                actions.append('NOTHING')
         return actions

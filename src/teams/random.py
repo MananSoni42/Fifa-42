@@ -34,6 +34,8 @@ class RandomTeam(Team):
             if i in ids:
                 self.players.append(RandomAgent(
                     id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord']))
+            else:
+                self.players.append(None)
 
     def move(self, state_prev, state, reward):
         """
@@ -41,5 +43,8 @@ class RandomTeam(Team):
         """
         actions = []
         for i, player in enumerate(self.players):
-            actions.append(player.check_move(state_prev, state, reward))
+            if player:
+                actions.append(player.check_move(state_prev, state, reward))
+            else:
+                actions.append('NOTHING')
         return actions

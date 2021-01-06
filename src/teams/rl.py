@@ -27,8 +27,8 @@ class RLAgent(agent):
         #return {'prev_state': state_prev, 'curr_state': state}
         return {
             'ball': state['ball'].pos.val,
-            'team1': [pl.pos.val[j] for pl in state['team1']['players'] for j in range(2)],
-            'team2': [pl.pos.val[j] for pl in state['team2']['players'] for j in range(2)],
+            'team1': [pl.pos.val[j] for pl in state['team1']['players'] for j in range(2) if pl],
+            'team2': [pl.pos.val[j] for pl in state['team2']['players'] for j in range(2) if pl],
         }
 
     def move(self, state_prev, state, reward, selected):
@@ -53,7 +53,7 @@ class RLTeam(Team):
 
         state_spec = dict(
                 ball = dict(type='float', shape=2, min_value=0, max_value=max(W,H)),
-                team1 = dict(type='float', shape=2*len(ids), min_value=0, max_value=max(W,H)),
+                team1 = dict(type='float', shape=2*4, min_value=0, max_value=max(W,H)),
                 team2 = dict(type='float', shape=2*len(ids), min_value=0, max_value=max(W,H)),
             )
 
@@ -65,6 +65,8 @@ class RLTeam(Team):
                 self.players.append(RLAgent(
                     id=i, team_id=self.id, pos=FORM[self.formation][self.dir][i]['coord'],
                     state_spec=state_spec, action_spec=action_spec))
+            else:
+                self.players.append(None)
 
     def move(self, state_prev, state, reward):
         """
@@ -73,5 +75,8 @@ class RLTeam(Team):
         actions = []
         global_reward = reward[self.id]['global']
         for i, player in enumerate(self.players):
-            actions.append(player.check_move(state_prev, state, reward[self.id]['players'][i]))
+            if player:
+                actions.append(player.check_move(state_prev, state, reward[self.id]['players'][i]))
+            else:
+                actions.append('NOTHING')
         return actions

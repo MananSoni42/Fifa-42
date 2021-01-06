@@ -93,12 +93,13 @@ class HumanTeam(Team):
         Draw the human team
         """
         for i, player in enumerate(self.players):
-            if i == self.selected:
-                player.draw(win, cam, self.id, selected=1, debug=debug)
-            elif i in self.next_selected:
-                player.draw(win, cam, self.id, selected=2, debug=debug)
-            else:
-                player.draw(win, cam, self.id, selected=0, debug=debug)
+            if player:
+                if i == self.selected:
+                    player.draw(win, cam, self.id, selected=1, debug=debug)
+                elif i in self.next_selected:
+                    player.draw(win, cam, self.id, selected=2, debug=debug)
+                else:
+                    player.draw(win, cam, self.id, selected=0, debug=debug)
 
     def select_player(self, ball):
         """
@@ -111,7 +112,7 @@ class HumanTeam(Team):
         """
 
         argsort = lambda seq: sorted(range(len(seq)), key=seq.__getitem__)
-        dists = [player.pos.dist(ball.pos) + player.rnd for player in self.players]
+        dists = [player.pos.dist(ball.pos) + player.rnd if player else float('inf') for player in self.players]
         sorted_dists = sorted(range(len(dists)), key = lambda i: dists[i])
         self.selected = sorted_dists[0] # index of top 3
         self.next_selected = sorted_dists[1:2]
@@ -132,11 +133,14 @@ class HumanTeam(Team):
         """
         actions = []
         for i, player in enumerate(self.players):
-            if i == self.selected:
-                actions.append(player.check_move(state_prev, state, reward))
-            elif self.maintain_formation:
-                actions.append(self.formation_dir(i))
+            if player:
+                if i == self.selected:
+                    actions.append(player.check_move(state_prev, state, reward))
+                elif self.maintain_formation:
+                    actions.append(self.formation_dir(i))
+                else:
+                    player.walk_count = 0
+                    actions.append('NOTHING')
             else:
-                player.walk_count = 0
-                actions.append('NOTHING')
+                actiona.append('NOTHING')
         return actions
