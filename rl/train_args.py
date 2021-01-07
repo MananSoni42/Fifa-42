@@ -18,11 +18,17 @@ def get_args():
     parser.add_argument('--display', action='store_true', default=False,
                         help='Show the game while training')
 
-    parser.add_argument('--summary_freq', type=int, default=10,
+    parser.add_argument('--ep_len', type=int, default=1000,
+                       help='Length of 1 episode')
+
+    parser.add_argument('--checkpoint', type=int, default=10,
                        help='Frequency at which to show episode summaries')
 
     parser.add_argument('--nosave', action='store_true', default=False,
                         help='Don\'t save the agents after training')
+
+    parser.add_argument('--noload', action='store_true', default=False,
+                        help='Don\'t load the agents before training')
 
     parser.add_argument('--agent_dir', type=str,
                         default='weights',

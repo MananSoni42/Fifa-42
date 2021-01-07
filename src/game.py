@@ -24,7 +24,7 @@ applause = mixer.Sound(APPLAUSE)
 class Game:
     ''' Class that controls the entire game '''
 
-    def __init__(self, team1, team2, sound=True, difficulty=0.6, cam='default'):
+    def __init__(self, team1, team2, sound=True, difficulty=0.6, cam='default', reset=dict()):
         '''
         Initializes the game
 
@@ -36,6 +36,7 @@ class Game:
             cam (str): Camera mode to play the game in
             train (bool): Run the game in training mode (episodic task)
         '''
+
         self.sound = sound
         self.difficulty = difficulty
         self.debug = False
@@ -46,7 +47,7 @@ class Game:
         self.team2 = team2
         self.team2.init(id=2, dir='R', diff=self.difficulty)
 
-        self.ball = Ball(pos=(W//2, H//2), sound=sound)
+        self.ball = Ball(pos=(W//2,H//2), sound=sound)
         self.stats = Stats()
 
         self.cam = Camera(self.ball.pos.x, self.ball.pos.y, mode=cam)
@@ -72,18 +73,30 @@ class Game:
             single_short_whistle.play()
             applause.play(-1)
 
-    def reset(self):
-        self.ball.reset((W//2, H//2))
+    def reset(self, reset=dict()):
+        if reset:
+            self.reset_args = reset
+        else:
+            self.reset_args = {
+                'ball_pos': (W//2,H//2),
+                1: [None]*NUM_TEAM,
+                2: [None]*NUM_TEAM
+            }
+
+        self.ball.reset(self.reset_args['ball_pos'])
         self.state_prev, self.state = None, self.get_state()
 
         self.rewards = { 1: [0]*NUM_TEAM, 2: [0]*NUM_TEAM }
         self.reward_hist = { 1: [0]*NUM_TEAM, 2: [0]*NUM_TEAM }
         self.stats = Stats()
 
-        for team in [self.team1, self.team2]:
+        for team in self.team1, self.team2:
             for i,player in enumerate(team.players):
                 if i in team.ids:
-                    player.pos = FORM[team.formation][team.dir][i]['coord']
+                    if self.reset_args[team.id][i]:
+                        player.pos = self.reset_args[team.id][i]
+                    else:
+                        player.pos = FORM[team.formation][team.dir][i]['coord']
             try:
                 for i,player in enumerate(team.players):
                     if i in team.ids:
@@ -621,22 +634,36 @@ class Game:
         state = self.get_state()
         return state_prev, state, self.rewards
 
+    def save(self, dir):
+        '''
+        Close the RL agents used in the game (only required for RL training)
+        '''
+        try:
+            self.team1.save(dir)
+        except:
+            pass
+
+        try:
+            self.team2.save(dir)
+        except:
+            pass
+
+
     def close(self, dir, save):
         '''
         Close the RL agents used in the game (only required for RL training)
         '''
         try:
-            if save:
-                self.team1.save(dir)
             for agent in self.team1.meta_agents:
                 agent.close()
         except:
             pass
 
         try:
-            if save:
-                self.team2.save(dir)
             for agent in self.team2.meta_agents:
                 agent.close()
         except:
             pass
+
+        if save:
+            self.save(dir)

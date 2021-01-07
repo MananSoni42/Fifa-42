@@ -21,11 +21,22 @@ class RLAgent(agent):
         self.agent = meta_agent
         self.R = reward
 
+    def polar(self, p0, p):
+        '''
+        Convert a point to polar coordinates
+        '''
+        r = p0.dist(p) / max(W,H) # between 0 and 1
+        th = math.atan2(p.y-p0.y, p.x-p0.x) / math.pi # between -1 and 1
+        return [r, th]
+
     def convert_state(self, state_prev, state):
         return {
-            'ball': state['ball'].pos.val,
-            'team1': [pl.pos.val[j] for pl in state['team1']['players'] for j in range(2) if pl],
-            'team2': [pl.pos.val[j] for pl in state['team2']['players'] for j in range(2) if pl],
+            'owned': [not state['ball'].free and state['ball'].ball_stats['player'] == self.id],
+            'goal': [GOAL_POS[0]*H, GOAL_POS[1]*H],
+            'pos': self.pos.val,
+            'ball': self.polar(self.pos, state['ball'].pos),
+            'team1': [self.polar(self.pos, pl.pos)[j] if pl else 0.0 for pl in state['team1']['players'] for j in range(2)],
+            'team2': [self.polar(self.pos, pl.pos)[j] if pl else 0.0 for pl in state['team2']['players'] for j in range(2)],
         }
 
     def move(self, state_prev, state, reward, selected):
@@ -46,12 +57,14 @@ class RLTeam(Team):
 
     def set_players(self, ids):
         self.players = []
-        type = 'reinforce'
 
         state_spec = dict(
-                ball = dict(type='float', shape=2, min_value=0, max_value=max(W,H)),
-                team1 = dict(type='float', shape=2*len(self.other_ids), min_value=0, max_value=max(W,H)), # hack to get other teams players value
-                team2 = dict(type='float', shape=2*len(ids), min_value=0, max_value=max(W,H)),
+                owned = dict(type='bool', shape=1),
+                goal  = dict(type='float', shape=2, min_value=0, max_value=max(W,H)),
+                pos   = dict(type='float', shape=2, min_value=0, max_value=max(W,H)),
+                ball  = dict(type='float', shape=2, min_value=-1, max_value=1),
+                team1 = dict(type='float', shape=2*NUM_TEAM, min_value=-1, max_value=1),
+                team2 = dict(type='float', shape=2*NUM_TEAM, min_value=-1, max_value=1),
             )
 
         action_spec = dict(type='int', shape=1, num_values=len(ACT))
@@ -68,10 +81,12 @@ class RLTeam(Team):
         self.meta_agent = dict()
         for agent in tqdm(['GK', 'DEF', 'MID', 'ATK']):
             if num[agent] > 0:
-                self.meta_agent[agent] = rl_agent.create(agent=type,
-                            states=state_spec, actions=action_spec,
-                            max_episode_timesteps=num[agent]*MAX_EP_LEN,
-                            batch_size=BATCH_SIZE)
+                self.meta_agent[agent] = rl_agent.create(
+                    agent='ppo',
+                    network={ 'type': 'auto', 'rnn': 2 },
+                    states=state_spec, actions=action_spec,
+                    max_episode_timesteps=num[agent]*self.max_ep_len,
+                    batch_size=BATCH_SIZE)
 
         for i in range(NUM_TEAM):
             if i in ids:
@@ -101,6 +116,8 @@ class RLTeam(Team):
 
     def load(self, dir):
         for name,agent in self.meta_agent.items():
-            if os.path.exists(os.path.join(dir,name)):
-                print(f'loading {name} agent from {os.path.join(dir,name)}')
-                agent.load(directory=dir, filename=name, format='checkpoint')
+            try:
+                agent = rl_agent.load(directory=dir, filename=name, format='checkpoint')
+                print(f'loaded {name} agent from {os.path.join(dir,name)}')
+            except:
+                pass

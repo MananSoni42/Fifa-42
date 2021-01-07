@@ -7,6 +7,7 @@ import pygame_menu
 from settings import *
 from const import FORM
 from game import Game
+from teams.random import RandomTeam
 
 MAX_CHAR = 50
 V_PAD = 20
