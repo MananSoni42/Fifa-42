@@ -69,9 +69,9 @@ OVER_TOP_LEFT = P(W//2-OVER_SIZE.x//2, H-50-OVER_SIZE.y)
 
 
 ############## RL hyper-parameters ##############
-BATCH_SIZE = 1
+BATCH_SIZE = 25
 
-REW = { # rewards (convention is +ve for team1 -ve for team 2)
+REW = {
     'GK': {
         'goal': 0.25, 'goal_recv': -1,
         'pass_succ': 0.2, 'pass_fail': -0.2,
@@ -93,6 +93,10 @@ REW = { # rewards (convention is +ve for team1 -ve for team 2)
         'pass_recv_same': 0.5, 'pass_recv_diff': 0.2,
     },
 }
+######################################
+
+
+
 
 ############## Assets (images, fonts, sounds) ##############
 ASSET_DIR = os.path.join(CurrentPath, 'assets')  # Path to assets

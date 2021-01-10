@@ -22,6 +22,7 @@ from teams.rl import RLTeam
 from menu import Menu
 from const import add_rewards
 import random
+import matplotlib.pyplot as plt
 
 args = get_args()
 
@@ -40,13 +41,20 @@ team2 = RLTeam(formation=args.team2_formation, color=(255, 128, 0), ids=[9])
 Hack to make RL agents work properly
 '''
 team2.max_ep_len = args.ep_len
+team2.eval = args.eval
 
 game = Game(team1, team2, sound=False, difficulty=args.difficulty/100, cam='full')  # initialize the game
 
 # load agent weights (if they exist)
-game.team2.load(args.agent_dir)
+if not args.noload:
+    game.team2.load(args.agent_dir)
 
 reward_hist = []
+avg_hist = []
+plot = {
+    'avg': [],
+    'checkpoint': [],
+}
 
 total_reward = {
     1: [0]*NUM_TEAM,
@@ -70,6 +78,7 @@ for ep in range(1,args.ep+1):
     x = random.randint(round(0.1*W), round(0.4*W))
     y = random.randint(0,H)
     reset[2][9] = P(x,y)
+    #reset['ball_pos'] = (P(x,y) + P(random.randint(-20,20), random.randint(-20,20))).val
     reset['ball_pos'] = (x,y)
 
     game.reset(reset=reset)
@@ -95,18 +104,26 @@ for ep in range(1,args.ep+1):
         game.save(args.agent_dir)
         print(f'\n ----------- Checkpoint at Ep {ep} -----------',
         f'improvement: ',
-        f'\t current: [ {sum(checkpoint_reward[1])/args.checkpoint} | {sum(checkpoint_reward[1])/args.checkpoint} ]',
-        f'\t last 3 : {" ".join(reward_hist) if len(reward_hist) < 3 else " ".join(reward_hist[-3:])} ',
+        f'\t current    : [ {sum(checkpoint_reward[1])/args.checkpoint} | {sum(checkpoint_reward[2])/args.checkpoint} ]',
+        f'\t last 3     : {" ".join(reward_hist) if len(reward_hist) < 3 else " ".join(reward_hist[-3:])} ',
+        f'\t prev 3 avg : {" ".join(avg_hist) if len(avg_hist) < 3 else " ".join(avg_hist[-3:])} ',
         f'Total: ',
         f'\tTeam 1: {sum(total_reward[1])/ep} | {approx(total_reward[1])}',
         f'\tTeam 2: {sum(total_reward[2])/ep} | {approx(total_reward[2])}',
         f'-------------------------------------------------------------------\n',
         sep='\n')
+        plot['avg'].append(sum(total_reward[2])/ep)
+        plot['checkpoint'].append(sum(checkpoint_reward[2])/args.checkpoint)
         reward_hist.append(f'[ {sum(checkpoint_reward[1])/args.checkpoint} | {sum(checkpoint_reward[2])/args.checkpoint} ]')
+        avg_hist.append(f'[ {sum(total_reward[1])/ep} | {sum(total_reward[2])/ep} ]')
         checkpoint_reward = {
             1: [0]*NUM_TEAM,
             2: [0]*NUM_TEAM,
         }
 
-
 game.close(args.agent_dir, save=not args.nosave)
+
+plt.plot(plot['avg'], label='average reward')
+plt.plot(plot['checkpoint'], label='checkpoint reward')
+plt.legend(loc='upper left')
+plt.show()

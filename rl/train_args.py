@@ -21,6 +21,9 @@ def get_args():
     parser.add_argument('--ep_len', type=int, default=1000,
                        help='Length of 1 episode')
 
+    parser.add_argument('--eval', action='store_true', default=False,
+                       help='Run the agent in evaluation mode')
+
     parser.add_argument('--checkpoint', type=int, default=10,
                        help='Frequency at which to show episode summaries')
 
