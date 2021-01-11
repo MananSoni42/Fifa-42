@@ -16,10 +16,11 @@ class RLAgent(agent):
     RL team
     """
 
-    def __init__(self, id, team_id, pos, meta_agent, reward, dir='L'):
+    def __init__(self, id, team_id, pos, meta_agent, reward, dir='L', eval=False):
         super().__init__(id, team_id, pos, dir)
         self.agent = meta_agent
         self.R = reward
+        self.eval = eval
 
     def polar(self, p0, p):
         '''
@@ -44,8 +45,12 @@ class RLAgent(agent):
         The agent observes the previous state's reward and acts on the current state
         """
         if state_prev:
-            action = self.agent.act(states=self.convert_state(state_prev, state))[0]
-            self.agent.observe(reward=reward)
+            if self.eval:
+                action = self.agent.act(states=self.convert_state(state_prev, state),
+                                        independent=True, internals=self.agent.initial_internals())[0][0]
+            else:
+                action = self.agent.act(states=self.convert_state(state_prev, state))[0]
+                self.agent.observe(reward=reward)
             return ACTION_MAP[action]
 
         return 'NOTHING'
@@ -81,19 +86,31 @@ class RLTeam(Team):
         self.meta_agent = dict()
         for agent in tqdm(['GK', 'DEF', 'MID', 'ATK']):
             if num[agent] > 0:
+                '''
                 self.meta_agent[agent] = rl_agent.create(
                     agent='ppo',
-                    network={ 'type': 'auto', 'rnn': 2 },
+                    network='auto',
                     states=state_spec, actions=action_spec,
                     max_episode_timesteps=num[agent]*self.max_ep_len,
                     batch_size=BATCH_SIZE)
+                '''
+                self.meta_agent[agent] = rl_agent.create(
+                    agent='tensorforce',
+                    states=state_spec, actions=action_spec,
+                    max_episode_timesteps=num[agent]*self.max_ep_len,
+                    update=dict(unit='timesteps', batch_size=BATCH_SIZE),
+                    optimizer=dict(optimizer='adam', learning_rate=1e-3),
+                    objective='action_value',
+                    reward_estimation=dict(horizon=100),
+                    exploration=1e-3,
+                    )
 
         for i in range(NUM_TEAM):
             if i in ids:
                 self.players.append(RLAgent(
                     id=i, team_id=self.id, pos=form[i]['coord'],
                     meta_agent=self.meta_agent[form[i]['pos']],
-                    reward=REW[form[i]['pos']]))
+                    reward=REW[form[i]['pos']], eval=self.eval))
             else:
                 self.players.append(None)
 
@@ -115,9 +132,9 @@ class RLTeam(Team):
             agent.save(directory=dir, filename=name, format='checkpoint')
 
     def load(self, dir):
-        for name,agent in self.meta_agent.items():
+        for name in self.meta_agent.keys():
             try:
-                agent = rl_agent.load(directory=dir, filename=name, format='checkpoint')
+                self.meta_agent[name] = rl_agent.load(directory=dir, filename=name, format='checkpoint')
                 print(f'loaded {name} agent from {os.path.join(dir,name)}')
             except:
                 pass

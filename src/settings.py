@@ -71,6 +71,17 @@ OVER_TOP_LEFT = P(W//2-OVER_SIZE.x//2, H-50-OVER_SIZE.y)
 ############## RL hyper-parameters ##############
 BATCH_SIZE = 25
 
+initial_reward = {
+    1: [-0.00005]*NUM_TEAM,
+    2: [-0.00005]*NUM_TEAM,
+}
+
+zero_reward = {
+    1: [0]*NUM_TEAM,
+    2: [0]*NUM_TEAM,
+}
+
+
 REW = {
     'GK': {
         'goal': 0.25, 'goal_recv': -1,

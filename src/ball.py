@@ -102,10 +102,8 @@ class Ball:
             self.reset(pos)
             return rewards
 
-        return {
-            1: [0]*NUM_TEAM,
-            2: [0]*NUM_TEAM,
-        }
+        return zero_reward.copy()
+
 
     def update_stats_rewards(self, stats, team1, team2, player=None, goal=None, side=None):
         """
@@ -202,10 +200,7 @@ class Ball:
             team (Team): The team for which to check
             stats (Stats):  Keep track of game statistics for the pause menu
         """
-        rewards = {
-            1: [0]*NUM_TEAM,
-            2: [0]*NUM_TEAM,
-        }
+        rewards = zero_reward.copy()
 
         for player in team.players:
             if player and self.pos.dist(player.pos) < PLAYER_RADIUS + BALL_RADIUS:
@@ -226,10 +221,7 @@ class Ball:
             team2 (Team): Team facing left
             stats (Stats):  Keep track of game statistics for the pause menu
         """
-        rewards = {
-            1: [0]*NUM_TEAM,
-            2: [0]*NUM_TEAM,
-        }
+        rewards = zero_reward.copy()
 
         if self.ball_stats['team'] == 1:
             player = team1.players[self.ball_stats['player']]
@@ -300,4 +292,4 @@ class Ball:
         ball_rewards = self.check_capture(team1, team2, stats)
         goal_rewards = self.goal_check(stats, team1, team2)
 
-        return add_rewards(ball_rewards, goal_rewards)
+        return add_rewards(initial_reward.copy(), add_rewards(ball_rewards, goal_rewards))

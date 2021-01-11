@@ -56,16 +56,9 @@ plot = {
     'checkpoint': [],
 }
 
-total_reward = {
-    1: [0]*NUM_TEAM,
-    2: [0]*NUM_TEAM,
-}
+total_reward = zero_reward.copy()
 
-checkpoint_reward = {
-    1: [0]*NUM_TEAM,
-    2: [0]*NUM_TEAM,
-}
-
+checkpoint_reward = zero_reward.copy()
 
 reset = {
     'ball_pos': (W//2,H//2),
@@ -95,27 +88,29 @@ for ep in range(1,args.ep+1):
         if args.display:
             pygame.display.update()  # refresh screen
 
-    approx = lambda l: [round(i,3) for i in l]
+    approx_list = lambda l: [round(i,3) for i in l]
+    approx = lambda x: round(x,3)
+
     total_reward = add_rewards(total_reward, game.reward_hist)
     checkpoint_reward = add_rewards(checkpoint_reward, game.reward_hist)
 
-    print(f'Ep {ep} - 1: {sum(game.reward_hist[1])} | 2: {sum(game.reward_hist[2])}\n')
+    print(f'Ep {str(ep).zfill(5)} - 1: {approx(sum(game.reward_hist[1]))} | 2: {approx(sum(game.reward_hist[2]))}\n')
     if ep%args.checkpoint == 0:
         game.save(args.agent_dir)
-        print(f'\n ----------- Checkpoint at Ep {ep} -----------',
+        print(f'\n ----------- Checkpoint at Ep {str(ep).zfill(5)} -----------',
         f'improvement: ',
-        f'\t current    : [ {sum(checkpoint_reward[1])/args.checkpoint} | {sum(checkpoint_reward[2])/args.checkpoint} ]',
+        f'\t current    : [ {approx(sum(checkpoint_reward[1])/args.checkpoint)} | {approx(sum(checkpoint_reward[2])/args.checkpoint)} ]',
         f'\t last 3     : {" ".join(reward_hist) if len(reward_hist) < 3 else " ".join(reward_hist[-3:])} ',
         f'\t prev 3 avg : {" ".join(avg_hist) if len(avg_hist) < 3 else " ".join(avg_hist[-3:])} ',
         f'Total: ',
-        f'\tTeam 1: {sum(total_reward[1])/ep} | {approx(total_reward[1])}',
-        f'\tTeam 2: {sum(total_reward[2])/ep} | {approx(total_reward[2])}',
+        f'\tTeam 1: {approx(sum(total_reward[1])/ep)} | {approx_list(total_reward[1])}',
+        f'\tTeam 2: {approx(sum(total_reward[2])/ep)} | {approx_list(total_reward[2])}',
         f'-------------------------------------------------------------------\n',
         sep='\n')
         plot['avg'].append(sum(total_reward[2])/ep)
         plot['checkpoint'].append(sum(checkpoint_reward[2])/args.checkpoint)
-        reward_hist.append(f'[ {sum(checkpoint_reward[1])/args.checkpoint} | {sum(checkpoint_reward[2])/args.checkpoint} ]')
-        avg_hist.append(f'[ {sum(total_reward[1])/ep} | {sum(total_reward[2])/ep} ]')
+        reward_hist.append(f'[ {approx(sum(checkpoint_reward[1])/args.checkpoint)} | {approx(sum(checkpoint_reward[2])/args.checkpoint)} ]')
+        avg_hist.append(f'[ {approx(sum(total_reward[1])/ep)} | {approx(sum(total_reward[2])/ep)} ]')
         checkpoint_reward = {
             1: [0]*NUM_TEAM,
             2: [0]*NUM_TEAM,

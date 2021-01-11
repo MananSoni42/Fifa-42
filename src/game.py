@@ -59,15 +59,7 @@ class Game:
         # game state to be passed to agents (see get_state() function)
         self.state = self.get_state()
 
-        self.rewards = { # rewards for the current time step
-            1: [0]*NUM_TEAM,
-            2: [0]*NUM_TEAM,
-        }
-
-        self.reward_hist = { # total rewards for the entire episode
-            1: [0]*NUM_TEAM,
-            2: [0]*NUM_TEAM,
-        }
+        self.reward_hist = zero_reward.copy() # total rewards for the entire episode
 
         if self.sound:
             single_short_whistle.play()
@@ -627,12 +619,12 @@ class Game:
         # Check for collision between players
         self.collision(self.team1, self.team2, self.ball)
 
-        self.rewards = self.ball.update(self.team1, self.team2, a1, a2, self.stats)  # Update ball's state
-        self.reward_hist = add_rewards(self.reward_hist, self.rewards)
+        rewards = self.ball.update(self.team1, self.team2, a1, a2, self.stats)  # Update ball's state
+        self.reward_hist = add_rewards(self.reward_hist, rewards)
         self.cam.move(self.ball.pos.x, self.ball.pos.y)
 
         state = self.get_state()
-        return state_prev, state, self.rewards
+        return state_prev, state, rewards
 
     def save(self, dir):
         '''
