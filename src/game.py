@@ -194,8 +194,7 @@ class Game:
         Display the current score (goals for each side)
         """
         #""" Show game score """
-        goal1_rect = (W//2 - GOAL_DISP_SIZE - 2*LINE_WIDTH,
-                      0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
+        goal1_rect = (W//2 - GOAL_DISP_SIZE - 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
         goal2_rect = (W//2 + 2*LINE_WIDTH, 0, GOAL_DISP_SIZE, GOAL_DISP_SIZE)
         goal_font = pygame.font.Font(FONT_ROBOTO, FONT_SIZE)
 

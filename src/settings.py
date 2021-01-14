@@ -1,4 +1,4 @@
-"""
+    """
 Global game settings
 
 Defines image / sound paths and all constants used in the game
