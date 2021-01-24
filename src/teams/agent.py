@@ -43,7 +43,7 @@ class Agent(ABC):
         Attributes:
             win (pygame.display): Window on which to draw
             team_id (int): Required to get the correct sprite
-            debug (bool): Show additional info including the player's ID and the square used to approximaate the player
+            debug (bool): Show additional info including the player's ID and the square used to approximate the player
         """
         if debug:
             cam.rect(win, (255,255,255,100), (self.pos.x-PLAYER_CENTER.x, self.pos.y-PLAYER_CENTER.y, 2*PLAYER_RADIUS, 2*PLAYER_RADIUS))
