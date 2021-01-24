@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -10,25 +10,26 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" integrity="sha384-Bfad6CLCknfcloXFOyFnlgtENryhrpZCe29RTifKEixXQZ38WheV+i/6YWSzkz3V" crossorigin="anonymous">
-    
-    <style>
-      html, body {
-        width: 100%;
-        height: 100%;
-        margin: 0px;
-        border: 0;
-        overflow: hidden; /*  Disable scrollbars */
-        display: block;  /* No floating content on sides */
-      }
-      </style>
-    
     <title>Fifa-42</title>
-  </head>
-  <body>
-    <canvas id="canvas" width="421" height="421"></canvas>
-    <div name="images" style="hidden">
-      <img src="https://i0.wp.com/freepngimages.com/wp-content/uploads/2018/06/football-no-background.png" width=3 height=3 id="ball">
-   </div>
-    <script src="game.js"></script>
-  </body>
+</head>
+<body>
+    <div class="row bg-success display-4 text-light">
+        <div class="col-12 text-center">
+            Fifa 42
+        </div>
+    </div>
+    <div class="row m-5">
+        <div class="col-6 mx-auto">
+            <form class="form-inline m-3" action="{{ url_for('game') }}" method="POST">
+              <div class="form-group mx-sm-3 mb-2">
+                <label>Enter your name: </label>
+                <input type="text" class="mx-1 form-control" name="name" id="name">
+              </div>
+              <button type="submit" class="btn btn-primary mb-2">Play</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
 </html>
