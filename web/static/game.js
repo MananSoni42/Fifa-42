@@ -1,4 +1,4 @@
-var state = {
+/*var state = {
   'W': 1920,
   'H': 1080,
   'ball': [683, 384],
@@ -25,8 +25,62 @@ var state = {
                        { "id": 7, "pos": [792, 384], "img": "L0" },
                        { "id": 8, "pos": [520, 384], "img": "L0" },
                        { "id": 9, "pos": [257, 537], "img": "L0" },
-                       { "id": 10, "pos": [257, 231], "img": "L0" }]}};
+                       { "id": 10, "pos": [257, 231], "img": "L0" }]}};*/
 
+var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+document.addEventListener("keypress", function(event) {
+  if(event.keyCode == 87) {
+      socket.emit('move', {'name': NAME, 'key': 'w'})
+  }
+  if(event.keyCode == 81) {
+      socket.emit('move', {'name': NAME, 'key': 'q'})
+  }
+  if(event.keyCode == 69) {
+      socket.emit('move', {'name': NAME, 'key': 'e'})
+  }
+  if(event.keyCode == 65) {
+      socket.emit('move', {'name': NAME, 'key': 'a'})
+  }
+  if(event.keyCode == 68) {
+      socket.emit('move', {'name': NAME, 'key': 'd'})
+  }
+  if(event.keyCode == 90) {
+      socket.emit('move', {'name': NAME, 'key': 'z'})
+  }
+  if(event.keyCode == 88) {
+      socket.emit('move', {'name': NAME, 'key': 'x'})
+  }
+  if(event.keyCode == 67) {
+      socket.emit('move', {'name': NAME, 'key': 'c'})
+  }
+  if(event.keyCode == 38) {
+      socket.emit('move', {'name': NAME, 'key': 'up'})
+  }
+  if(event.keyCode == 39) {
+      socket.emit('move', {'name': NAME, 'key': 'right'})
+  }
+  if(event.keyCode == 40) {
+      socket.emit('move', {'name': NAME, 'key': 'down'})
+  }
+  if(event.keyCode == 37) {
+      socket.emit('move', {'name': NAME, 'key': 'left'})
+  }
+  if(event.keyCode == 32) {
+      socket.emit('move', {'name': NAME, 'key': 'space'})
+  }
+});
+
+socket.on('next', data => {
+  state=data['state'];
+  draw_ball(state["ball"][0], state["ball"][1], state['W'], state['H']);
+  for(i=0;i<11;i++) {
+    draw_player(state["team1"]["players"][i]["pos"][0], state["team1"]["players"][i]["pos"][1], state['W'], state['H'], "red");
+    draw_player(state["team2"]["players"][i]["pos"][0], state["team2"]["players"][i]["pos"][1], state['H'], state['H'], "blue");
+  }
+});
+
+// socket.emit('move', {'name': NAME, 'key': k})
 
 canvas = document.getElementById("canvas");
 canvas.width = window.innerWidth;
