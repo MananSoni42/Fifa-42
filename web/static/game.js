@@ -133,6 +133,7 @@ function draw_player(x,y,w,h,color) {
     ctx.closePath();
 }
 
+/*
 $(document).ready(() => {
     field_draw();
     console.log(state["ball"]);
@@ -142,3 +143,4 @@ $(document).ready(() => {
       draw_player(state["team2"]["players"][i]["pos"][0], state["team2"]["players"][i]["pos"][1], state['H'], state['H'], "blue");
     }
 });
+*/
