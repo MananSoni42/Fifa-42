@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO, send, emit
 import json
-import threading
 import atexit
-import time, threading
+import time
+from multiprocessing import Process, Value
 
 import sys
 import os
@@ -21,24 +21,8 @@ name1, team1 = None, None
 name2, team2 = None, None
 inter = None
 
-class setInterval :
-    def __init__(self,interval,action) :
-        self.interval=interval
-        self.action=action
-        self.stopEvent=threading.Event()
-        thread=threading.Thread(target=self.__setInterval)
-        thread.start()
-
-    def __setInterval(self) :
-        nextTime=time.time()+self.interval
-        while not self.stopEvent.wait(nextTime-time.time()) :
-            nextTime+=self.interval
-            self.action()
-
-    def cancel(self) :
-        self.stopEvent.set()
-
 def send_network_state(state):
+    print('sending game state')
     network_state = {
         'W': W, 'H': H, 'ball': state["ball"].pos.val,
         'team1': {
@@ -74,9 +58,8 @@ def show_game():
             name2 = name
             print(f'Added team2 with name {name2}')
 
-            game = Game(team1, team2, sound=False, difficulty=0, cam='full')
             print(f'Starting game')
-            inter = setInterval(1, game_next)
+            game = Game(team1, team2, sound=False, difficulty=0, cam='full')
 
             return render_template('game.html', name=name)
         else:
@@ -100,3 +83,9 @@ def move_player(data):
 if __name__ == "__main__":
     #atexit.register(inter.cancel)
     socketio.run(app, debug=True)
+
+if __name__ == "__main__":
+   p = Process(target=game_next)
+   p.start()
+   socketio.run(debug=True, use_reloader=False)
+   p.join()
