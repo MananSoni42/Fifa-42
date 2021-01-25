@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO
 import json
 import atexit
 import time
@@ -21,7 +21,6 @@ name2, team2 = None, None
 inter = None
 
 def send_network_state(state):
-    print('sending game state')
     network_state = {
         'W': W, 'H': H, 'ball': state["ball"].pos.val,
         'team1': {
@@ -32,7 +31,7 @@ def send_network_state(state):
         }
     }
     with app.test_request_context():
-        emit('next', {'state': network_state}, broadcast=True)
+        socketio.emit('next', {'state': network_state}, broadcast=True)
 
 @app.route("/", methods=['GET'])
 def index():
@@ -47,16 +46,16 @@ def show_game():
             team1 = NetworkTeam(formation='balanced-1', color=(0, 32, 255))
             name1 = name
             print(f'Added team1 with name {name1}')
-            return render_template('game.html', name=name, next=True)
+            return render_template('game.html', name=name, next=False)
         elif not team2:
-            team2 = NetworkTeam(formation='balanced-1', color=(0, 32, 255))
+            team2 = NetworkTeam(formation='attacking-2', color=(0, 32, 255))
             name2 = name
             print(f'Added team2 with name {name2}')
 
             print(f'Starting game')
             game = Game(team1, team2, sound=False, difficulty=0, cam='full')
 
-            return render_template('game.html', name=name, next=False)
+            return render_template('game.html', name=name, next=True)
         else:
             return render_template('error.html', message="Already have 2 players in the game")
     else:
@@ -76,12 +75,10 @@ def move_player(data):
         raise Exception(f'name `{name}` not recognized, choose from `{name1}` or `{name2}`')
 
 @socketio.on("get_next")
-def game_next():
+def game_next(data):
     if game:
-        print('Game next')
         game.next()
         send_network_state(game.get_state())
-
 
 if __name__ == "__main__":
     #atexit.register(inter.cancel)
