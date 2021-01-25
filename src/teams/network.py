@@ -28,6 +28,7 @@ class NetworkAgent(Agent):
         '''
         super().__init__(id, team_id, pos, dir)
         self.keys = Queue()
+        self.maintain_formation = False
 
     def register_keystroke(self, key):
         '''
@@ -36,7 +37,7 @@ class NetworkAgent(Agent):
         Use this method within the server's socket
         '''
         key = key.lower()
-        if key in valid_keys:
+        if key in NetworkAgent.valid_keys:
             self.keys.put(key)
         else:
             print(f'key `{key}` not recognized, replacing with `nothing`')
@@ -120,6 +121,12 @@ class NetworkTeam(Team):
         if min(dists) > PLAYER_RADIUS + BALL_RADIUS and abs(ball.pos.x - self.goal_x) < W//5:
             # If the ball is within the D and is not very near to any other player, give control to the keeper
             self.selected = 0
+
+    def register_keystroke(self, key):
+        """
+        Register a keystroke for the currently selected player
+        """
+        self.players[self.selected].register_keystroke(key)
 
     def formation_dir(self, id):
         """

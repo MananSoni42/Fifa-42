@@ -22,7 +22,9 @@ inter = None
 
 def send_network_state(state):
     network_state = {
-        'W': W, 'H': H, 'ball': state["ball"].pos.val,
+        'W': W, 'H': H,
+        'name1': name1, 'name2': name2,
+        'ball': state["ball"].pos.val,
         'team1': {
             'pos': [p.pos.val for p in state['team1']['players']]
         },
@@ -48,7 +50,7 @@ def show_game():
             print(f'Added team1 with name {name1}')
             return render_template('game.html', name=name, next=False)
         elif not team2:
-            team2 = NetworkTeam(formation='attacking-2', color=(0, 32, 255))
+            team2 = NetworkTeam(formation='defensive-3', color=(0, 32, 255))
             name2 = name
             print(f'Added team2 with name {name2}')
 
@@ -79,6 +81,18 @@ def game_next(data):
     if game:
         game.next()
         send_network_state(game.get_state())
+
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
 if __name__ == "__main__":
     #atexit.register(inter.cancel)
