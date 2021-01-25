@@ -3,7 +3,6 @@ from flask_socketio import SocketIO, send, emit
 import json
 import atexit
 import time
-from multiprocessing import Process, Value
 
 import sys
 import os
@@ -35,10 +34,6 @@ def send_network_state(state):
     with app.test_request_context():
         emit('next', {'state': network_state}, broadcast=True)
 
-def game_next():
-    game.next()
-    send_network_state(game.get_state())
-
 @app.route("/", methods=['GET'])
 def index():
     return render_template('index.html')
@@ -52,7 +47,7 @@ def show_game():
             team1 = NetworkTeam(formation='balanced-1', color=(0, 32, 255))
             name1 = name
             print(f'Added team1 with name {name1}')
-            return render_template('game.html', name=name)
+            return render_template('game.html', name=name, next=True)
         elif not team2:
             team2 = NetworkTeam(formation='balanced-1', color=(0, 32, 255))
             name2 = name
@@ -61,7 +56,7 @@ def show_game():
             print(f'Starting game')
             game = Game(team1, team2, sound=False, difficulty=0, cam='full')
 
-            return render_template('game.html', name=name)
+            return render_template('game.html', name=name, next=False)
         else:
             return render_template('error.html', message="Already have 2 players in the game")
     else:
@@ -80,12 +75,14 @@ def move_player(data):
     else:
         raise Exception(f'name `{name}` not recognized, choose from `{name1}` or `{name2}`')
 
+@socketio.on("get_next")
+def game_next():
+    if game:
+        print('Game next')
+        game.next()
+        send_network_state(game.get_state())
+
+
 if __name__ == "__main__":
     #atexit.register(inter.cancel)
     socketio.run(app, debug=True)
-
-if __name__ == "__main__":
-   p = Process(target=game_next)
-   p.start()
-   socketio.run(debug=True, use_reloader=False)
-   p.join()
