@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Camera - Fifa-42</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Fifa-42</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../config/">Installing locally</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../game/">Game</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../game-menu/">Game menu</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../ball/">Ball</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../stats/">Stats</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Camera</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../agent/">Agent</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../team/">Team</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../custom-teams-%28and-their-agents%29/">Custom teams (and their agents)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../settings/">Settings</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../constants/">Constants</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../point/">Point</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                    <li >
+                        <a rel="next" href="../stats/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../agent/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+      
+    
+        <li class="main active"><a href="#camera">camera</a></li>
+        
+            <li><a href="#camera-objects">Camera Objects</a></li>
+        
+    
+    
+    </ul>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><a name="camera"></a></p>
+<h1 id="camera">camera</h1>
+<p>Implementation of the game's camera</p>
+<p><a name="camera.Camera"></a></p>
+<h2 id="camera-objects">Camera Objects</h2>
+<pre><code class="language-python">class Camera()
+</code></pre>
+<p>Class to draw different camera angles</p>
+<p><a name="camera.Camera.__init__"></a></p>
+<h4 id="__init__">__init__</h4>
+<pre><code class="language-python"> | __init__(cx, cy, mode='default')
+</code></pre>
+<p>Initializes the game camera</p>
+<p>The game camera has 3 modes:</p>
+<ul>
+<li>default: Follows the ball while showing surrounding players</li>
+<li>zoomed: Follows the ball closely</li>
+<li>full: Displays the entire field</li>
+</ul>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>cx</code> <em>float</em> - Camera's x coordinate</li>
+<li><code>cy</code> <em>float</em> - Camera's y coordinate</li>
+<li><code>mode</code> <em>str</em> - The camera mode</li>
+</ul>
+<p><a name="camera.Camera.params"></a></p>
+<h4 id="params">params</h4>
+<pre><code class="language-python"> | @property
+ | params()
+</code></pre>
+<p>Helper  method to reduce code redundancy</p>
+<p><a name="camera.Camera.set_mode"></a></p>
+<h4 id="set_mode">set_mode</h4>
+<pre><code class="language-python"> | set_mode(mode)
+</code></pre>
+<p>Set the camera's mode. Mode must be one of ['full', 'default', 'zoomed']</p>
+<p><a name="camera.Camera.move"></a></p>
+<h4 id="move">move</h4>
+<pre><code class="language-python"> | move(bx, by, alpha=P(0.9,0.9))
+</code></pre>
+<p>Move the camera to the given coordinates (Camera can't go over the field boundary)</p>
+<p>Uses exponential smoothing to minimize jittering</p>
+<p><a name="camera.Camera.pt"></a></p>
+<h4 id="pt">pt</h4>
+<pre><code class="language-python"> | pt(p)
+</code></pre>
+<p>Transform any 2-D point with respect to the camera</p>
+<p><a name="camera.Camera.rect_in_view"></a></p>
+<h4 id="rect_in_view">rect_in_view</h4>
+<pre><code class="language-python"> | rect_in_view(r1)
+</code></pre>
+<p>Check if given rectangle is within the camera's view</p>
+<p><a name="camera.Camera.circle_in_view"></a></p>
+<h4 id="circle_in_view">circle_in_view</h4>
+<pre><code class="language-python"> | circle_in_view(x, y, rad)
+</code></pre>
+<p>Check if given circle is within the camera's view</p>
+<p><a name="camera.Camera.rect"></a></p>
+<h4 id="rect">rect</h4>
+<pre><code class="language-python"> | rect(win, col, coords, width=0)
+</code></pre>
+<p>Draw a rectangle according to the cameras mode (attributes are same as <code>pygame.draw.rect</code>)</p>
+<p><a name="camera.Camera.circle"></a></p>
+<h4 id="circle">circle</h4>
+<pre><code class="language-python"> | circle(win, col, p, r, width=0)
+</code></pre>
+<p>Draw a circle according to the cameras mode (attributes are same as <code>pygame.draw.cirlce</code>)</p>
+<p><a name="camera.Camera.polygon"></a></p>
+<h4 id="polygon">polygon</h4>
+<pre><code class="language-python"> | polygon(win, col, pts)
+</code></pre>
+<p>Draw a polygon according to the cameras mode (attributes are same as <code>pygame.draw.polygon</code>)</p>
+<p><a name="camera.Camera.blit"></a></p>
+<h4 id="blit">blit</h4>
+<pre><code class="language-python"> | blit(win, path, pt, size)
+</code></pre>
+<p>Blit a given sprite to the surface according to the cameras mode</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>win</code> <em>pygame.Window</em> - window for drawing</li>
+<li><code>path</code> <em>pygame.Image</em> - path to the sprite</li>
+<li><code>pt</code> <em>P</em> - center of the sprite</li>
+<li><code>size</code> <em>P</em> - size of the sprite</li>
+</ul></div>
+                </div>
+        </div>
+
+    <hr>
+    <footer class="container">
+        
+        <center>Documentation built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="http://kristopolous.github.io/BOOTSTRA.386">BOOTSTRA.386</a>.</center>
+    </footer>
+        <script src="../../../../search/main.js"></script>
+    </body>
+</html>

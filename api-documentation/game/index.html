@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Game - Fifa-42</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Fifa-42</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../config/">Installing locally</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li class="active">
+                            <a href="./">Game</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../game-menu/">Game menu</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../ball/">Ball</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../stats/">Stats</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../camera/">Camera</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../agent/">Agent</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../team/">Team</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../custom-teams-%28and-their-agents%29/">Custom teams (and their agents)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../settings/">Settings</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../constants/">Constants</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../point/">Point</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                    <li >
+                        <a rel="next" href="../../config/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../game-menu/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+      
+    
+        <li class="main active"><a href="#game">game</a></li>
+        
+            <li><a href="#game-objects">Game Objects</a></li>
+        
+    
+    
+    </ul>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><a name="game"></a></p>
+<h1 id="game">game</h1>
+<p>Contains the central game class</p>
+<p>Manages interactions with the players and the ball</p>
+<p><a name="game.Game"></a></p>
+<h2 id="game-objects">Game Objects</h2>
+<pre><code class="language-python">class Game()
+</code></pre>
+<p>Class that controls the entire game</p>
+<p><a name="game.Game.__init__"></a></p>
+<h4 id="__init__">__init__</h4>
+<pre><code class="language-python"> | __init__(team1, team2, sound=True, difficulty=0.6, cam='default')
+</code></pre>
+<p>Initializes the game</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>team1</code> <em>Team</em> - Right-facing team</li>
+<li><code>team2</code> <em>Team</em> - Left-facing team</li>
+<li><code>sound</code> <em>bool</em> - Enable / Disable in-game sounds</li>
+<li><code>difficulty</code> <em>float</em> - Game difficulty (0-1)</li>
+</ul>
+<p><a name="game.Game.check_interruptions"></a></p>
+<h4 id="check_interruptions">check_interruptions</h4>
+<pre><code class="language-python"> | check_interruptions()
+</code></pre>
+<p>Check for special keyboard buttons</p>
+<p>Sets internal flags to pause, quit the game or run it in debug mode</p>
+<p><a name="game.Game.same_team_collision"></a></p>
+<h4 id="same_team_collision">same_team_collision</h4>
+<pre><code class="language-python"> | same_team_collision(team, free)
+</code></pre>
+<p>Check if current player collides with any other players of the same team</p>
+<p><a name="game.Game.diff_team_collision"></a></p>
+<h4 id="diff_team_collision">diff_team_collision</h4>
+<pre><code class="language-python"> | diff_team_collision(team1, team2, free)
+</code></pre>
+<p>Check if current player collides with any other players of the opposite team</p>
+<p><a name="game.Game.collision"></a></p>
+<h4 id="collision">collision</h4>
+<pre><code class="language-python"> | collision(team1, team2, ball)
+</code></pre>
+<p>Handle collisions between all in-game players.</p>
+<p><a name="game.Game.text_draw"></a></p>
+<h4 id="text_draw">text_draw</h4>
+<pre><code class="language-python"> | text_draw(win, text, rect, align='center')
+</code></pre>
+<p>Utility to draw text</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>win</code> <em>pygame.display</em> - window for rendering
+  text (pygame.font (rendered)): The text object</li>
+<li><code>rect</code> <em>tuple</em> - Rectangle specified as (x, y, width, height)</li>
+<li><code>align</code> <em>string</em> - text alignment can be one of 'left', 'right', 'center' (defaults to 'center')</li>
+</ul>
+<p><a name="game.Game.goal_draw"></a></p>
+<h4 id="goal_draw">goal_draw</h4>
+<pre><code class="language-python"> | goal_draw(win)
+</code></pre>
+<p>Display the current score (goals for each side)</p>
+<p><a name="game.Game.field_draw"></a></p>
+<h4 id="field_draw">field_draw</h4>
+<pre><code class="language-python"> | field_draw(win, hints)
+</code></pre>
+<p>Draw the football pitch</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>win</code> <em>pygame.display</em> - window for rendering</li>
+<li><code>hints</code> <em>bool</em> - If (movement-based) hints are to be shown</li>
+</ul>
+<p><a name="game.Game.draw"></a></p>
+<h4 id="draw">draw</h4>
+<pre><code class="language-python"> | draw(win, hints=True)
+</code></pre>
+<p>Draw the entire game</p>
+<p>Calls <code>field_draw()</code> along with the <code>draw()</code> methods for each team and the ball</p>
+<p><a name="game.Game.practice_instr_draw"></a></p>
+<h4 id="practice_instr_draw">practice_instr_draw</h4>
+<pre><code class="language-python"> | practice_instr_draw(win)
+</code></pre>
+<p>Draw the practice game instructions (shows extra hints and keyboard controls)</p>
+<p><a name="game.Game.bar_draw"></a></p>
+<h4 id="bar_draw">bar_draw</h4>
+<pre><code class="language-python"> | bar_draw(win, dim, w0, h0, w, h, col, val, debug_text, invert=False)
+</code></pre>
+<p>Draw a bar in the pause menu (for statistics)</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>win</code> - Main window used for all drawing</li>
+<li><code>dim</code> <em>[int]</em> - extra dimensions for the pause menu</li>
+<li><code>w0</code> <em>int</em> - x coordinate of the bar's top left point</li>
+<li><code>h0</code> <em>int</em> - y coordinate of the bar's top left point</li>
+<li><code>w</code> <em>int</em> - width of the bar</li>
+<li><code>h</code> <em>int</em> - height of the bar</li>
+<li><code>col</code> <em>[int]</em> - color of the bar (RGB tuple)</li>
+<li><code>val</code> <em>float</em> - % of the bar to fill (between 0 and 1)</li>
+<li><code>debug_text</code> <em>str</em> - Text to display in debug mode</li>
+<li><code>invert</code> <em>bool</em> - Flip the bar left to right</li>
+</ul>
+<p><a name="game.Game.bar_label_draw"></a></p>
+<h4 id="bar_label_draw">bar_label_draw</h4>
+<pre><code class="language-python"> | bar_label_draw(win, dim, w0, h0, w, h, text)
+</code></pre>
+<p>Draw the label of a bar in the pause menu (for statistics)</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>win</code> - Main window used for all drawing</li>
+<li><code>dim</code> <em>[int]</em> - extra dimensions for the pause menu</li>
+<li><code>w0</code> <em>int</em> - x coordinate of the bar's top left point</li>
+<li><code>h0</code> <em>int</em> - y coordinate of the bar's top left point</li>
+<li><code>w</code> <em>int</em> - width of the bar</li>
+<li><code>h</code> <em>int</em> - height of the bar</li>
+<li><code>text</code> <em>str</em> - Text to display in the label</li>
+</ul>
+<p><a name="game.Game.pause_box_draw"></a></p>
+<h4 id="pause_box_draw">pause_box_draw</h4>
+<pre><code class="language-python"> | pause_box_draw(win, dim)
+</code></pre>
+<p>Draw the skeleton of the pause menu (bg, title, exit button)</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>win</code> - Main window used for all drawing</li>
+<li><code>dim</code> <em>[int]</em> - extra dimensions for the pause menu</li>
+</ul>
+<p><a name="game.Game.pause_draw"></a></p>
+<h4 id="pause_draw">pause_draw</h4>
+<pre><code class="language-python"> | pause_draw(win)
+</code></pre>
+<p>Draw the pause menu</p>
+<p>Displays statistics for possession, pass accuracy and shot accuracy</p>
+<p><a name="game.Game.get_state"></a></p>
+<h4 id="get_state">get_state</h4>
+<pre><code class="language-python"> | get_state()
+</code></pre>
+<p>Create a state object that summarizes the entire game</p>
+<pre><code>state = {
+    'team1': {
+        'players' # list of the team player's coordinates
+        'goal_x' # The x-coordinate of their goal post
+    },
+    'team2': {
+        'players' # list of the team player's coordinates
+        'goal_x' # The x-coordinate of their goal post
+    },
+    'ball' # Position of the ball
+}
+</code></pre>
+<p><a name="game.Game.next"></a></p>
+<h4 id="next">next</h4>
+<pre><code class="language-python"> | next()
+</code></pre>
+<p>Move the game forward by 1 frame</p>
+<p>Passes state objects to the teams and pass their actions to <code>move_next()</code></p>
+<p><a name="game.Game.move_next"></a></p>
+<h4 id="move_next">move_next</h4>
+<pre><code class="language-python"> | move_next(a1, a2)
+</code></pre>
+<p>Update the players' and ball's internal state based on the teams' actions</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>a1</code> <em>list</em> - list of actions (1 for each player) in team 1</li>
+<li><code>a2</code> <em>list</em> - list of actions (1 for each player) in team 2</li>
+</ul>
+<p>Each action must be a key in the <code>ACT</code> dictionary found in <code>const.py</code></p></div>
+                </div>
+        </div>
+
+    <hr>
+    <footer class="container">
+        
+        <center>Documentation built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="http://kristopolous.github.io/BOOTSTRA.386">BOOTSTRA.386</a>.</center>
+    </footer>
+        <script src="../../../../search/main.js"></script>
+    </body>
+</html>

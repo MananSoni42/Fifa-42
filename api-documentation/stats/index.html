@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Stats - Fifa-42</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Fifa-42</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../config/">Installing locally</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../game/">Game</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../game-menu/">Game menu</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../ball/">Ball</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Stats</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../camera/">Camera</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../agent/">Agent</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../team/">Team</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../custom-teams-%28and-their-agents%29/">Custom teams (and their agents)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../settings/">Settings</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../constants/">Constants</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../point/">Point</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                    <li >
+                        <a rel="next" href="../ball/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../camera/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+      
+    
+        <li class="main active"><a href="#stats">stats</a></li>
+        
+            <li><a href="#stats-objects">Stats Objects</a></li>
+        
+    
+    
+    </ul>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><a name="stats"></a></p>
+<h1 id="stats">stats</h1>
+<p>Manage game statistics</p>
+<p>Currently tracks:</p>
+<ul>
+<li>Possession</li>
+<li>Number of goals scored</li>
+<li>Pass accuracy</li>
+<li>Shot accuracy</li>
+</ul>
+<p><a name="stats.Stats"></a></p>
+<h2 id="stats-objects">Stats Objects</h2>
+<pre><code class="language-python">class Stats(object)
+</code></pre>
+<p>Keep track of game statistics</p>
+<p><a name="stats.Stats.__init__"></a></p>
+<h4 id="__init__">__init__</h4>
+<pre><code class="language-python"> | __init__()
+</code></pre>
+<p>Initializes the possession, pass accuracy and shot accuracy</p>
+<p><a name="stats.Stats.get_possession"></a></p>
+<h4 id="get_possession">get_possession</h4>
+<pre><code class="language-python"> | get_possession()
+</code></pre>
+<p>Return a tuple containing the current possesion (between 0 and 1) for each team</p>
+<p>It is rounded to 2 decimal places and their sum is guaranteed to be 1</p>
+<p><a name="stats.Stats.get_pass_acc"></a></p>
+<h4 id="get_pass_acc">get_pass_acc</h4>
+<pre><code class="language-python"> | get_pass_acc()
+</code></pre>
+<p>Return a tuple containing the current pass accuracy (between 0 and 1) for each team</p>
+<p>It is rounded to 2 decimal places</p>
+<p><a name="stats.Stats.get_shot_acc"></a></p>
+<h4 id="get_shot_acc">get_shot_acc</h4>
+<pre><code class="language-python"> | get_shot_acc()
+</code></pre>
+<p>Return a tuple containing the current shot accuracy (between 0 and 1) for each team</p>
+<p>It is rounded to 2 decimal places</p></div>
+                </div>
+        </div>
+
+    <hr>
+    <footer class="container">
+        
+        <center>Documentation built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="http://kristopolous.github.io/BOOTSTRA.386">BOOTSTRA.386</a>.</center>
+    </footer>
+        <script src="../../../../search/main.js"></script>
+    </body>
+</html>

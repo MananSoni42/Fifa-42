@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Team - Fifa-42</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Fifa-42</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../config/">Installing locally</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../game/">Game</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../game-menu/">Game menu</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../ball/">Ball</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../stats/">Stats</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../camera/">Camera</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../agent/">Agent</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Team</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../custom-teams-%28and-their-agents%29/">Custom teams (and their agents)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../settings/">Settings</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../constants/">Constants</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../point/">Point</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                    <li >
+                        <a rel="next" href="../agent/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../custom-teams-%28and-their-agents%29/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+      
+    
+        <li class="main active"><a href="#team">team</a></li>
+        
+            <li><a href="#team-objects">Team Objects</a></li>
+        
+    
+    
+    </ul>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><a name="team"></a></p>
+<h1 id="team">team</h1>
+<p>Defines how a team is created, drawn and updated</p>
+<p>Override the <code>set_players</code> and <code>move</code> method to create a valid custom team</p>
+<p>(You can use a custom agent in your custom team)</p>
+<p><a name="team.Team"></a></p>
+<h2 id="team-objects">Team Objects</h2>
+<pre><code class="language-python">class Team(ABC)
+</code></pre>
+<p>Abstract class that controls a team of agents.</p>
+<p>Implement the move and set_players methods to instantiate</p>
+<p><a name="team.Team.__init__"></a></p>
+<h4 id="__init__">__init__</h4>
+<pre><code class="language-python"> | __init__(color=(0, 0, 0), formation='default', ids=list(range(NUM_TEAM)))
+</code></pre>
+<p>Initialize the teams (not completely, some paramters are set using the <code>init()</code> method)</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>color</code> <em>tuple</em> - The RGB value of the team</li>
+<li><code>formation</code> <em>string</em> - The team's formation of the team. Must be a key of <code>FORM</code> from <code>const.py</code></li>
+<li><code>ids</code> <em>[int]</em> - Players to include in the team (identified by their ids)</li>
+</ul>
+<p><a name="team.Team.init"></a></p>
+<h4 id="init">init</h4>
+<pre><code class="language-python"> | init(id, dir, diff)
+</code></pre>
+<p>Set the teams id, direction and difficulty (only for AI teams)
+Also recolor the sprites based on the team's chosen color</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>id</code> <em>int</em> - The team's id (must be either 1 or 2)</li>
+<li><code>dir</code> <em>str</em> - The team's direction (must be either 'L' or 'R')</li>
+<li><code>diff</code> <em>float</em> - The game difficult (between 0-1)</li>
+</ul>
+<p>Calls <code>set_players()</code> and <code>set_color()</code></p>
+<p><a name="team.Team.set_color"></a></p>
+<h4 id="set_color">set_color</h4>
+<pre><code class="language-python"> | set_color()
+</code></pre>
+<p>Recolor the sprites using this team's color</p>
+<p><a name="team.Team.set_formation"></a></p>
+<h4 id="set_formation">set_formation</h4>
+<pre><code class="language-python"> | set_formation(formation)
+</code></pre>
+<p>Set the teams formation</p>
+<p><a name="team.Team.formation_toggle"></a></p>
+<h4 id="formation_toggle">formation_toggle</h4>
+<pre><code class="language-python"> | formation_toggle()
+</code></pre>
+<p>Toggle whether the team maintains its formation</p>
+<p><a name="team.Team.draw"></a></p>
+<h4 id="draw">draw</h4>
+<pre><code class="language-python"> | draw(win, cam, debug=False)
+</code></pre>
+<p>Draw the team</p>
+<p>Basically calls each players' <code>draw()</code> method</p>
+<p><a name="team.Team.update"></a></p>
+<h4 id="update">update</h4>
+<pre><code class="language-python"> | update(action, ball)
+</code></pre>
+<p>Update the team's state</p>
+<p>Basically calls each players' <code>update()</code> method</p>
+<p><a name="team.Team.set_players"></a></p>
+<h4 id="set_players">set_players</h4>
+<pre><code class="language-python"> | @abstractmethod
+ | set_players(ids=list(range(NUM_TEAM)))
+</code></pre>
+<p>Implement this method to instantiate a valid team.</p>
+<p>Add players (of relevant class) to the team</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>ids</code> <em>list</em> - IDs of players to include in the team (defaults to all the players)</li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul>
+<li>Players are added to a list called players</li>
+<li>Their ids match their respective index in the array</li>
+</ul>
+<p><a name="team.Team.move"></a></p>
+<h4 id="move">move</h4>
+<pre><code class="language-python"> | @abstractmethod
+ | move(state_prev, state, reward)
+</code></pre>
+<p>Implement this method for a valid team</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>state_prev</code> <em>dict</em> - The lsat to last game state</li>
+<li><code>state</code> <em>dict</em> - The last game state</li>
+<li><code>reward</code> <em>list</em> - Reward returned from this state (Not implemented)</li>
+</ul>
+<p>Should return a list of valid actions (in the same order as each of the players)</p></div>
+                </div>
+        </div>
+
+    <hr>
+    <footer class="container">
+        
+        <center>Documentation built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="http://kristopolous.github.io/BOOTSTRA.386">BOOTSTRA.386</a>.</center>
+    </footer>
+        <script src="../../../../search/main.js"></script>
+    </body>
+</html>

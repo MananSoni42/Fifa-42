@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Custom teams (and their agents) - Fifa-42</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Fifa-42</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../config/">Installing locally</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../game/">Game</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../game-menu/">Game menu</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../ball/">Ball</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../stats/">Stats</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../camera/">Camera</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../agent/">Agent</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../team/">Team</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Custom teams (and their agents)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../settings/">Settings</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../constants/">Constants</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../point/">Point</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                    <li >
+                        <a rel="next" href="../team/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../settings/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+      
+    
+        <li class="main active"><a href="#random">random</a></li>
+        
+            <li><a href="#randomagent-objects">RandomAgent Objects</a></li>
+        
+            <li><a href="#randomteam-objects">RandomTeam Objects</a></li>
+        
+    
+        <li class="main "><a href="#human">human</a></li>
+        
+            <li><a href="#humanagent-objects">HumanAgent Objects</a></li>
+        
+            <li><a href="#humanteam-objects">HumanTeam Objects</a></li>
+        
+    
+        <li class="main "><a href="#network">network</a></li>
+        
+            <li><a href="#networkagent-objects">NetworkAgent Objects</a></li>
+        
+            <li><a href="#networkteam-objects">NetworkTeam Objects</a></li>
+        
+    
+        <li class="main "><a href="#original_ai">original_ai</a></li>
+        
+            <li><a href="#originalaiagent-objects">OriginalAIAgent Objects</a></li>
+        
+            <li><a href="#originalaiteam-objects">OriginalAITeam Objects</a></li>
+        
+    
+    
+    </ul>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><a name="random"></a></p>
+<h1 id="random">random</h1>
+<p>Create a random team i.e. team where each agent takes a random action (used for testing)</p>
+<p><a name="random.RandomAgent"></a></p>
+<h2 id="randomagent-objects">RandomAgent Objects</h2>
+<pre><code class="language-python">class RandomAgent(Agent)
+</code></pre>
+<p>Agents that move randomly</p>
+<p><a name="random.RandomAgent.move"></a></p>
+<h4 id="move">move</h4>
+<pre><code class="language-python"> | move(state_prev, state, reward)
+</code></pre>
+<p>Move the agent randomly</p>
+<p><a name="random.RandomTeam"></a></p>
+<h2 id="randomteam-objects">RandomTeam Objects</h2>
+<pre><code class="language-python">class RandomTeam(Team)
+</code></pre>
+<p>A team of random agents</p>
+<p><a name="random.RandomTeam.move"></a></p>
+<h4 id="move_1">move</h4>
+<pre><code class="language-python"> | move(state_prev, state, reward)
+</code></pre>
+<p>Move each player randomly</p>
+<p><a name="human"></a></p>
+<h1 id="human">human</h1>
+<p>Create a Human team i.e. controlled by the keyboard</p>
+<p><a name="human.HumanAgent"></a></p>
+<h2 id="humanagent-objects">HumanAgent Objects</h2>
+<pre><code class="language-python">class HumanAgent(Agent)
+</code></pre>
+<p>Agents controlled by humans</p>
+<p><a name="human.HumanAgent.draw"></a></p>
+<h4 id="draw">draw</h4>
+<pre><code class="language-python"> | draw(win, cam, team_id, selected=0, debug=False)
+</code></pre>
+<p>Draw the human agent. Also draws a red triangle on top of the selected player</p>
+<p><a name="human.HumanAgent.move"></a></p>
+<h4 id="move_2">move</h4>
+<pre><code class="language-python"> | move(state_prev, state, reward)
+</code></pre>
+<p>Move the human agent based on the keyboard</p>
+<p><a name="human.HumanTeam"></a></p>
+<h2 id="humanteam-objects">HumanTeam Objects</h2>
+<pre><code class="language-python">class HumanTeam(Team)
+</code></pre>
+<p>A team of human players</p>
+<p><a name="human.HumanTeam.update"></a></p>
+<h4 id="update">update</h4>
+<pre><code class="language-python"> | update(action, ball)
+</code></pre>
+<p>Select a player (based on the Ball's state) and update the team's state based on the received actions and the ball's position</p>
+<p><a name="human.HumanTeam.draw"></a></p>
+<h4 id="draw_1">draw</h4>
+<pre><code class="language-python"> | draw(win, cam, debug)
+</code></pre>
+<p>Draw the human team</p>
+<p><a name="human.HumanTeam.select_player"></a></p>
+<h4 id="select_player">select_player</h4>
+<pre><code class="language-python"> | select_player(ball)
+</code></pre>
+<p>Select the player that is controlled by the keyboard</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>If ball is near the D-area, keeper gets automatic control</li>
+<li>Otherwise the player nearest to the ball has control (ties are broken randomly)</li>
+</ul>
+<p><a name="human.HumanTeam.formation_dir"></a></p>
+<h4 id="formation_dir">formation_dir</h4>
+<pre><code class="language-python"> | formation_dir(id)
+</code></pre>
+<p>Send player (with the given ID) to his designated place in the formation</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)</li>
+<li>Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)</li>
+</ul>
+<p><a name="human.HumanTeam.move"></a></p>
+<h4 id="move_3">move</h4>
+<pre><code class="language-python"> | move(state_prev, state, reward)
+</code></pre>
+<p>Move a human team</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>Player nearest to the ball moves through keyboard</li>
+<li>All other players return to their original positions (if maintain_formation is set)</li>
+</ul>
+<p><a name="network"></a></p>
+<h1 id="network">network</h1>
+<p>Create a team that can be controlled over the network</p>
+<p><a name="network.NetworkAgent"></a></p>
+<h2 id="networkagent-objects">NetworkAgent Objects</h2>
+<pre><code class="language-python">class NetworkAgent(Agent)
+</code></pre>
+<p>Agent that can be controlled over the network (online)</p>
+<p>Use the <code>register_keystroke()</code> function to add keys from the server (socket)</p>
+<p><a name="network.NetworkAgent.__init__"></a></p>
+<h4 id="__init__">__init__</h4>
+<pre><code class="language-python"> | __init__(id, team_id, pos, dir='L')
+</code></pre>
+<p>Initialize the network agent</p>
+<p>The agent maintains a queue of the received keystrokes</p>
+<p><a name="network.NetworkAgent.register_keystroke"></a></p>
+<h4 id="register_keystroke">register_keystroke</h4>
+<pre><code class="language-python"> | register_keystroke(key)
+</code></pre>
+<p>Register a keystroke</p>
+<p>Use this method within the server's socket</p>
+<p><a name="network.NetworkAgent.move"></a></p>
+<h4 id="move_4">move</h4>
+<pre><code class="language-python"> | move(state_prev, state, reward)
+</code></pre>
+<p>Move the network agent based on it's internal queue</p>
+<p><a name="network.NetworkTeam"></a></p>
+<h2 id="networkteam-objects">NetworkTeam Objects</h2>
+<pre><code class="language-python">class NetworkTeam(Team)
+</code></pre>
+<p>A team of network players</p>
+<p><a name="network.NetworkTeam.update"></a></p>
+<h4 id="update_1">update</h4>
+<pre><code class="language-python"> | update(action, ball)
+</code></pre>
+<p>Select a player (based on the Ball's state) and update the team's state based on the received actions and the ball's position</p>
+<p><a name="network.NetworkTeam.select_player"></a></p>
+<h4 id="select_player_1">select_player</h4>
+<pre><code class="language-python"> | select_player(ball)
+</code></pre>
+<p>Select the player that is controlled by the keyboard</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>If ball is near the D-area, keeper gets automatic control</li>
+<li>Otherwise the player nearest to the ball has control (ties are broken randomly)</li>
+</ul>
+<p><a name="network.NetworkTeam.register_keystroke"></a></p>
+<h4 id="register_keystroke_1">register_keystroke</h4>
+<pre><code class="language-python"> | register_keystroke(key)
+</code></pre>
+<p>Register a keystroke for the currently selected player</p>
+<p><a name="network.NetworkTeam.formation_dir"></a></p>
+<h4 id="formation_dir_1">formation_dir</h4>
+<pre><code class="language-python"> | formation_dir(id)
+</code></pre>
+<p>Send player (with the given ID) to his designated place in the formation</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)</li>
+<li>Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)</li>
+</ul>
+<p><a name="network.NetworkTeam.move"></a></p>
+<h4 id="move_5">move</h4>
+<pre><code class="language-python"> | move(state_prev, state, reward)
+</code></pre>
+<p>Move a network team</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>Player nearest to the ball moves through keyboard</li>
+<li>All other players return to their original positions (if maintain_formation is set)</li>
+</ul>
+<p><a name="original_ai"></a></p>
+<h1 id="original_ai">original_ai</h1>
+<p>Create a hardcoded AI team i.e. actions are determined using simple geometry</p>
+<p><a name="original_ai.OriginalAIAgent"></a></p>
+<h2 id="originalaiagent-objects">OriginalAIAgent Objects</h2>
+<pre><code class="language-python">class OriginalAIAgent(Agent)
+</code></pre>
+<p>Harcoded AI agents that play like the original AI (designed in 2013)
+Takes an additional difficulty arguement</p>
+<p><a name="original_ai.OriginalAIAgent.draw"></a></p>
+<h4 id="draw_2">draw</h4>
+<pre><code class="language-python"> | draw(win, cam, team_id, debug=False)
+</code></pre>
+<p>Draw an AI agent</p>
+<p>Also displays circles with <code>AI_FAR_RADIUS</code> and <code>AI_NEAR_RADIUS</code> when debug is True</p>
+<p><a name="original_ai.OriginalAIAgent.dist_to_line"></a></p>
+<h4 id="dist_to_line">dist_to_line</h4>
+<pre><code class="language-python"> | dist_to_line(line, pt)
+</code></pre>
+<p>perpendicular of a pt from the given line</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>line</code> <em>tuple</em> - A straight line representing x<em>line[0] + y</em>line[1] + line[2] = 0</li>
+<li><code>pt</code> <em>Point</em> - a 2D point</li>
+</ul>
+<p><a name="original_ai.OriginalAIAgent.ai_move_with_ball"></a></p>
+<h4 id="ai_move_with_ball">ai_move_with_ball</h4>
+<pre><code class="language-python"> | ai_move_with_ball(enemy_players, goal_x)
+</code></pre>
+<p>How AI players move when they have the ball</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>enemy_players</code> <em>list</em> - A list of the positions (coordinates) of the enemy players</li>
+<li><code>goal_x</code> <em>int</em> - The x-coordinate of the enemy's goal post</li>
+</ul>
+<p>Returns an ACT</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>If this player has the ball</li>
+<li>Calculate vectors towards the goal and away from nearby players of the opposite team</li>
+<li>Add up all these vectors and move in that direction (probabilistically)</li>
+<li>enemy_players: positions of all of the enemy team</li>
+</ul>
+<p><a name="original_ai.OriginalAIAgent.ai_move_without_ball"></a></p>
+<h4 id="ai_move_without_ball">ai_move_without_ball</h4>
+<pre><code class="language-python"> | ai_move_without_ball(ball)
+</code></pre>
+<p>How AI players move when they do not have the ball</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>ball</code> <em>Point</em> - position of the ball</li>
+</ul>
+<p>Returns an ACT</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>If the ball is within its <code>AI_FAR_RADIUS</code>, move towards the ball (probabilistically)</li>
+<li>Otherwise, do <code>NOTHING</code></li>
+</ul>
+<p><a name="original_ai.OriginalAIAgent.ai_pass"></a></p>
+<h4 id="ai_pass">ai_pass</h4>
+<pre><code class="language-python"> | ai_pass(team_players, enemy_team_players)
+</code></pre>
+<p>How AI players pass the ball</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>team_players</code> <em>list</em> - A list of the positions (coordinates) of the team players</li>
+<li><code>enemy_team_players</code> <em>list</em> - A list of the positions (coordinates) of the enemy team players</li>
+</ul>
+<p>Returns an ACT</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>Pass the ball such that the perpendicular distance to the pass line is less than <code>AI_MIN_PASS_DIST</code></li>
+<li>Pass is valid if no enemy is nearer than a team player in that direction</li>
+<li><code>Note</code> - The origin is at top-left instead of the standard bottom-left so we map y to H-y</li>
+</ul>
+<p><a name="original_ai.OriginalAIAgent.ai_shoot"></a></p>
+<h4 id="ai_shoot">ai_shoot</h4>
+<pre><code class="language-python"> | ai_shoot(gk, goal_x)
+</code></pre>
+<p>How AI players shoot the ball</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>gk</code> <em>Agent</em> - The enemy's goalkeeper agent</li>
+<li><code>goal_x</code> <em>int</em> - the x-coordinate of the enemy's</li>
+</ul>
+<p>Returns an ACT</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>Only shoots if within <code>AI_SHOOT_RADIUS</code> of  the enemy goal</li>
+<li>Shoots to maximize distance between keeper and shot while keeping the shot within goal boundaries</li>
+<li><code>Note</code> - The origin is at top-left instead of the standard bottom-left so we map y to H-y</li>
+</ul>
+<p><a name="original_ai.OriginalAIAgent.gk_move"></a></p>
+<h4 id="gk_move">gk_move</h4>
+<pre><code class="language-python"> | gk_move(goal_x, ball)
+</code></pre>
+<p>How the AI goalkeeper moves</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>goal_x</code> <em>int</em> - the x-coordinate of the enemy's</li>
+<li><code>ball</code> <em>Ball</em> - The football object</li>
+</ul>
+<p>Returns an ACT</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>Moves towards the ball (tracks the y coordinate)</li>
+<li>Does not go outside the goals boundary</li>
+</ul>
+<p><a name="original_ai.OriginalAIAgent.gk_pass"></a></p>
+<h4 id="gk_pass">gk_pass</h4>
+<pre><code class="language-python"> | gk_pass(enemy_players, goal_x)
+</code></pre>
+<p>How the AI goalkeeper passes</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>enemy_players</code> <em>list</em> - A list of the positions (coordinates) of the enemy players</li>
+<li><code>goal_x</code> <em>int</em> - The x-coordinate of the team's goal post</li>
+</ul>
+<p>Returns an ACT</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>Pass such that enemy players in AI_SHOOT_RADIUS do not get the ball</li>
+</ul>
+<p><a name="original_ai.OriginalAIAgent.move"></a></p>
+<h4 id="move_6">move</h4>
+<pre><code class="language-python"> | move(state_prev, state, reward, selected)
+</code></pre>
+<p>Umbrella function that is used to move the player. Overrides the Agent's <code>move()</code> method</p>
+<p>Returns an ACT</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>if the selected player is the goal keeper and it has the ball: call <code>ai_gk_pass()</code></li>
+<li>else if the selected player is the goal keeper and it does not have the ball: call <code>ai_gk_move()</code></li>
+<li>else If the selected player is within <code>AI_SHOOT_RADIUS</code> of the enemy's goal post and it has the ball: call <code>ai_shoot()</code></li>
+<li>else If the selected player has the ball: call <code>ai_pass()</code> or <code>ai_move()</code> based on the <code>PASS_PROB</code></li>
+<li>else call <code>ai_move_without_ball()</code> or <code>ai_move_with_ball()</code></li>
+</ul>
+<p><a name="original_ai.OriginalAITeam"></a></p>
+<h2 id="originalaiteam-objects">OriginalAITeam Objects</h2>
+<pre><code class="language-python">class OriginalAITeam(Team)
+</code></pre>
+<p>The AI team used in the original (C++) version</p>
+<p><a name="original_ai.OriginalAITeam.select_player"></a></p>
+<h4 id="select_player_2">select_player</h4>
+<pre><code class="language-python"> | select_player(ball)
+</code></pre>
+<p>Select a player based on the balls position</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>If ball is near the D-area, keeper gets automatic control</li>
+<li>Otherwise the player nearest to the ball has control (ties are broken randomly)</li>
+</ul>
+<p><a name="original_ai.OriginalAITeam.formation_dir"></a></p>
+<h4 id="formation_dir_2">formation_dir</h4>
+<pre><code class="language-python"> | formation_dir(id)
+</code></pre>
+<p>Send player (with the given ID) to his designated place in the formation</p>
+<p><strong>Working</strong>:</p>
+<ul>
+<li>If player is in-line (horizontally or vertically), move directly towards original point (U/L/D/R)</li>
+<li>Otherwise choose 2 directions that take you closer to the original point and choose one of them randomly (UL/UR/DL/DR)</li>
+</ul>
+<p><a name="original_ai.OriginalAITeam.move"></a></p>
+<h4 id="move_7">move</h4>
+<pre><code class="language-python"> | move(state_prev, state, reward)
+</code></pre>
+<p>Move each player in the team. Call this method to move the team</p></div>
+                </div>
+        </div>
+
+    <hr>
+    <footer class="container">
+        
+        <center>Documentation built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="http://kristopolous.github.io/BOOTSTRA.386">BOOTSTRA.386</a>.</center>
+    </footer>
+        <script src="../../../../search/main.js"></script>
+    </body>
+</html>

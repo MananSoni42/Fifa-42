@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Installing locally - Fifa-42</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="..">Fifa-42</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="..">Home</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../about/">About</a>
+                </li>
+            
+            
+            
+                <li class="active">
+                    <a href="./">Installing locally</a>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../api-documentation/game/">Game</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/game-menu/">Game menu</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/ball/">Ball</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/stats/">Stats</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/camera/">Camera</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/agent/">Agent</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/team/">Team</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/custom-teams-%28and-their-agents%29/">Custom teams (and their agents)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/settings/">Settings</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/constants/">Constants</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/point/">Point</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                    <li >
+                        <a rel="next" href="../about/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../api-documentation/game/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+      
+    
+    
+    </ul>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>This game is written in Python 3.7.0  </p>
+<hr />
+<p>To set up a local copy, follow the steps given below:</p>
+<ul>
+<li>
+<p>Install python (3+) and pip<br />
+<strong>Debian</strong>: apt-get install python python3-pip<br />
+<strong>Arch</strong>: pacman -S python python-pip<br />
+<strong>Windows</strong>: Download <a href="https://www.python.org/downloads/windows/">Python</a> (this <a href="https://github.com/BurntSushi/nfldb/wiki/Python-&amp;-pip-Windows-installation">tutorial</a> may be helpful)</p>
+</li>
+<li>
+<p>Clone this repository<br />
+If you have git, execute:</p>
+</li>
+</ul>
+<pre><code>git clone https://github.com/MananSoni42/Fifa-42.git
+</code></pre>
+<p>otherwise:
+Download the <a href="https://github.com/MananSoni42/Fifa-42/archive/master.zip">ZIP</a> file</p>
+<ul>
+<li>Install the required dependancies<blockquote>
+<p>Ensure that you are inside the Fifa-42 directory</p>
+</blockquote>
+</li>
+</ul>
+<pre><code>pip install -r requirements.txt
+</code></pre>
+<ul>
+<li>Play the game with Python<blockquote>
+<p>Ensure that you are inside the Fifa-42/src directory</p>
+</blockquote>
+</li>
+</ul>
+<pre><code>python3 play.py
+</code></pre>
+<p>Done! Now you can make your own changes to the game.</p>
+<ul>
+<li>Various command line arguements are available, see them using</li>
+</ul>
+<pre><code>python3 play.py --help
+</code></pre></div>
+                </div>
+        </div>
+
+    <hr>
+    <footer class="container">
+        
+        <center>Documentation built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="http://kristopolous.github.io/BOOTSTRA.386">BOOTSTRA.386</a>.</center>
+    </footer>
+        <script src="../../search/main.js"></script>
+    </body>
+</html>

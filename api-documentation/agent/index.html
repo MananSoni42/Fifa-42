@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Agent - Fifa-42</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/bootstrap-theme.min.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../..">Fifa-42</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="../..">Home</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../about/">About</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../../config/">Installing locally</a>
+                </li>
+            
+            
+            
+                <li class="dropdown active">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../game/">Game</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../game-menu/">Game menu</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../ball/">Ball</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../stats/">Stats</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../camera/">Camera</a>
+                        </li>
+                    
+                        <li class="active">
+                            <a href="./">Agent</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../team/">Team</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../custom-teams-%28and-their-agents%29/">Custom teams (and their agents)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../settings/">Settings</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../constants/">Constants</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../point/">Point</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                    <li >
+                        <a rel="next" href="../camera/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../team/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+      
+    
+        <li class="main active"><a href="#agent">agent</a></li>
+        
+            <li><a href="#agent-objects">Agent Objects</a></li>
+        
+    
+    
+    </ul>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><a name="agent"></a></p>
+<h1 id="agent">agent</h1>
+<p>Defines how an agent is created, drawn and updated</p>
+<p>Override the <code>move</code> method to create a valid custom agent</p>
+<p><a name="agent.Agent"></a></p>
+<h2 id="agent-objects">Agent Objects</h2>
+<pre><code class="language-python">class Agent(ABC)
+</code></pre>
+<p>Abstract class that controls agents in the football game</p>
+<p>Implement the move method to instantiate a valid agent</p>
+<p><a name="agent.Agent.__init__"></a></p>
+<h4 id="__init__">__init__</h4>
+<pre><code class="language-python"> | __init__(id, team_id, pos, dir='L')
+</code></pre>
+<p>Initialize a player</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>id</code> <em>int</em> - Player's unique ID</li>
+<li><code>team_id</code> <em>int</em> - ID of the team the player plays for</li>
+<li><code>pos</code> <em>Point</em> - The player's initial position</li>
+<li><code>dir</code> <em>string</em> - The player's current direction (which way it faces). Either 'R' or 'L'</li>
+</ul>
+<p><a name="agent.Agent.draw"></a></p>
+<h4 id="draw">draw</h4>
+<pre><code class="language-python"> | draw(win, cam, team_id, debug=False)
+</code></pre>
+<p>Draw the player as an animated sprite</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>win</code> <em>pygame.display</em> - Window on which to draw</li>
+<li><code>team_id</code> <em>int</em> - Required to get the correct sprite</li>
+<li><code>debug</code> <em>bool</em> - Show additional info including the player's ID and the square used to approximate the player</li>
+</ul>
+<p><a name="agent.Agent.update"></a></p>
+<h4 id="update">update</h4>
+<pre><code class="language-python"> | update(action, players)
+</code></pre>
+<p>Update player's (in-game) state based on his action</p>
+<p><a name="agent.Agent.move"></a></p>
+<h4 id="move">move</h4>
+<pre><code class="language-python"> | @abstractmethod
+ | move(state_prev, state, reward)
+</code></pre>
+<p>Implement this method for a valid agent</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>state_prev</code> <em>dict</em> - The lsat to last game state</li>
+<li><code>state</code> <em>dict</em> - The last game state</li>
+<li><code>reward</code> <em>list</em> - Reward returned from this state (Not implemented)</li>
+</ul>
+<p>Should return a valid action</p></div>
+                </div>
+        </div>
+
+    <hr>
+    <footer class="container">
+        
+        <center>Documentation built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="http://kristopolous.github.io/BOOTSTRA.386">BOOTSTRA.386</a>.</center>
+    </footer>
+        <script src="../../../../search/main.js"></script>
+    </body>
+</html>

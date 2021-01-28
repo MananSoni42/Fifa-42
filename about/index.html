@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>About - Fifa-42</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/bootstrap-theme.min.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../js/jquery-1.10.2.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="..">Fifa-42</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            <!-- Main navigation -->
+            <ul class="nav navbar-nav">
+            
+            
+                <li >
+                    <a href="..">Home</a>
+                </li>
+            
+            
+            
+                <li class="active">
+                    <a href="./">About</a>
+                </li>
+            
+            
+            
+                <li >
+                    <a href="../config/">Installing locally</a>
+                </li>
+            
+            
+            
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">API Documentation <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                    
+                        <li >
+                            <a href="../api-documentation/game/">Game</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/game-menu/">Game menu</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/ball/">Ball</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/stats/">Stats</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/camera/">Camera</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/agent/">Agent</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/team/">Team</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/custom-teams-%28and-their-agents%29/">Custom teams (and their agents)</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/settings/">Settings</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/constants/">Constants</a>
+                        </li>
+                    
+                        <li >
+                            <a href="../api-documentation/point/">Point</a>
+                        </li>
+                    
+                    </ul>
+                </li>
+            
+            
+            </ul>
+
+            <!-- Search, Navigation and Repo links -->
+            <ul class="nav navbar-nav navbar-right">
+                    <li >
+                        <a rel="next" href="..">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../config/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+      
+    
+        <li class="main active"><a href="#progress">Progress</a></li>
+        
+    
+    
+    </ul>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p>This game was originally started as a final project for our final programming class (in 2013). The game was originally written in ANSI C (the only programming language we knew), only worked in a console and took us a whopping 8 months to write!<br />
+Looking back, the game was a perfect example of how to NOT write code - We used NO documentation or comments, the variables were single letters and the entire codebase was a single file.</p>
+<blockquote>
+<p>// When I wrote the code, only god and I knew how it worked, now only god knows</p>
+</blockquote>
+<p>We decided to rewrite the entire game in Python with an aim of making the original game more accessible. It has since turned into a full fledged project that will (hopefully) have:
+* Good documentation making it easy for anyone to contribute
+* An option to play online (with multiplayer support)
+* A Reinforcement-Learning based computer team that adapts itself to defeat you.</p>
+<h2 id="progress">Progress</h2>
+<ul>
+<li>[x] Create an executable game - release v1.0</li>
+<li>[ ] Add a web UI  - Release - release v2.0<ul>
+<li>[ ] Port python to JavaScript</li>
+<li>[ ] Set up local single player (static - requires only frontend)</li>
+<li>[ ] Add online multi player (requires a backend)</li>
+</ul>
+</li>
+<li>[ ] Set up better computer agents<ul>
+<li>[x] Set up the original AI team</li>
+<li>[ ] Come up with an improved (hard-coded) AI team</li>
+<li>[ ] Train a realistic AI team using Reinforcement Learning - release v3.0</li>
+</ul>
+</li>
+</ul></div>
+                </div>
+        </div>
+
+    <hr>
+    <footer class="container">
+        
+        <center>Documentation built with <a href="http://www.mkdocs.org">MkDocs</a> and <a href="http://kristopolous.github.io/BOOTSTRA.386">BOOTSTRA.386</a>.</center>
+    </footer>
+        <script src="../../search/main.js"></script>
+    </body>
+</html>
